@@ -116,7 +116,7 @@ label.icon-search {
     font-size: 14px;
     border: 1px solid #999;
     text-transform: uppercase;
-    padding: 10px 28px;
+    padding: 10px 20px;
 }
 .search_form input[type='submit']:hover{
 	background:#fff;
@@ -238,7 +238,7 @@ ul.multi-column-dropdown h6 {
     text-align: center;
 }
 .dropdown-menu.columns-3 {
-    min-width:900px;
+    min-width:750px;
     padding: 30px 30px;
 }
 .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
