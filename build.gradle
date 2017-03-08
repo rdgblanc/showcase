@@ -1,0 +1,31 @@
+ext {
+	SPRING_VERSION = "4.2.0.RELEASE"
+	SPRING_SECURITY_VERSION = "4.0.2.RELEASE"
+}
+
+subprojects {
+	apply plugin: "java"
+	apply plugin: "eclipse"
+	apply plugin: "eclipse-wtp"
+
+	group = "br.com.vitrinedecristal"
+
+	repositories {
+		mavenCentral()
+
+		maven {
+			url "http://186.215.183.197/artifactory/plugins-release"
+		}
+	}
+
+	dependencies {
+		compile "log4j:log4j:1.2.17"
+		compile "org.slf4j:log4j-over-slf4j:1.7.7"
+	}
+
+	compileJava.options.encoding = "UTF-8"
+	compileTestJava.options.encoding = "UTF-8"
+
+	compileJava.sourceCompatibility = JavaVersion.VERSION_1_7
+	compileJava.targetCompatibility = JavaVersion.VERSION_1_7
+}

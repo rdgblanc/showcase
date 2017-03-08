@@ -1,0 +1,72 @@
+import org.apache.tools.ant.filters.*
+
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "eclipse-wtp"
+
+version = "1.0.0"
+
+group = "br.com.vitrinedecristal"
+
+jar {
+	manifest {
+		attributes 	"Implementation-Title": "UP - Vitrine de Cristal",
+					"Implementation-Version": version
+	}
+}
+
+repositories {
+	maven {
+		url "http://186.215.183.197/artifactory/libs-release"
+	}
+
+	mavenCentral()
+}
+
+ext {
+	SPRING_VERSION = "4.1.0.RELEASE"
+	SPRING_SECURITY_VERSION = "4.0.2.RELEASE"
+}
+
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+compileJava.sourceCompatibility = JavaVersion.VERSION_1_7
+compileJava.targetCompatibility = JavaVersion.VERSION_1_7
+
+dependencies {
+	compile "log4j:log4j:1.2.17"
+	compile "com.google.code.gson:gson:2.2.4"
+	compile "net.sf.dozer:dozer:5.5.1"
+
+	compile "commons-lang:commons-lang:2.4"
+	compile "org.apache.commons:commons-lang3:3.3.2"
+
+	compile "org.springframework:spring-aop:$SPRING_VERSION"
+	compile "org.springframework:spring-beans:$SPRING_VERSION"
+	compile "org.springframework:spring-core:$SPRING_VERSION"
+	compile "org.springframework:spring-context:$SPRING_VERSION"
+	compile "org.springframework:spring-test:$SPRING_VERSION"
+
+	compile "org.springframework.security:spring-security-core:$SPRING_SECURITY_VERSION"
+
+	compile "org.elasticsearch:elasticsearch:2.3.0"
+	compile "org.springframework.data:spring-data-elasticsearch:2.0.2.RELEASE"
+}
+
+eclipse {
+	project {
+		natures "org.eclipse.wst.common.modulecore.ModuleCoreNature"
+	}
+}
+
+compileJava {
+	inputs.file "src/main/resources/applicationContext.xml"
+	inputs.file "src/main/resources/log4j.xml"
+}
+
+def allProcessResourcesTasks() {
+	sourceSets*.processResourcesTaskName.collect {
+		tasks[it]
+	}
+}

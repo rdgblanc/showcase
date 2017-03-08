@@ -1,0 +1,28 @@
+apply plugin: "war"
+apply plugin: "eclipse-wtp"
+
+dependencies {
+	compile project(":showcase-core")
+
+	compile "jstl:jstl:1.2"
+
+	compile "io.swagger:swagger-jaxrs:1.5.3"
+
+	compile "org.springframework:spring-context:$SPRING_VERSION"
+	compile "org.springframework:spring-web:$SPRING_VERSION"
+
+	compile "org.springframework.security:spring-security-config:$SPRING_SECURITY_VERSION"
+	compile "org.springframework.security:spring-security-web:$SPRING_SECURITY_VERSION"
+
+	compile ("org.jboss.resteasy:resteasy-spring:2.3.2.Final") {
+		exclude group: "org.jboss.resteasy"
+	}
+
+	providedCompile "org.jboss.resteasy:resteasy-jaxrs:2.3.2.Final"
+	providedCompile "javax.servlet:javax.servlet-api:3.1.0"
+	providedCompile "javax.inject:javax.inject:1"
+}
+
+war {
+	baseName "showcase-web"
+}
