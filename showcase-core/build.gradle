@@ -24,8 +24,9 @@ repositories {
 }
 
 ext {
-	SPRING_VERSION = "4.1.0.RELEASE"
-	SPRING_SECURITY_VERSION = "4.0.2.RELEASE"
+	SPRING_VERSION = "4.3.7.RELEASE"
+	SPRING_SECURITY_VERSION = "4.2.2.RELEASE"
+	HIBERNATE_VERSION = "4.3.11.Final"
 }
 
 compileJava.options.encoding = "UTF-8"
@@ -47,11 +48,16 @@ dependencies {
 	compile "org.springframework:spring-core:$SPRING_VERSION"
 	compile "org.springframework:spring-context:$SPRING_VERSION"
 	compile "org.springframework:spring-test:$SPRING_VERSION"
+	compile "org.springframework:spring-orm:$SPRING_VERSION"
 
 	compile "org.springframework.security:spring-security-core:$SPRING_SECURITY_VERSION"
+	
+	compile "org.hibernate:hibernate-core:$HIBERNATE_VERSION"
+	compile "org.hibernate:hibernate-entitymanager:3.3.2.GA"
+	compile "org.hibernate:hibernate:3.3.2.GA"
+	compile "org.hibernate:ejb3-persistence:1.0.2.GA"
 
-	compile "org.elasticsearch:elasticsearch:2.3.0"
-	compile "org.springframework.data:spring-data-elasticsearch:2.0.2.RELEASE"
+	compile "mysql:mysql-connector-java:6.0.6"
 }
 
 eclipse {

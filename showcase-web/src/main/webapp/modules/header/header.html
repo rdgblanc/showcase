@@ -74,7 +74,7 @@
 				<a href="#" data-toggle="modal" data-target="#modal-login"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
 			</div>
 			<div class="w3l_logo">
-				<a href="index.html">
+				<a href="#/" ng-click="switchView(viewsEnum.HOME)">
 					<img src="assets/images/logo/logo1.jpg" alt=" " class="img-responsive" width="120px" height="93px" />
 				</a>
 			</div>
@@ -106,49 +106,59 @@
 				</div>
 				<div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
 					<ul class="nav navbar-nav">
-						<li><a href="#/">Home</a></li>
+						<li class="active"><a href="#/" class="act" ng-click="switchView(viewsEnum.HOME)">Home</a></li>
+						<li><a href="#/products" ng-click="switchView(viewsEnum.PRODUCTS)">Produtos/Buscar</a></li>
 						<!-- Mega Menu -->
 						<li class="dropdown">
-							<a href="#/products" class="dropdown-toggle" data-toggle="dropdown">Produtos<b class="caret"></b></a>
-							<ul class="dropdown-menu multi-column columns-3">
+							<a href="#/" class="dropdown-toggle" data-toggle="dropdown">Empresa<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-1">
 								<div class="row">
-									<div class="col-sm-4">
+									<div class="col-sm-12">
 										<ul class="multi-column-dropdown">
-											<h6>Roupas</h6>
-											<li><a href="#/dresses">Vestidos<span>Novo</span></a></li>
-											<li><a href="#/sweaters">Blusas</a></li>
-											<li><a href="#/skirts">Shorts & Saias</a></li>
-											<li><a href="#/jeans">Jeans</a></li>
-											<li><a href="#/shirts">Camisas & Tops<span>Novo</span></a></li>
-										</ul>
-									</div>
-									<div class="col-sm-4">
-										<ul class="multi-column-dropdown">
-											<h6>Vestuário étnico</h6>
-											<li><a href="#/salwars">Calças</a></li>
-											<li><a href="#/sarees">Vestidos<span>Novo</span></a></li>
-											<li><a href="#/products"><i>Acessórios</i></a></li>
-										</ul>
-									</div>
-									<div class="col-sm-4">
-										<ul class="multi-column-dropdown">
-											<h6>Calçados</h6>
-											<li><a href="#/sandals">Sapatos</a></li>
-											<li><a href="#/sandals">Sandálias</a></li>
-											<li><a href="#/sandals">Botas</a></li>
-											<li><a href="#/sandals">Sapatilhas</a></li>
+											<h6>Vitrine de Cristal</h6>
+											<li><a href="#/about" ng-click="switchView(viewsEnum.ABOUT)">Sobre</a></li>
+											<li><a href="#/guideline" ng-click="switchView(viewsEnum.GUIDELINE)">Diretrizes</a></li>
+											<li><a href="#/contact" ng-click="switchView(viewsEnum.CONTACT)">Contato</a></li>
+											<li><a href="#/faq" ng-click="switchView(viewsEnum.FAQ)">Perguntas Frequentes</a></li>
 										</ul>
 									</div>
 								</div>
 							</ul>
 						</li>
-						<li><a href="#/short-codes">Favoritos</a></li>
-						<li><a href="#/about">Sobre nós</a></li>
-						<li><a href="#/contact">Contato</a></li>
+						<!-- Mega Menu -->
+						<li class="dropdown">
+							<a href="#/" class="dropdown-toggle" data-toggle="dropdown">Minha Conta<b class="caret"></b></a>
+							<ul class="dropdown-menu multi-column columns-3">
+								<div class="row">
+									<div class="col-sm-4">
+										<ul class="multi-column-dropdown">
+											<h6>Compras</h6>
+											<li><a href="#/order_list" ng-click="switchView(viewsEnum.ORDER_LIST)">Meus Pedidos</a></li>
+											<li><a href="#/wish_list" ng-click="switchView(viewsEnum.WISH_LIST)">Favoritos</a></li>
+											<li><a href="#/questions" ng-click="switchView(viewsEnum.QUESTIONS)">Perguntas</a></li>
+										</ul>
+									</div>
+									<div class="col-sm-4">
+										<ul class="multi-column-dropdown">
+											<h6>Vendas</h6>
+											<li><a href="#/ads" ng-click="switchView(viewsEnum.ADS)">Meus Anúncios</a></li>
+											<li><a href="#/negotiations" ng-click="switchView(viewsEnum.NEGOTIATIOS)">Minhas Negociações</a></li>
+											<li><a href="#/messages" ng-click="switchView(viewsEnum.QUESTIONS)">Chat/Mensagens</a></li>
+										</ul>
+									</div>
+									<div class="col-sm-4">
+										<ul class="multi-column-dropdown">
+											<li><a href="#/account" ng-click="switchView(viewsEnum.ACCOUNT)"><i>Dados Pessoais</i></a></li>
+											<li><a href="#/exit" ng-click="switchView(viewsEnum.EXIT)"><i>SAIR</i></a></li>
+										</ul>
+									</div>
+								</div>
+							</ul>
+						</li>
 					</ul>
 				</div>
 			</nav>
 		</div>
 	</div>
-		<!-- //menu -->
+	<!-- //menu -->
 </div>

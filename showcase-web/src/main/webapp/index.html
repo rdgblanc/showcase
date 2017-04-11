@@ -64,14 +64,14 @@
 		</script>
 	</head>
 	
-	<body>
+	<body data-ng-controller="showcaseController">
 		<div>
 			<!-- Header -->
 			<div data-ng-include data-src="'modules/header/header.html'"></div>
 			<!-- end:: Header -->
 
 			<!-- Page Content -->
-			<div data-ng-view></div>
+			<div data-ng-include data-src="currentView"></div>
 			<!-- end:: Page Content -->
 			
 			<!-- Footer -->

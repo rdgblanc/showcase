@@ -15,7 +15,7 @@ public class JerseyConfigurator extends Application {
 	public JerseyConfigurator() {
 		BeanConfig beanConfig = new BeanConfig();
 		beanConfig.setVersion("1.0.0");
-		beanConfig.setBasePath("/vitrinedecristal/api");
+		beanConfig.setBasePath("/showcase/api");
 		beanConfig.setResourcePackage("br.com.vitrinedecristal");
 		beanConfig.setScan(true);
 

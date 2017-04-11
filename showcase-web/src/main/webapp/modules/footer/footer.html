@@ -13,10 +13,11 @@
 				</div>
 				<div class="col-md-3 w3_footer_grid">
 					<h3>Informação</h3>
-					<ul class="info"> 
-						<li><a href="#/about">Sobre nós</a></li>
-						<li><a href="#/contact">Contato</a></li>
-						<li><a href="#/faq">Perguntas Frequentes</a></li>
+					<ul class="info">
+						<li><a href="#/about" ng-click="switchView(viewsEnum.ABOUT)">Sobre nós</a></li>
+						<li><a href="#/guideline" ng-click="switchView(viewsEnum.GUIDELINE)">Diretrizes</a></li>
+						<li><a href="#/contact" ng-click="switchView(viewsEnum.CONTACT)">Contato</a></li>
+						<li><a href="#/faq" ng-click="switchView(viewsEnum.FAQ)">Perguntas Frequentes</a></li>
 					</ul>
 				</div>
 				<div class="col-md-3 w3_footer_grid">
@@ -32,10 +33,10 @@
 				<div class="col-md-3 w3_footer_grid">
 					<h3>Perfil</h3>
 					<ul class="info">
-						<li><a href="#/">Meus Pedidos</a></li>
-						<li><a href="#/">Meus Favoritos</a></li>
-						<li><a href="#/">Meus Produtos</a></li>
-						<li><a href="#/">Minhas Negociações</a></li>
+						<li><a href="#/order_list" ng-click="switchView(viewsEnum.ORDER_LIST)">Meus Pedidos</a></li>
+						<li><a href="#/wish_list" ng-click="switchView(viewsEnum.WISH_LIST)">Favoritos</a></li>
+						<li><a href="#/ads" ng-click="switchView(viewsEnum.ADS)">Meus Anúncios</a></li>
+						<li><a href="#/negotiations" ng-click="switchView(viewsEnum.NEGOTIATIOS)">Minhas Negociações</a></li>
 					</ul>
 					<h4>Siga-nos</h4>
 					<div class="agileits_social_button">
@@ -47,13 +48,13 @@
 						</ul>
 					</div>
 				</div>
-				<div class="clearfix"> </div>
+				<div class="clearfix"></div>
 			</div>
 		</div>
 		<div class="footer-copy">
 			<div class="footer-copy1">
 				<div class="footer-copy-pos">
-					<a href="#home1" class="scroll"><img src="assets/images/arrow.png" alt=" " class="img-responsive" /></a>
+					<a href="#home1" class="scroll" ng-click="anchorScroll()"><img src="assets/images/arrow.png" alt=" " class="img-responsive" /></a>
 				</div>
 			</div>
 			<div class="container">

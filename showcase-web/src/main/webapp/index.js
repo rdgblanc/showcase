@@ -59,6 +59,72 @@ window.module.run(['$rootScope', '$location', '$route',
 	}
 ]);
 
+angular.module('showcase').controller("showcaseController", [
+	'$scope', '$log', '$anchorScroll', '$location', '$route',
+	function($scope, $log, $anchorScroll, $location, $route) {
+		$log.info('Showcase controller.....');
+
+		$scope.viewsEnum = Object.freeze({
+			HOME: 'pages/home/home.html',
+
+			ABOUT: 'pages/about/about.html',
+			GUIDELINE: 'pages/guideline/guideline.html',
+			CONTACT: 'pages/contact/contact.html',
+			FAQ: 'pages/faq/faq.html'
+		});
+
+		$scope.currentView = $scope.viewsEnum.HOME;
+
+		$scope.initialize = function() {
+			var path = $location.$$path.split("/");
+			$log.info(path);
+			if (path[1] !== undefined) {
+				var view = path[1].toUpperCase();
+				$log.info('>>>' + view);
+				$log.info('>>>' + $scope.viewsEnum[view]);
+				if ($scope.viewsEnum[view] !== undefined) {
+					$scope.switchView($scope.viewsEnum[view]);
+				}
+			}
+		};
+		
+		$scope.checkActiveMenu = function() {
+			$log.info('$scope.checkActiveMenu()');
+			//var path = $location.$$path.split("/");
+			$("#bs-megadropdown-tabs li").removeClass("active");
+			$("#bs-megadropdown-tabs li").children("a").removeClass("act");
+
+			switch($scope.currentView) {
+				case $scope.viewsEnum.HOME:
+					$("#nav-home").addClass("active");
+					$("#nav-home").children("a").addClass("act");
+					break;
+				case $scope.viewsEnum.ABOUT:
+					$("#nav-about").addClass("active");
+					$("#nav-about").children("a").addClass("act");
+					break;
+			}
+			
+			//$route.reload();
+			//$scope.$digest();
+		};
+
+		$scope.switchView = function(view) {
+			$log.info('switch view..1');
+			$scope.currentView = view;
+			$anchorScroll();
+			//$scope.checkActiveMenu();
+			$log.info('switch view..2');
+		};
+
+		$scope.anchorScroll = function() {
+			$anchorScroll();
+		};
+
+		$scope.initialize();
+
+	}]);
+
 var DEFAULT_ERROR_CALLBACK = function(responseData) {
 	toaster.pop({
 		"type" : "error",
