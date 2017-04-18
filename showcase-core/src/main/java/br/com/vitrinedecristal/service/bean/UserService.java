@@ -96,7 +96,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		userVO.setStatus(UserStatusEnum.ACTIVE);
 		userVO.setDtAtualizacao(new Date());
 		// userVO.setRole(Roles.ROLE_USER); TODO validar ROLEs dos usuários
-		userVO.setRole(Roles.ROLE_USER);
+		//userVO.setRole(Roles.ROLE_USER);
 		User user = super.save(ParserUtil.getVO(userVO, User.class));
 		logger.info("Usuário criado com sucesso!");
 

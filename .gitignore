@@ -13,3 +13,9 @@ hs_err_pid*
 showcase-web/build/
 showcase-core/build/
 .gradle/
+showcase-core/.classpath
+showcase-core/.project
+showcase-core/.settings/
+showcase-web/.classpath
+showcase-web/.project
+showcase-web/.settings/
