@@ -27,6 +27,7 @@ import br.com.vitrinedecristal.exception.UserAlreadyExistsException;
 import br.com.vitrinedecristal.log.TrackingLogger;
 import br.com.vitrinedecristal.model.Token;
 import br.com.vitrinedecristal.model.User;
+import br.com.vitrinedecristal.security.credential.Roles;
 import br.com.vitrinedecristal.security.credential.UserCredentials;
 import br.com.vitrinedecristal.security.util.AuthenticationUtils;
 import br.com.vitrinedecristal.service.ITokenService;
@@ -52,7 +53,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
-	private ITokenService tokenBO;
+	private ITokenService tokenService;
 
 	private static final Logger logger = TrackingLogger.getLogger(UserService.class);
 
@@ -95,6 +96,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		userVO.setStatus(UserStatusEnum.ACTIVE);
 		userVO.setDtAtualizacao(new Date());
 		// userVO.setRole(Roles.ROLE_USER); TODO validar ROLEs dos usuários
+		userVO.setRole(Roles.ROLE_USER);
 		User user = super.save(ParserUtil.getVO(userVO, User.class));
 		logger.info("Usuário criado com sucesso!");
 
@@ -189,7 +191,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 
 	@Override
 	public void updateForgottenPassword(String tokenHash, String newPassword, Long userId) throws BusinessException, EncryptPasswordException, NotFoundException {
-		Token token = tokenBO.validatePasswordForgotToken(tokenHash, userId);
+		Token token = tokenService.validatePasswordForgotToken(tokenHash, userId);
 		this.updateUserPassword(token.getUsuario().getId(), null, newPassword);
 	}
 

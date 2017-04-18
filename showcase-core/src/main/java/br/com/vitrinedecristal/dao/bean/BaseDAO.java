@@ -42,8 +42,7 @@ public abstract class BaseDAO<B extends Serializable, T extends IID<B>> implemen
 	/**
 	 * Construtor básico para classe de acesso a dados (DAO)
 	 * 
-	 * @param manager
-	 *            - EntityManager
+	 * @param manager - EntityManager
 	 */
 	@SuppressWarnings("unchecked")
 	public BaseDAO(EntityManager manager) {
@@ -147,13 +146,10 @@ public abstract class BaseDAO<B extends Serializable, T extends IID<B>> implemen
 	/**
 	 * Monta e retorna uma query para consulta com JPA. O map passado por parâmetro será usado para montar a condição <code>WHERE</code>.
 	 * 
-	 * @param parameters
-	 *            os parâmetros que serão usados na condição <code>WHERE</code>.
-	 * @param count
-	 *            indica se a consulta da query será um <code>COUNT</code>.
+	 * @param parameters os parâmetros que serão usados na condição <code>WHERE</code>.
+	 * @param count indica se a consulta da query será um <code>COUNT</code>.
 	 * @return uma query.
-	 * @throws IllegalArgumentException
-	 *             se o parâmetro for <code>null</code>.
+	 * @throws IllegalArgumentException se o parâmetro for <code>null</code>.
 	 */
 	private String getQuery(Map<String, Object> parameters, boolean count) {
 		if (parameters == null) {
@@ -189,8 +185,7 @@ public abstract class BaseDAO<B extends Serializable, T extends IID<B>> implemen
 	 * <li>Não possuem a anotação {@link Transient}.
 	 * </ul>
 	 * 
-	 * @param filter
-	 *            o objeto do qual os campos serão lidos. Se for <code>null</code> será retornado um {@link HashMap} vazio.
+	 * @param filter o objeto do qual os campos serão lidos. Se for <code>null</code> será retornado um {@link HashMap} vazio.
 	 * @return um map com o nome dos campos e o respectivo valor.
 	 */
 	private Map<String, Object> getParameters(T filter) {

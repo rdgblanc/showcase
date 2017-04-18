@@ -18,7 +18,7 @@ import br.com.vitrinedecristal.enums.GenderEnum;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
 
 @Entity
-@Table(name = "TB_USER")
+@Table(name = "TB_USUARIO")
 public class User implements IID<Long> {
 
 	@Id

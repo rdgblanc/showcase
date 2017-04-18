@@ -11,12 +11,12 @@ public class UserDTO implements Serializable {
 
 	private String email;
 
-	public String getUid() {
+	public String getId() {
 		return id;
 	}
 
-	public void setUid(String uid) {
-		this.id = uid;
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getNome() {

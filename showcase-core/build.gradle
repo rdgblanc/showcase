@@ -47,17 +47,25 @@ dependencies {
 	compile "org.springframework:spring-beans:$SPRING_VERSION"
 	compile "org.springframework:spring-core:$SPRING_VERSION"
 	compile "org.springframework:spring-context:$SPRING_VERSION"
+	compile "org.springframework:spring-context-support:$SPRING_VERSION"
 	compile "org.springframework:spring-test:$SPRING_VERSION"
 	compile "org.springframework:spring-orm:$SPRING_VERSION"
+	compile "org.springframework:spring-tx:$SPRING_VERSION"
+	compile "org.springframework:spring-jdbc:$SPRING_VERSION"
+	compile "org.springframework:spring-oxm:$SPRING_VERSION"
+	compile "org.springframework:spring-expression:$SPRING_VERSION"
 
 	compile "org.springframework.security:spring-security-core:$SPRING_SECURITY_VERSION"
 	
 	compile "org.hibernate:hibernate-core:$HIBERNATE_VERSION"
 	compile "org.hibernate:hibernate-entitymanager:3.3.2.GA"
+	compile "org.hibernate:hibernate-annotations:3.3.1.GA"
+	compile "org.hibernate:hibernate-commons-annotations:3.0.0.ga"
 	compile "org.hibernate:hibernate:3.3.2.GA"
 	compile "org.hibernate:ejb3-persistence:1.0.2.GA"
+	compile "cglib:cglib-nodep:2.1_3"
 
-	compile "mysql:mysql-connector-java:6.0.6"
+	compile "mysql:mysql-connector-java:5.1.41"
 }
 
 eclipse {
