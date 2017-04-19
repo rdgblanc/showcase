@@ -17,16 +17,15 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import br.com.vitrinedecristal.dto.LoginDTO;
 import br.com.vitrinedecristal.dto.UserDTO;
+import br.com.vitrinedecristal.enums.UserStatusEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.exception.EntityNotFoundException;
-import br.com.vitrinedecristal.model.User;
 import br.com.vitrinedecristal.service.IUserService;
 import br.com.vitrinedecristal.swagger.ApiException;
 import br.com.vitrinedecristal.swagger.ApiExceptionResponse;
 import br.com.vitrinedecristal.swagger.AuthorizationException;
 import br.com.vitrinedecristal.swagger.BadRequestException;
 import br.com.vitrinedecristal.swagger.EmptyRequestBodyException;
-import br.com.vitrinedecristal.util.ParserUtil;
 import br.com.vitrinedecristal.vo.UserVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,7 +43,7 @@ public class UserController extends SpringBeanAutowiringSupport {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "List users", notes = "List every user login information.")
+	@ApiOperation(value = "Lista os usuários", notes = "Lista os usuários cadastrados.")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
 			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
@@ -54,26 +53,26 @@ public class UserController extends SpringBeanAutowiringSupport {
 	}
 
 	@GET
-	@Path("/{uid}")
+	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Get user information", notes = "Get user information based on the uid (@self for logged user).")
+	@ApiOperation(value = "Informações do usuário", notes = "Obtém informações do usuário através do ID (@self para usuário logado).")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
 			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class),
 			@ApiResponse(code = 404, message = EntityNotFoundException.MESSAGE, response = ApiExceptionResponse.class)
 	})
-	public UserDTO get(@ApiParam @PathParam("id") Long id) throws ApiException, BusinessException {
+	public UserDTO get(@ApiParam @PathParam("id") String id) throws ApiException, BusinessException {
 		if (id == null) {
 			throw new EmptyRequestBodyException();
 		}
 
-		return ParserUtil.getVO(this.userService.findByPrimaryKey(id), UserDTO.class);
+		return this.userService.get(id);
 	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Create an user", notes = "Create a new user.")
+	@ApiOperation(value = "Cria um usuário", notes = "Cria um novo usuário.")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class)
 	})
@@ -87,12 +86,13 @@ public class UserController extends SpringBeanAutowiringSupport {
 	}
 
 	@PUT
-	@Path("/{uid}")
+	@Path("/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Update an user", notes = "Update the informed user.")
+	@ApiOperation(value = "Atualiza um usuário", notes = "Atualiza as informações do usuário.")
 	@ApiResponses(value = {
-			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class)
+			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
+			@ApiResponse(code = 404, message = EntityNotFoundException.MESSAGE, response = ApiExceptionResponse.class)
 	})
 	public UserDTO update(@PathParam("id") Long id, UserVO userVO) throws ApiException, BusinessException, NotFoundException {
 		if (userVO == null) {
@@ -104,23 +104,22 @@ public class UserController extends SpringBeanAutowiringSupport {
 	}
 
 	@DELETE
-	@Path("/{uid}")
-	@ApiOperation(value = "Remove the informed user", notes = "Remove the informed user.")
+	@Path("/{id}")
+	@ApiOperation(value = "Remove um usuário", notes = "Altera o status do usuário informado para INATIVO.")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
-			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
+			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class),
+			@ApiResponse(code = 404, message = EntityNotFoundException.MESSAGE, response = ApiExceptionResponse.class)
 	})
-	public void remove(@PathParam("id") Long id) throws ApiException {
-		User user = new User();
-		user.setId(id);
-		this.userService.remove(user);
+	public void remove(@PathParam("id") Long id) throws ApiException, BusinessException, NotFoundException {
+		this.userService.updateStatus(id, UserStatusEnum.INACTIVE);
 	}
 
 	@POST
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Validate login credentials", notes = "Validate login information and stores the credentials in the session.")
+	@ApiOperation(value = "Efetua o login", notes = "Valida as informações de login a armazena as credenciais na sessão.")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class)
 	})

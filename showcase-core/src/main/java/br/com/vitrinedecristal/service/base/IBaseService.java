@@ -5,6 +5,7 @@ import java.util.List;
 
 import br.com.vitrinedecristal.dao.IBaseDAO;
 import br.com.vitrinedecristal.dao.IID;
+import br.com.vitrinedecristal.enums.RoleEnum;
 
 /**
  * Estabelece os contratos básicos de negócio de uma entidade.
@@ -16,11 +17,20 @@ import br.com.vitrinedecristal.dao.IID;
 public interface IBaseService<B extends Serializable, T extends IID<B>, D extends IBaseDAO<B, T>> {
 
 	/**
+	 * Funções do usuário de acordo com a enum {@link RoleEnum#ROLE_ADMIN}
+	 */
+	public static final String ROLE_ADMIN = "ROLE_ADMIN";
+	/**
+	 * Funções do usuário de acordo com a enum {@link RoleEnum#ROLE_USER}
+	 */
+	public static final String ROLE_USER = "ROLE_USER";
+
+	/**
 	 * Persiste a entidade na base.
 	 * 
 	 * @param t a entidade a ser persistida.
 	 * @return a entidade persistida.
-	 * @see IBaseDAO#save(IUID)
+	 * @see IBaseDAO#save(IID)
 	 */
 	public T save(T t);
 
@@ -28,7 +38,7 @@ public interface IBaseService<B extends Serializable, T extends IID<B>, D extend
 	 * Exclui a entidade da base.
 	 * 
 	 * @param t a entidade a ser excluída.
-	 * @see IBaseDAO#remove(IUID)
+	 * @see IBaseDAO#remove(IID)
 	 */
 	public void remove(T t);
 

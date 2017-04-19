@@ -1,12 +1,13 @@
 package br.com.vitrinedecristal.vo;
 
 import java.util.Date;
+import java.util.List;
 
 import br.com.vitrinedecristal.annotation.IgnoreVOParser;
 import br.com.vitrinedecristal.enums.GenderEnum;
+import br.com.vitrinedecristal.enums.RoleEnum;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
 import br.com.vitrinedecristal.model.User;
-import br.com.vitrinedecristal.security.credential.Roles;
 
 /**
  * Classe VO para representação de um objeto {@link User} nos clientes.
@@ -16,7 +17,7 @@ public class UserVO extends BaseVO<User> {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
-	
+
 	private String nome;
 
 	private String email;
@@ -38,7 +39,7 @@ public class UserVO extends BaseVO<User> {
 
 	private UserStatusEnum status;
 
-	private Roles role;
+	private List<RoleEnum> roles;
 
 	public UserVO() {
 	}
@@ -140,12 +141,12 @@ public class UserVO extends BaseVO<User> {
 		this.status = status;
 	}
 
-	public Roles getRole() {
-		return role;
+	public List<RoleEnum> getRoles() {
+		return roles;
 	}
 
-	public void setRole(Roles role) {
-		this.role = role;
+	public void setRoles(List<RoleEnum> roles) {
+		this.roles = roles;
 	}
 
 }

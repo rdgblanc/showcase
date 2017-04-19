@@ -1,20 +1,26 @@
 package br.com.vitrinedecristal.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.vitrinedecristal.dao.IID;
 import br.com.vitrinedecristal.enums.GenderEnum;
+import br.com.vitrinedecristal.enums.RoleEnum;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
 
 @Entity
@@ -51,16 +57,17 @@ public class User implements IID<Long> {
 
 	@Column(name = "DT_ATUALIZACAO", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	private Date dtAtualizacao = new Date();
+	private Date dtAtualizacao;
 
 	@Column(name = "STATUS", nullable = false)
 	@Enumerated(value = EnumType.STRING)
 	private UserStatusEnum status;
 
-	/*
-	 * @Column(name = "ROLE", nullable = false)
-	 * @Enumerated(EnumType.STRING) private Roles role;
-	 */
+	@ElementCollection(targetClass = RoleEnum.class, fetch = FetchType.EAGER)
+	@JoinTable(name = "TB_FUNCAO_USUARIO", joinColumns = @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID"))
+	@Column(name = "FUNCAO", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private List<RoleEnum> roles;
 
 	public Long getId() {
 		return id;
@@ -142,12 +149,12 @@ public class User implements IID<Long> {
 		this.status = status;
 	}
 
-	// public Roles getRole() {
-	// return role;
-	// }
-	//
-	// public void setRole(Roles role) {
-	// this.role = role;
-	// }
+	public List<RoleEnum> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<RoleEnum> roles) {
+		this.roles = roles;
+	}
 
 }

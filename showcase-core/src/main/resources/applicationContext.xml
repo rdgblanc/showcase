@@ -24,9 +24,12 @@
 
 	<!-- Security configuration -->
 	<security:global-method-security secured-annotations="enabled" />
+	<bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
 	<security:authentication-manager>
-		<security:authentication-provider user-service-ref="userDetailsService" />
+		<security:authentication-provider user-service-ref="userDetailsService">
+			<security:password-encoder ref="bCryptPasswordEncoder" />
+		</security:authentication-provider>
 	</security:authentication-manager>
 
 	<!-- Bean scan configuration -->

@@ -1,7 +1,6 @@
 package br.com.vitrinedecristal.service.bean;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -14,20 +13,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.vitrinedecristal.application.ApplicationBeanFactory;
 import br.com.vitrinedecristal.dao.IUserDAO;
 import br.com.vitrinedecristal.dto.LoginDTO;
 import br.com.vitrinedecristal.dto.UserDTO;
+import br.com.vitrinedecristal.enums.RoleEnum;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
-import br.com.vitrinedecristal.exception.EncryptPasswordException;
 import br.com.vitrinedecristal.exception.EntityNotFoundException;
+import br.com.vitrinedecristal.exception.InvalidPermissionException;
 import br.com.vitrinedecristal.exception.UserAlreadyExistsException;
 import br.com.vitrinedecristal.log.TrackingLogger;
 import br.com.vitrinedecristal.model.Token;
 import br.com.vitrinedecristal.model.User;
-import br.com.vitrinedecristal.security.credential.Roles;
 import br.com.vitrinedecristal.security.credential.UserCredentials;
 import br.com.vitrinedecristal.security.util.AuthenticationUtils;
 import br.com.vitrinedecristal.service.ITokenService;
@@ -71,6 +72,27 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	}
 
 	@Override
+	public UserDTO get(String id) throws BusinessException {
+		logger.info("Obtendo usuário pelo id: " + id);
+
+		Long userId = null;
+		if (id.equals("@self")) {
+			logger.info("Obtendo informações do usuário logado..");
+			userId = AuthenticationUtils.getUserId();
+			logger.info("Usuário logado resgatado [" + userId + "]");
+		} else if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN)) {
+			throw new InvalidPermissionException();
+		}
+
+		User user = super.findByPrimaryKey(userId);
+		if (user == null) {
+			throw new EntityNotFoundException();
+		}
+
+		return ParserUtil.getVO(user, UserDTO.class);
+	}
+
+	@Override
 	@Transactional
 	public UserDTO createUser(UserVO userVO) throws BusinessException {
 		if (userVO == null) {
@@ -91,12 +113,11 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		}
 
 		userVO.setSenha(this.encryptPassword(userVO.getSenha()));
+		userVO.setStatus(UserStatusEnum.INCOMPLETE);
+		userVO.setDtAtualizacao(new Date());
+		userVO.setRoles(Arrays.asList(RoleEnum.ROLE_USER));
 
 		logger.info("Criando usuário: " + userVO);
-		userVO.setStatus(UserStatusEnum.ACTIVE);
-		userVO.setDtAtualizacao(new Date());
-		// userVO.setRole(Roles.ROLE_USER); TODO validar ROLEs dos usuários
-		//userVO.setRole(Roles.ROLE_USER);
 		User user = super.save(ParserUtil.getVO(userVO, User.class));
 		logger.info("Usuário criado com sucesso!");
 
@@ -105,63 +126,101 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 
 	@Override
 	public UserDTO updateUser(UserVO userVO) throws NotFoundException, BusinessException {
+		logger.info("Atualizando usuário: " + userVO);
+
+		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN) && !userVO.getId().equals(AuthenticationUtils.getUserId())) {
+			throw new InvalidPermissionException();
+		}
+
 		if (userVO == null) {
 			throw new IllegalArgumentException("A entidade usuário não pode ser nula.");
 		}
 
-		logger.info("Atualizando usuário: " + userVO);
-		User userToUpdate = null;
-
+		User storedUser = null;
 		try {
-			userToUpdate = getDAO().findByPrimaryKey(userVO.getId());
+			storedUser = getDAO().findByPrimaryKey(userVO.getId());
 		} catch (NoResultException e) {
 			throw new NotFoundException("Usuário não encontrado", e);
 		}
 
-		if (StringUtils.isBlank(userVO.getNome())) {
-			userToUpdate.setNome(userVO.getNome());
+		if (AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN)) {
+			if (StringUtils.isNotBlank(userVO.getEmail())) {
+				storedUser.setEmail(userVO.getEmail());
+			}
+
+			if (userVO.getRoles() != null && !userVO.getRoles().isEmpty() && RoleEnum.containsAll(userVO.getRoles())) {
+				storedUser.setRoles(userVO.getRoles());
+			}
+
+			if (userVO.getClassificacao() != null) {
+				storedUser.setClassificacao(userVO.getClassificacao());
+			}
 		}
 
-		// TODO validar essa alteração para usuários Roles.ADMIN
-		// if (StringUtils.isBlank(userVO.getEmail())) {
-		// this.validateEmail(userVO.getEmail());
-		// userToUpdate.setEmail(userVO.getEmail());
-		// }
+		if (StringUtils.isBlank(userVO.getNome())) {
+			storedUser.setNome(userVO.getNome());
+		}
 
 		if (StringUtils.isNotBlank(userVO.getNovaSenha())) {
-			// TODO para usuários admin, a alteração de senha não solicita a senha atual
-			// this.updateUserPassword(userVO.getId(), null, userVO.getNovaSenha());
-			if (StringUtils.isBlank(userVO.getSenha())) {
-				throw new IllegalArgumentException("A senha atual não foi informada.");
+			if (AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN)) {
+				this.updateUserPassword(userVO.getId(), null, userVO.getNovaSenha());
+			} else {
+				if (StringUtils.isBlank(userVO.getSenha())) {
+					throw new IllegalArgumentException("A senha atual não foi informada.");
+				}
+				this.updateUserPassword(userVO.getId(), userVO.getSenha(), userVO.getNovaSenha());
 			}
-			this.updateUserPassword(userVO.getId(), userVO.getSenha(), userVO.getNovaSenha());
 		}
 
 		if (userVO.getSexo() != null) {
-			userToUpdate.setSexo(userVO.getSexo());
+			storedUser.setSexo(userVO.getSexo());
 		}
 
 		if (StringUtils.isBlank(userVO.getTelefone())) {
-			userToUpdate.setEmail(userVO.getTelefone());
+			storedUser.setEmail(userVO.getTelefone());
 		}
 
 		if (userVO.getDtNascimento() != null) {
-			userToUpdate.setDtNascimento(userVO.getDtNascimento());
+			storedUser.setDtNascimento(userVO.getDtNascimento());
 		}
 
-		if (userVO.getClassificacao() != null) {
-			userToUpdate.setClassificacao(userVO.getClassificacao());
-		}
-
-		// userVO.setRole(Roles.ROLE_USER); TODO validar alteração de ROLEs dos usuários
-
-		userToUpdate.setStatus(UserStatusEnum.ACTIVE);
-		userToUpdate.setDtAtualizacao(new Date());
-		userToUpdate = getDAO().save(userToUpdate);
+		storedUser.setStatus(UserStatusEnum.ACTIVE);
+		storedUser.setDtAtualizacao(new Date());
+		storedUser = getDAO().save(storedUser);
 		logger.info("Usuário atualizado com sucesso!");
 
-		return ParserUtil.getVO(userToUpdate, UserDTO.class);
+		return ParserUtil.getVO(storedUser, UserDTO.class);
 	}
+
+	@Override
+	public void updateStatus(Long id, UserStatusEnum status) throws BusinessException, NotFoundException {
+		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN)) {
+			throw new InvalidPermissionException();
+		}
+
+		if (id == null) {
+			throw new IllegalArgumentException("O id do usuário não pode ser nulo.");
+		}
+
+		if (status == null) {
+			throw new IllegalArgumentException("O novo status do usuário não pode ser nulo.");
+		}
+
+		logger.info("Alterando status do usuário [" + id + "] para " + status);
+
+		User storedUser = null;
+		try {
+			storedUser = getDAO().findByPrimaryKey(id);
+		} catch (NoResultException e) {
+			throw new NotFoundException("Usuário não encontrado", e);
+		}
+
+		storedUser.setDtAtualizacao(new Date());
+		storedUser = getDAO().save(storedUser);
+		logger.info("Status do usuário atualizado com sucesso!");
+	}
+
+	// TODO função para atualizar a classificação do usuário (calcular a média e atualizad na base..)
 
 	@Override
 	public void recoveryPassword(User usuario) throws BusinessException {
@@ -190,7 +249,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	}
 
 	@Override
-	public void updateForgottenPassword(String tokenHash, String newPassword, Long userId) throws BusinessException, EncryptPasswordException, NotFoundException {
+	public void updateForgottenPassword(String tokenHash, String newPassword, Long userId) throws BusinessException, NotFoundException {
 		Token token = tokenService.validatePasswordForgotToken(tokenHash, userId);
 		this.updateUserPassword(token.getUsuario().getId(), null, newPassword);
 	}
@@ -239,44 +298,15 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	}
 
 	/**
-	 * Criptografa uma senha usando o algoritmo MD5.
+	 * Criptografa uma senha usando o algoritmo do springframework security {@link BCryptPasswordEncoder}.
 	 * 
-	 * @param password a senha a ser criptografada.
-	 * @return a senha criptografada.
-	 * @throws EncryptPasswordException caso não seja possível criptografar a senha.
+	 * @param password a senha a ser criptografada
+	 * @return a senha criptografada
 	 */
-	private String encryptPassword(String password) throws EncryptPasswordException {
-		if (StringUtils.isBlank(password)) {
-			throw new IllegalArgumentException("A senha a ser criptografada não pode ser nula.");
-		}
-
-		logger.info("Criptografando senha: " + password);
-
-		String sign = PASSWORD_SEED + password;
-		StringBuffer hexString = new StringBuffer();
-		MessageDigest md = null;
-
-		try {
-			md = MessageDigest.getInstance("MD5");
-		} catch (NoSuchAlgorithmException e) {
-			throw new EncryptPasswordException(e);
-		}
-
-		md.update(sign.getBytes());
-		byte[] userProfileId = md.digest();
-
-		for (int i = 0; i < userProfileId.length; i++) {
-			if ((0xff & userProfileId[i]) < 0x10) {
-				hexString.append("0" + Integer.toHexString((0xFF & userProfileId[i])));
-			} else {
-				hexString.append(Integer.toHexString(0xFF & userProfileId[i]));
-			}
-		}
-
-		sign = hexString.toString();
-
-		logger.info("Senha criptografada com sucesso!");
-		return sign;
+	private String encryptPassword(String password) {
+		PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String encodedPassword = passwordEncoder.encode(password);
+		return encodedPassword;
 	}
 
 	/**
@@ -286,10 +316,9 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	 * @param password a senha atual
 	 * @param newPassword a nova senha
 	 * @throws BusinessException
-	 * @throws EncryptPasswordException
 	 * @throws NotFoundException
 	 */
-	private void updateUserPassword(Long userId, String password, String newPassword) throws BusinessException, EncryptPasswordException, NotFoundException {
+	private void updateUserPassword(Long userId, String password, String newPassword) throws BusinessException, NotFoundException {
 		if (StringUtils.isBlank(newPassword)) {
 			throw new IllegalArgumentException("A nova senha não foi informada.");
 		}
@@ -304,13 +333,13 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		}
 
 		if (password != null) {
-			String encryptedPassword = encryptPassword(password);
+			String encryptedPassword = this.encryptPassword(password);
 			if (!encryptedPassword.equals(user.getSenha())) {
 				throw new BusinessException("A senha informada para realizar a troca não é válida com a senha cadastrada na base de dados.");
 			}
 		}
 
-		String newPasswordEncrypted = encryptPassword(newPassword);
+		String newPasswordEncrypted = this.encryptPassword(newPassword);
 		if (user.getSenha().equals(newPasswordEncrypted)) {
 			throw new BusinessException("A nova senha é igual a senha anterior.");
 		}

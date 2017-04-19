@@ -8,10 +8,8 @@ import javax.persistence.EntityManager;
 /**
  * Interface com os contratos básicos para uma classe DAO (Data Access Object).
  * 
- * @param <B>
- *            tipo da chave primária da entidade.
- * @param <T>
- *            tipo da entidade.
+ * @param <B> tipo da chave primária da entidade.
+ * @param <T> tipo da entidade.
  */
 public interface IBaseDAO<B extends Serializable, T extends IID<B>> {
 
@@ -25,8 +23,7 @@ public interface IBaseDAO<B extends Serializable, T extends IID<B>> {
 	/**
 	 * Persiste a entidade na base.
 	 * 
-	 * @param t
-	 *            a entidade a ser persistida.
+	 * @param t a entidade a ser persistida.
 	 * @return a entidade persistida.
 	 */
 	T save(T t);
@@ -34,16 +31,14 @@ public interface IBaseDAO<B extends Serializable, T extends IID<B>> {
 	/**
 	 * Exclui a entidade da base.
 	 * 
-	 * @param t
-	 *            a entidade a ser excluída.
+	 * @param t a entidade a ser excluída.
 	 */
 	void remove(T t);
 
 	/**
 	 * Pesquisa pela entidade por chave primária.
 	 * 
-	 * @param b
-	 *            a chave primária da entidade a ser pesquisada.
+	 * @param b a chave primária da entidade a ser pesquisada.
 	 * @return a entidade pesquisada ou <code>null</code> caso a entidade não exista.
 	 */
 	T findByPrimaryKey(B b);
@@ -58,10 +53,8 @@ public interface IBaseDAO<B extends Serializable, T extends IID<B>> {
 	/**
 	 * Lista as entidades.
 	 * 
-	 * @param offset
-	 *            a posição da primeira entidade retornada.
-	 * @param limit
-	 *            o número máximo de entidades retornadas.
+	 * @param offset a posição da primeira entidade retornada.
+	 * @param limit o número máximo de entidades retornadas.
 	 * @return uma lista com as entidades.
 	 */
 	List<T> find(int offset, int limit);
@@ -76,8 +69,7 @@ public interface IBaseDAO<B extends Serializable, T extends IID<B>> {
 	 * <li>Não possuem a anotação {@link javax.persistence.Transient}.
 	 * </ul>
 	 * 
-	 * @param filter
-	 *            o objeto cujos campos serão usados como filtro. Caso seja <code>null</code> não será usado.
+	 * @param filter o objeto cujos campos serão usados como filtro. Caso seja <code>null</code> não será usado.
 	 * @return uma lista com todas as entidades.
 	 */
 	List<T> find(T filter);
@@ -92,12 +84,9 @@ public interface IBaseDAO<B extends Serializable, T extends IID<B>> {
 	 * <li>Não possuem a anotação {@link javax.persistence.Transient}.
 	 * </ul>
 	 * 
-	 * @param filter
-	 *            o objeto cujos campos serão usados como filtro. Caso seja <code>null</code> não será usado.
-	 * @param offset
-	 *            a posição da primeira entidade retornada. Caso seja <code>null</code> não será usado.
-	 * @param limit
-	 *            número máximo de entidades retornadas. Caso seja <code>null</code> não será usado.
+	 * @param filter o objeto cujos campos serão usados como filtro. Caso seja <code>null</code> não será usado.
+	 * @param offset a posição da primeira entidade retornada. Caso seja <code>null</code> não será usado.
+	 * @param limit número máximo de entidades retornadas. Caso seja <code>null</code> não será usado.
 	 * @return uma lista com todas as entidades.
 	 */
 	List<T> find(T filter, Integer offset, Integer limit);
@@ -119,8 +108,7 @@ public interface IBaseDAO<B extends Serializable, T extends IID<B>> {
 	 * <li>Não possuem a anotação {@link javax.persistence.Transient}.
 	 * </ul>
 	 * 
-	 * @param filter
-	 *            o objeto cujos campos serão usados como filtro. Caso seja <code>null</code> não será usado.
+	 * @param filter o objeto cujos campos serão usados como filtro. Caso seja <code>null</code> não será usado.
 	 * @return a quantidade de entidades.
 	 */
 	int count(T filter);

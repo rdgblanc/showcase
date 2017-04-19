@@ -2,11 +2,13 @@ package br.com.vitrinedecristal.service;
 
 import java.util.List;
 
+import org.springframework.security.access.annotation.Secured;
+
 import br.com.vitrinedecristal.dao.IUserDAO;
 import br.com.vitrinedecristal.dto.LoginDTO;
 import br.com.vitrinedecristal.dto.UserDTO;
+import br.com.vitrinedecristal.enums.UserStatusEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
-import br.com.vitrinedecristal.exception.EncryptPasswordException;
 import br.com.vitrinedecristal.model.User;
 import br.com.vitrinedecristal.service.base.IBaseService;
 import br.com.vitrinedecristal.vo.UserVO;
@@ -23,7 +25,18 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	 * @return lista de usuários
 	 * @throws BusinessException
 	 */
+	@Secured(ROLE_ADMIN)
 	List<UserDTO> listUsers() throws BusinessException;
+
+	/**
+	 * Obtém informações do usuário
+	 * 
+	 * @param id id do usuário
+	 * @return informações do usuário
+	 * @throws BusinessException
+	 */
+	@Secured(ROLE_USER)
+	UserDTO get(String id) throws BusinessException;
 
 	/**
 	 * Cria o usuário
@@ -40,10 +53,21 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	 * @param userVO
 	 * @return usuário alterado
 	 * @throws NotFoundException
-	 * @throws EncryptPasswordException
 	 * @throws BusinessException
 	 */
-	UserDTO updateUser(UserVO userVO) throws NotFoundException, EncryptPasswordException, BusinessException;
+	@Secured(ROLE_USER)
+	UserDTO updateUser(UserVO userVO) throws NotFoundException, BusinessException;
+
+	/**
+	 * Altera o status do usuário
+	 * 
+	 * @param id id do usuário a ser removido
+	 * @param status novo status do usuário
+	 * @throws BusinessException
+	 * @throws NotFoundException
+	 */
+	@Secured(ROLE_ADMIN)
+	void updateStatus(Long id, UserStatusEnum status) throws BusinessException, NotFoundException;
 
 	/**
 	 * Envia um e-mail de recuperação de senha para o usuário
@@ -59,11 +83,10 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	 * @param token
 	 * @param newPassword
 	 * @param userId
-	 * @throws EncryptPasswordException
 	 * @throws BusinessException
 	 * @throws NotFoundException
 	 */
-	void updateForgottenPassword(String token, String newPassword, Long userId) throws BusinessException, EncryptPasswordException, NotFoundException;
+	void updateForgottenPassword(String token, String newPassword, Long userId) throws BusinessException, NotFoundException;
 
 	/**
 	 * Efetua o login do usuário
