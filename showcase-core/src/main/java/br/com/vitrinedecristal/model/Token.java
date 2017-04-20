@@ -19,7 +19,7 @@ import javax.persistence.TemporalType;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import br.com.vitrinedecristal.dao.IID;
+import br.com.vitrinedecristal.dao.base.IID;
 import br.com.vitrinedecristal.enums.TokenEnum;
 
 /**

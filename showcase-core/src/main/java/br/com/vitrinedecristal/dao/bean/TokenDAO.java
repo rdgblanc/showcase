@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
 import br.com.vitrinedecristal.dao.ITokenDAO;
+import br.com.vitrinedecristal.dao.base.BaseDAO;
 import br.com.vitrinedecristal.model.Token;
 
 public class TokenDAO extends BaseDAO<Long, Token> implements ITokenDAO {

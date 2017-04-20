@@ -3,8 +3,8 @@ package br.com.vitrinedecristal.service.base;
 import java.io.Serializable;
 import java.util.List;
 
-import br.com.vitrinedecristal.dao.IBaseDAO;
-import br.com.vitrinedecristal.dao.IID;
+import br.com.vitrinedecristal.dao.base.IBaseDAO;
+import br.com.vitrinedecristal.dao.base.IID;
 
 /**
  * Estabelece os comportamentos básicos de negócio de uma entidade.

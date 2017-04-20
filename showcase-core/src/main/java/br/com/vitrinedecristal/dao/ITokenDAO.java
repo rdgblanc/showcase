@@ -1,5 +1,6 @@
 package br.com.vitrinedecristal.dao;
 
+import br.com.vitrinedecristal.dao.base.IBaseDAO;
 import br.com.vitrinedecristal.model.Token;
 
 public interface ITokenDAO extends IBaseDAO<Long, Token> {

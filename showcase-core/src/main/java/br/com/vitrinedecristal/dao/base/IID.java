@@ -1,4 +1,4 @@
-package br.com.vitrinedecristal.dao;
+package br.com.vitrinedecristal.dao.base;
 
 import java.io.Serializable;
 

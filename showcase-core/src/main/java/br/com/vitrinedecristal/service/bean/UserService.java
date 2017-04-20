@@ -25,12 +25,12 @@ import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.exception.EntityNotFoundException;
 import br.com.vitrinedecristal.exception.InvalidPermissionException;
 import br.com.vitrinedecristal.exception.UserAlreadyExistsException;
-import br.com.vitrinedecristal.log.TrackingLogger;
 import br.com.vitrinedecristal.model.Token;
 import br.com.vitrinedecristal.model.User;
 import br.com.vitrinedecristal.security.credential.UserCredentials;
 import br.com.vitrinedecristal.security.util.AuthenticationUtils;
 import br.com.vitrinedecristal.service.ITokenService;
+import br.com.vitrinedecristal.service.IUserLoginService;
 import br.com.vitrinedecristal.service.IUserService;
 import br.com.vitrinedecristal.service.base.BaseService;
 import br.com.vitrinedecristal.util.ParserUtil;
@@ -43,10 +43,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * String para ser usada junto da senha dos usuários. Deve ser mantido em segredo.
-	 */
-	private static final String PASSWORD_SEED = "vcristal:";
+	private static final Logger logger = Logger.getLogger(UserService.class);
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -54,7 +51,8 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	@Autowired
 	private ITokenService tokenService;
 
-	private static final Logger logger = TrackingLogger.getLogger(UserService.class);
+	@Autowired
+	private IUserLoginService userLoginService;
 
 	public UserService(IUserDAO userDAO) {
 		super(userDAO);
@@ -191,7 +189,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 
 		storedUser.setStatus(UserStatusEnum.ACTIVE);
 		storedUser.setDtAtualizacao(new Date());
-		storedUser = getDAO().save(storedUser);
+		storedUser = super.save(storedUser);
 		logger.info("Usuário atualizado com sucesso!");
 
 		return ParserUtil.parse(storedUser, UserDTO.class);
@@ -220,7 +218,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 
 		storedUser.setStatus(status);
 		storedUser.setDtAtualizacao(new Date());
-		getDAO().save(storedUser);
+		super.save(storedUser);
 
 		logger.info("Status do usuário atualizado com sucesso!");
 	}
@@ -272,12 +270,12 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		if (auth != null && auth.getPrincipal() instanceof UserCredentials) {
 			UserCredentials userDetails = (UserCredentials) auth.getPrincipal();
 
-			User user = getDAO().findByPrimaryKey(userDetails.getId());
+			User user = super.findByPrimaryKey(userDetails.getId());
 			if (user == null) {
 				throw new EntityNotFoundException();
 			}
 
-			this.updateLastAccess(user);
+			this.userLoginService.saveLastAccess(user);
 			dto = ParserUtil.parse(user, UserDTO.class);
 		}
 
@@ -329,7 +327,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 
 		logger.info("Alterando senha atual do usuário para uma nova senha: [" + newPassword + "]");
 
-		User user = getDAO().findByPrimaryKey(userId);
+		User user = super.findByPrimaryKey(userId);
 		if (user == null) {
 			throw new EntityNotFoundException();
 		}
@@ -347,7 +345,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		}
 
 		user.setSenha(newPasswordEncrypted);
-		this.save(user);
+		super.save(user);
 
 		// TODO add MailSender
 		// IMailSender mailSender = MailSenderFactory.createEmailSender();
@@ -355,17 +353,6 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		// logger.info("Enviando email de alteração de senha!");
 
 		logger.info("Senha alterada com sucesso!");
-	}
-
-	/**
-	 * Atualiza o registro de último acesso (autenticação) do usuário
-	 * 
-	 * @param user Entidade {@link User}
-	 */
-	private void updateLastAccess(User user) {
-		logger.info("Atualizando último acesso do usuário: " + user.getId());
-		// TODO atualizar a tabela TB_LOGIN_USUARIO
-		logger.info("Atualização de acesso realizada com sucesso!");
 	}
 
 }

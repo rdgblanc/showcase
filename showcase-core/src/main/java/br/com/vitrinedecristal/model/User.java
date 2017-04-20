@@ -18,7 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.vitrinedecristal.dao.IID;
+import br.com.vitrinedecristal.dao.base.IID;
 import br.com.vitrinedecristal.enums.GenderEnum;
 import br.com.vitrinedecristal.enums.RoleEnum;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
@@ -38,7 +38,7 @@ public class User implements IID<Long> {
 	@Column(name = "EMAIL", length = 200, nullable = false)
 	private String email;
 
-	@Column(name = "SENHA", length = 45, nullable = false)
+	@Column(name = "SENHA", length = 200, nullable = false)
 	private String senha;
 
 	@Column(name = "SEXO", nullable = true)

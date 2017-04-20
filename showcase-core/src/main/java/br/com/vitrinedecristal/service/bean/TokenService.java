@@ -13,7 +13,6 @@ import br.com.vitrinedecristal.application.ApplicationBeanFactory;
 import br.com.vitrinedecristal.dao.ITokenDAO;
 import br.com.vitrinedecristal.enums.TokenEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
-import br.com.vitrinedecristal.log.TrackingLogger;
 import br.com.vitrinedecristal.model.Token;
 import br.com.vitrinedecristal.model.User;
 import br.com.vitrinedecristal.service.ITokenService;
@@ -29,7 +28,7 @@ public class TokenService extends BaseService<Long, Token, ITokenDAO> implements
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger logger = TrackingLogger.getLogger(TokenService.class);
+	private static final Logger logger = Logger.getLogger(TokenService.class);
 
 	private static final int EXPIRATION_TIME_FORGOT_PASSWORD = 3600; // Segundos em que o token de recuperação de senha leva para expirar
 

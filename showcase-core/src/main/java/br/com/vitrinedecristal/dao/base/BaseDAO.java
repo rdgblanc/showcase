@@ -1,4 +1,4 @@
-package br.com.vitrinedecristal.dao.bean;
+package br.com.vitrinedecristal.dao.base;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -18,16 +18,12 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.log4j.Logger;
 
-import br.com.vitrinedecristal.dao.IBaseDAO;
-import br.com.vitrinedecristal.dao.IID;
-import br.com.vitrinedecristal.log.TrackingLogger;
-
 /**
  * Representação base para uma classe DAO (Data Access Object). Inclui as funcionalidades básicas.
  */
 public abstract class BaseDAO<B extends Serializable, T extends IID<B>> implements IBaseDAO<B, T> {
 
-	private static Logger logger = TrackingLogger.getLogger(BaseDAO.class);
+	private static Logger logger = Logger.getLogger(BaseDAO.class);
 
 	/**
 	 * EntityManager - gerencia a entidade

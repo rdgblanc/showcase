@@ -11,22 +11,19 @@ import org.apache.log4j.Logger;
 
 import br.com.vitrinedecristal.exception.InvalidFieldException;
 import br.com.vitrinedecristal.exception.ValidationException;
-import br.com.vitrinedecristal.log.TrackingLogger;
 
 /**
  * Classe utilitária para validações.
  */
 public class ValidatorUtil {
 
-	private static final Logger logger = TrackingLogger.getLogger(ValidatorUtil.class);
+	private static final Logger logger = Logger.getLogger(ValidatorUtil.class);
 
 	/**
 	 * Valida se o offset e o size são válidos
 	 * 
-	 * @param offset
-	 *            início da consulta
-	 * @param size
-	 *            tamanho da consulta
+	 * @param offset início da consulta
+	 * @param size tamanho da consulta
 	 */
 	public static void validateOffsetAndSize(Integer offset, Integer size) {
 		if (offset < 0) {
@@ -41,12 +38,9 @@ public class ValidatorUtil {
 	/**
 	 * Valida se o parâmetro não é nulo.
 	 * 
-	 * @param object
-	 *            o objeto a ser validado.
-	 * @param message
-	 *            a mensagem da exceção, caso o objeto seja nulo.
-	 * @throws IllegalArgumentException
-	 *             caso o objeto seja nulo.
+	 * @param object o objeto a ser validado.
+	 * @param message a mensagem da exceção, caso o objeto seja nulo.
+	 * @throws IllegalArgumentException caso o objeto seja nulo.
 	 */
 	public static void notNull(Object object, String message) {
 		if (object == null) {
@@ -57,12 +51,9 @@ public class ValidatorUtil {
 	/**
 	 * Valida se o parâmetro não é nulo ou vazio.
 	 * 
-	 * @param object
-	 *            o objeto a ser validado.
-	 * @param message
-	 *            a mensagem da exceção, caso o objeto seja nulo ou vazio.
-	 * @throws IllegalArgumentException
-	 *             caso o objeto seja nulo ou vazio.
+	 * @param object o objeto a ser validado.
+	 * @param message a mensagem da exceção, caso o objeto seja nulo ou vazio.
+	 * @throws IllegalArgumentException caso o objeto seja nulo ou vazio.
 	 */
 	public static void notNull(String object, String message) {
 		if (StringUtils.isBlank(object)) {
@@ -73,8 +64,7 @@ public class ValidatorUtil {
 	/**
 	 * Realiza a validação da entidade de entrada, que não deve ser nula
 	 * 
-	 * @param t
-	 *            Entidade
+	 * @param t Entidade
 	 */
 	public static void validate(Object t) {
 		if (t == null) {
@@ -85,16 +75,11 @@ public class ValidatorUtil {
 	/**
 	 * Primeiro valida se o objeto passado por parâmetro não é <code>null</code>. Em seguida valida se os campos informados no parâmetro <code>requiredFields</code> não são <code>null</code> ou vazio.
 	 * 
-	 * @param object
-	 *            o objeto a ser validado.
-	 * @param requiredFields
-	 *            o nome dos campos que serão validados no objeto. Se <code>null</code> então nenhum campo será validado.
-	 * @throws IllegalArgumentException
-	 *             caso o objeto a ser validado seja <code>null</code>.
-	 * @throws InvalidFieldException
-	 *             caso exista um ou mais campos inválidos.
-	 * @throws ValidationException
-	 *             caso não seja possível validar o objeto.
+	 * @param object o objeto a ser validado.
+	 * @param requiredFields o nome dos campos que serão validados no objeto. Se <code>null</code> então nenhum campo será validado.
+	 * @throws IllegalArgumentException caso o objeto a ser validado seja <code>null</code>.
+	 * @throws InvalidFieldException caso exista um ou mais campos inválidos.
+	 * @throws ValidationException caso não seja possível validar o objeto.
 	 */
 	public static void notNullFields(Object object, String... requiredFields) throws InvalidFieldException, ValidationException {
 		if (logger.isDebugEnabled()) {

@@ -7,12 +7,11 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import org.dozer.DozerBeanMapper;
 
-import br.com.vitrinedecristal.log.TrackingLogger;
 import br.com.vitrinedecristal.vo.BaseVO;
 
 public class ParserUtil {
 
-	private static Logger logger = TrackingLogger.getLogger(ParserUtil.class);
+	private static Logger logger = Logger.getLogger(ParserUtil.class);
 
 	private static final DozerBeanMapper mapper = new DozerBeanMapper();
 

@@ -9,6 +9,7 @@
       	<!-- <jta-data-source>java:jboss/datasources/showcase</jta-data-source> -->
       	<class>br.com.vitrinedecristal.model.Token</class>
       	<class>br.com.vitrinedecristal.model.User</class>
+      	<class>br.com.vitrinedecristal.model.UserLogin</class>
 
 		<properties>
 			<!-- <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />

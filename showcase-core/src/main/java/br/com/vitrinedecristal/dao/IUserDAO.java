@@ -2,6 +2,7 @@ package br.com.vitrinedecristal.dao;
 
 import java.util.List;
 
+import br.com.vitrinedecristal.dao.base.IBaseDAO;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
 import br.com.vitrinedecristal.model.User;
 

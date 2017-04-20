@@ -8,6 +8,7 @@ import javax.persistence.Query;
 import org.apache.commons.lang3.StringUtils;
 
 import br.com.vitrinedecristal.dao.IUserDAO;
+import br.com.vitrinedecristal.dao.base.BaseDAO;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
 import br.com.vitrinedecristal.model.User;
 
