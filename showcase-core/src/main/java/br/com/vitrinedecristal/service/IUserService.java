@@ -52,11 +52,10 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	 * 
 	 * @param userVO
 	 * @return usuário alterado
-	 * @throws NotFoundException
 	 * @throws BusinessException
 	 */
 	@Secured(ROLE_USER)
-	UserDTO updateUser(UserVO userVO) throws NotFoundException, BusinessException;
+	UserDTO updateUser(UserVO userVO) throws BusinessException;
 
 	/**
 	 * Altera o status do usuário
@@ -64,10 +63,9 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	 * @param id id do usuário a ser removido
 	 * @param status novo status do usuário
 	 * @throws BusinessException
-	 * @throws NotFoundException
 	 */
 	@Secured(ROLE_ADMIN)
-	void updateStatus(Long id, UserStatusEnum status) throws BusinessException, NotFoundException;
+	void updateStatus(Long id, UserStatusEnum status) throws BusinessException;
 
 	/**
 	 * Envia um e-mail de recuperação de senha para o usuário
@@ -86,7 +84,7 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	 * @throws BusinessException
 	 * @throws NotFoundException
 	 */
-	void updateForgottenPassword(String token, String newPassword, Long userId) throws BusinessException, NotFoundException;
+	void updateForgottenPassword(String token, String newPassword, Long userId) throws BusinessException;
 
 	/**
 	 * Efetua o login do usuário

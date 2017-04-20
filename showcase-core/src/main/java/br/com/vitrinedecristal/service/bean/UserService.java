@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -36,7 +35,6 @@ import br.com.vitrinedecristal.service.IUserService;
 import br.com.vitrinedecristal.service.base.BaseService;
 import br.com.vitrinedecristal.util.ParserUtil;
 import br.com.vitrinedecristal.vo.UserVO;
-import javassist.NotFoundException;
 
 /**
  * Servico para realização de lógicas no negócio para a entidade {@link User}
@@ -80,8 +78,16 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 			logger.info("Obtendo informações do usuário logado..");
 			userId = AuthenticationUtils.getUserId();
 			logger.info("Usuário logado resgatado [" + userId + "]");
-		} else if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN)) {
+		} else if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString())) {
 			throw new InvalidPermissionException();
+		}
+
+		if (userId == null) {
+			try {
+				userId = Long.valueOf(id);
+			} catch (Exception e) {
+				throw new BusinessException("Não foi possível converter o ID do usuário");
+			}
 		}
 
 		User user = super.findByPrimaryKey(userId);
@@ -125,10 +131,11 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	}
 
 	@Override
-	public UserDTO updateUser(UserVO userVO) throws NotFoundException, BusinessException {
+	@Transactional
+	public UserDTO updateUser(UserVO userVO) throws BusinessException {
 		logger.info("Atualizando usuário: " + userVO);
 
-		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN) && !userVO.getId().equals(AuthenticationUtils.getUserId())) {
+		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !userVO.getId().equals(AuthenticationUtils.getUserId())) {
 			throw new InvalidPermissionException();
 		}
 
@@ -136,14 +143,12 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 			throw new IllegalArgumentException("A entidade usuário não pode ser nula.");
 		}
 
-		User storedUser = null;
-		try {
-			storedUser = getDAO().findByPrimaryKey(userVO.getId());
-		} catch (NoResultException e) {
-			throw new NotFoundException("Usuário não encontrado", e);
+		User storedUser = getDAO().findByPrimaryKey(userVO.getId());
+		if (storedUser == null) {
+			throw new EntityNotFoundException();
 		}
 
-		if (AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN)) {
+		if (AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString())) {
 			if (StringUtils.isNotBlank(userVO.getEmail())) {
 				storedUser.setEmail(userVO.getEmail());
 			}
@@ -157,12 +162,12 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 			}
 		}
 
-		if (StringUtils.isBlank(userVO.getNome())) {
+		if (StringUtils.isNotBlank(userVO.getNome())) {
 			storedUser.setNome(userVO.getNome());
 		}
 
 		if (StringUtils.isNotBlank(userVO.getNovaSenha())) {
-			if (AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN)) {
+			if (AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString())) {
 				this.updateUserPassword(userVO.getId(), null, userVO.getNovaSenha());
 			} else {
 				if (StringUtils.isBlank(userVO.getSenha())) {
@@ -176,8 +181,8 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 			storedUser.setSexo(userVO.getSexo());
 		}
 
-		if (StringUtils.isBlank(userVO.getTelefone())) {
-			storedUser.setEmail(userVO.getTelefone());
+		if (StringUtils.isNotBlank(userVO.getTelefone())) {
+			storedUser.setTelefone(userVO.getTelefone());
 		}
 
 		if (userVO.getDtNascimento() != null) {
@@ -193,8 +198,9 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	}
 
 	@Override
-	public void updateStatus(Long id, UserStatusEnum status) throws BusinessException, NotFoundException {
-		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN)) {
+	@Transactional
+	public void updateStatus(Long id, UserStatusEnum status) throws BusinessException {
+		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString())) {
 			throw new InvalidPermissionException();
 		}
 
@@ -207,16 +213,15 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		}
 
 		logger.info("Alterando status do usuário [" + id + "] para " + status);
-
-		User storedUser = null;
-		try {
-			storedUser = getDAO().findByPrimaryKey(id);
-		} catch (NoResultException e) {
-			throw new NotFoundException("Usuário não encontrado", e);
+		User storedUser = getDAO().findByPrimaryKey(id);
+		if (storedUser == null) {
+			throw new EntityNotFoundException();
 		}
 
+		storedUser.setStatus(status);
 		storedUser.setDtAtualizacao(new Date());
-		storedUser = getDAO().save(storedUser);
+		getDAO().save(storedUser);
+
 		logger.info("Status do usuário atualizado com sucesso!");
 	}
 
@@ -249,7 +254,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	}
 
 	@Override
-	public void updateForgottenPassword(String tokenHash, String newPassword, Long userId) throws BusinessException, NotFoundException {
+	public void updateForgottenPassword(String tokenHash, String newPassword, Long userId) throws BusinessException {
 		Token token = tokenService.validatePasswordForgotToken(tokenHash, userId);
 		this.updateUserPassword(token.getUsuario().getId(), null, newPassword);
 	}
@@ -316,20 +321,17 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	 * @param password a senha atual
 	 * @param newPassword a nova senha
 	 * @throws BusinessException
-	 * @throws NotFoundException
 	 */
-	private void updateUserPassword(Long userId, String password, String newPassword) throws BusinessException, NotFoundException {
+	private void updateUserPassword(Long userId, String password, String newPassword) throws BusinessException {
 		if (StringUtils.isBlank(newPassword)) {
 			throw new IllegalArgumentException("A nova senha não foi informada.");
 		}
 
 		logger.info("Alterando senha atual do usuário para uma nova senha: [" + newPassword + "]");
 
-		User user;
-		try {
-			user = getDAO().findByPrimaryKey(userId);
-		} catch (NoResultException e) {
-			throw new NotFoundException("Usuário não encontrado.", e);
+		User user = getDAO().findByPrimaryKey(userId);
+		if (user == null) {
+			throw new EntityNotFoundException();
 		}
 
 		if (password != null) {

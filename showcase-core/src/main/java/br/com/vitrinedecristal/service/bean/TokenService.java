@@ -21,7 +21,6 @@ import br.com.vitrinedecristal.service.IUserService;
 import br.com.vitrinedecristal.service.base.BaseService;
 import br.com.vitrinedecristal.util.ParserUtil;
 import br.com.vitrinedecristal.vo.UserVO;
-import javassist.NotFoundException;
 
 /**
  * Serviço para gerenciamento de tokens de ativações dos usuários.
@@ -93,7 +92,7 @@ public class TokenService extends BaseService<Long, Token, ITokenDAO> implements
 				IUserService userBO = ApplicationBeanFactory.getBean(IUserService.class);
 				try {
 					userBO.updateUser(ParserUtil.getVO(token.getUsuario(), UserVO.class));
-				} catch (NotFoundException e) {
+				} catch (Exception e) {
 					logger.warn("Erro ao atualizar usuário", e);
 				}
 

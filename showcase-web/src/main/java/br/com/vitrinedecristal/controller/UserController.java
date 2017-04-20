@@ -32,7 +32,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import javassist.NotFoundException;
 
 @Path("/user")
 @Api(value = "/user")
@@ -94,7 +93,7 @@ public class UserController extends SpringBeanAutowiringSupport {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
 			@ApiResponse(code = 404, message = EntityNotFoundException.MESSAGE, response = ApiExceptionResponse.class)
 	})
-	public UserDTO update(@PathParam("id") Long id, UserVO userVO) throws ApiException, BusinessException, NotFoundException {
+	public UserDTO update(@PathParam("id") Long id, UserVO userVO) throws ApiException, BusinessException {
 		if (userVO == null) {
 			throw new EmptyRequestBodyException();
 		}
@@ -111,7 +110,7 @@ public class UserController extends SpringBeanAutowiringSupport {
 			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class),
 			@ApiResponse(code = 404, message = EntityNotFoundException.MESSAGE, response = ApiExceptionResponse.class)
 	})
-	public void remove(@PathParam("id") Long id) throws ApiException, BusinessException, NotFoundException {
+	public void remove(@ApiParam @PathParam("id") Long id) throws ApiException, BusinessException {
 		this.userService.updateStatus(id, UserStatusEnum.INACTIVE);
 	}
 
