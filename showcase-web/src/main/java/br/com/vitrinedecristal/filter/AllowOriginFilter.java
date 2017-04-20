@@ -27,10 +27,10 @@ public class AllowOriginFilter implements Filter {
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String ipAddress = httpRequest.getHeader("X-FORWARDED-FOR");
-		System.out.println("IP address (X-FORWARDED-FOR) '" + ipAddress + "'");
+		// System.out.println("IP address (X-FORWARDED-FOR) '" + ipAddress + "'");
 		if (ipAddress == null) {
 			ipAddress = request.getRemoteAddr();
-			System.out.println("IP address (remoteAddr) '" + ipAddress + "'");
+			// System.out.println("IP address (remoteAddr) '" + ipAddress + "'");
 		}
 		RequestUtil.getInstance().setRequestIp(ipAddress);
 	}
