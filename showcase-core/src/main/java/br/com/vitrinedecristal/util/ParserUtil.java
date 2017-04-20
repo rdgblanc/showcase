@@ -19,14 +19,12 @@ public class ParserUtil {
 	/**
 	 * Converte uma entidade para um VO.
 	 * 
-	 * @param object
-	 *            a entidade a ser convertida.
-	 * @param voClass
-	 *            classe do VO
+	 * @param object a entidade a ser convertida.
+	 * @param voClass classe do VO
 	 * @return o VO da entidade ou <tt>null</tt> caso não seja possível converter.
 	 * @see {@link #getVO(List)}
 	 */
-	public static <T, V> V getVO(T object, Class<V> voClass) {
+	public static <T, V> V parse(T object, Class<V> voClass) {
 		if (object == null) {
 			return null;
 		}
@@ -47,13 +45,11 @@ public class ParserUtil {
 	 * 
 	 * @param <T>
 	 * @param <V>
-	 * 
-	 * @param list
-	 *            a lista de entidades a serem convertidas.
+	 * @param list a lista de entidades a serem convertidas.
 	 * @return a lista de VOs.
 	 * @see #getVO(T)
 	 */
-	public static <T, V> List<V> getVO(List<T> list, Class<V> voClass) {
+	public static <T, V> List<V> parse(List<T> list, Class<V> voClass) {
 		List<V> listVO = new ArrayList<V>();
 
 		if (list == null || list.isEmpty()) {
@@ -61,7 +57,7 @@ public class ParserUtil {
 		}
 
 		for (T t : list) {
-			V vo = ParserUtil.getVO(t, voClass);
+			V vo = ParserUtil.parse(t, voClass);
 
 			if (vo != null) {
 				listVO.add(vo);
@@ -75,9 +71,7 @@ public class ParserUtil {
 	 * Converte uma lista de VOs para uma lista de entidades.
 	 * 
 	 * @param <T>
-	 * 
-	 * @param listVO
-	 *            a lista de VOs a serem convertidos.
+	 * @param listVO a lista de VOs a serem convertidos.
 	 * @return a lista de entidades.
 	 */
 	public static <T> List<T> parse(List<? extends BaseVO<T>> listVO) {

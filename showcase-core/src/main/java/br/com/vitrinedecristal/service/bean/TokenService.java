@@ -91,7 +91,7 @@ public class TokenService extends BaseService<Long, Token, ITokenDAO> implements
 			if (token.getUsuario().getId().equals(userId)) {
 				IUserService userBO = ApplicationBeanFactory.getBean(IUserService.class);
 				try {
-					userBO.updateUser(ParserUtil.getVO(token.getUsuario(), UserVO.class));
+					userBO.updateUser(ParserUtil.parse(token.getUsuario(), UserVO.class));
 				} catch (Exception e) {
 					logger.warn("Erro ao atualizar usuário", e);
 				}

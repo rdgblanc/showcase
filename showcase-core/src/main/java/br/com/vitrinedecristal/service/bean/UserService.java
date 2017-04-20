@@ -66,7 +66,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		List<User> users = super.find();
 		logger.info("Usuários listados com sucesso");
 
-		return ParserUtil.getVO(users, UserDTO.class);
+		return ParserUtil.parse(users, UserDTO.class);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 			throw new EntityNotFoundException();
 		}
 
-		return ParserUtil.getVO(user, UserDTO.class);
+		return ParserUtil.parse(user, UserDTO.class);
 	}
 
 	@Override
@@ -124,10 +124,10 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		userVO.setRoles(Arrays.asList(RoleEnum.ROLE_USER));
 
 		logger.info("Criando usuário: " + userVO);
-		User user = super.save(ParserUtil.getVO(userVO, User.class));
+		User user = super.save(ParserUtil.parse(userVO, User.class));
 		logger.info("Usuário criado com sucesso!");
 
-		return ParserUtil.getVO(user, UserDTO.class);
+		return ParserUtil.parse(user, UserDTO.class);
 	}
 
 	@Override
@@ -194,7 +194,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		storedUser = getDAO().save(storedUser);
 		logger.info("Usuário atualizado com sucesso!");
 
-		return ParserUtil.getVO(storedUser, UserDTO.class);
+		return ParserUtil.parse(storedUser, UserDTO.class);
 	}
 
 	@Override
@@ -278,7 +278,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 			}
 
 			this.updateLastAccess(user);
-			dto = ParserUtil.getVO(user, UserDTO.class);
+			dto = ParserUtil.parse(user, UserDTO.class);
 		}
 
 		return dto;
