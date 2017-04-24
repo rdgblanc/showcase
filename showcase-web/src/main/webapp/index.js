@@ -126,8 +126,9 @@ angular.module('showcase').controller("showcaseController", [
 	}]);
 
 var DEFAULT_ERROR_CALLBACK = function(responseData) {
-	toaster.pop({
+	/*toaster.pop({
 		"type" : "error",
 		"title" : responseData.errorMessage
-	});
+	});*/
+	console.log(responseData);
 };

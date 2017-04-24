@@ -23,10 +23,10 @@
 										<div class="facts">
 											<div class="register">
 												<form action="#" method="post">
-													<input name="Email" placeholder="Email" type="text" required="">
-													<input name="Password" placeholder="Senha" type="password" required="">
+													<input name="Email" placeholder="Email" type="text" required=""  ng-model="user.email" >
+													<input name="Password" placeholder="Senha" type="password" required=""  ng-model="user.senha" >
 													<div class="sign-up">
-														<input type="submit" value="Acessar"/>
+														<input type="submit" value="Acessar" ng-click="auth(user)" />
 													</div>
 												</form>
 											</div>
@@ -35,14 +35,16 @@
 									<div class="tab-2 resp-tab-content" aria-labelledby="tab_item-1">
 										<div class="facts">
 											<div class="register">
-												<form action="#" method="post">
-													<input placeholder="Nome" name="Name" type="text" required="">
-													<input placeholder="Email" name="Email" type="email" required="">
-													<input placeholder="Senha" name="Password" type="password" required="">
-													<input placeholder="Confirmar Senha" name="Password" type="password" required="">
-													<div class="sign-up">
-														<input type="submit" value="Criar conta"/>
-													</div>
+												<form action="#" method="post" name="form">
+													<fieldset>
+														<input placeholder="Nome" name="Name" type="text" required="" ng-model="user.nome" >
+														<input placeholder="Email" name="Email" type="email" required="" ng-model="user.email" >
+														<input placeholder="Senha" name="Password" type="password" required="" ng-model="user.senha" >
+														<input placeholder="Confirmar Senha" name="Password" type="password" required="" ng-model="user.novaSenha" >
+														<div class="sign-up">
+															<input type="button" value="Criar conta" ng-click="save(user)" />
+														</div>
+													</fieldset>
 												</form>
 											</div>
 										</div>
@@ -71,7 +73,12 @@
 	<div class="header">
 		<div class="container">
 			<div class="w3l_login">
-				<a href="#" data-toggle="modal" data-target="#modal-login"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></a>
+				<a href="#" data-toggle="modal" data-target="#modal-login">
+					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+				</a>
+				<a href="#" data-toggle="modal" data-target="#modal-login" class="nick">
+					<h5>{{userLogged &amp;&amp; user &amp;&amp; user.nome ? "Olá, " + user.nome : "Entre"}}</h5>
+				</a>
 			</div>
 			<div class="w3l_logo">
 				<a href="#/" ng-click="switchView(viewsEnum.HOME)">
