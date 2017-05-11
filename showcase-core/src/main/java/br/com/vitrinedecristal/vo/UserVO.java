@@ -3,7 +3,6 @@ package br.com.vitrinedecristal.vo;
 import java.util.Date;
 import java.util.List;
 
-import br.com.vitrinedecristal.annotation.IgnoreVOParser;
 import br.com.vitrinedecristal.enums.GenderEnum;
 import br.com.vitrinedecristal.enums.RoleEnum;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
@@ -21,11 +20,6 @@ public class UserVO extends BaseVO<User> {
 	private String nome;
 
 	private String email;
-
-	private String senha;
-
-	@IgnoreVOParser
-	private String novaSenha;
 
 	private GenderEnum sexo;
 
@@ -75,22 +69,6 @@ public class UserVO extends BaseVO<User> {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
-	public String getNovaSenha() {
-		return novaSenha;
-	}
-
-	public void setNovaSenha(String novaSenha) {
-		this.novaSenha = novaSenha;
 	}
 
 	public GenderEnum getSexo() {

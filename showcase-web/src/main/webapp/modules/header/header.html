@@ -22,14 +22,16 @@
 									<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-0">
 										<div class="facts">
 											<div class="register">
-												<form name="loginForm" novalidate role="form" ng-submit="auth()">
+												<form name="loginForm" novalidate role="form" ng-submit="loginForm.$valid && auth()">
 													<div class="form-group">
-														<input placeholder="Email" name="email" type="text" required ng-model="user.email">
+														<input placeholder="Email" name="email" type="text" required ng-model="user.email" ng-class="{'has-error': loginForm.$submitted && loginForm.email.$error.required}">
+														<span class="invalid" ng-if="loginForm.$submitted && loginForm.email.$invalid">E-mail inválido.</span>
 													</div>
 													<div class="form-group">
-														<input placeholder="Senha" name="password" type="password" required ng-model="user.senha">
+														<input placeholder="Senha" name="password" type="password" required ng-model="user.senha" ng-class="{'has-error': loginForm.$submitted && loginForm.password.$error.required}">
+														<span class="invalid" ng-if="loginForm.$submitted && loginForm.password.$invalid">Senha inválida.</span>
 													</div>
-													<div id="alert-group" class="form-group" ng-if="message.type && !showLoading">
+													<div id="alert-group" class="form-group" ng-if="message.type && loginForm.$submitted && loginForm.$valid && !showLoading">
 														<div class="alert alert-{{message.type}}" role="alert">
 															<strong ng-if="message.title">{{message.title}} </strong>{{message.body}}
 														</div>
@@ -57,7 +59,7 @@
 															<span class="invalid" ng-if="registerForm.$submitted && registerForm.email.$invalid">E-mail inválido.</span>
 														</div>
 														<div class="form-group">
-															<input placeholder="Confirmar Email" name="emailConfirm" type="email" required compare-to="user.email" ng-model="user.emailConfirm" ng-class="{'has-error': registerForm.$submitted && registerForm.emailConfirm.$invalid}">
+															<input placeholder="Confirmar Email" name="emailConfirm" type="email" required compare-to="user.email" ng-class="{'has-error': registerForm.$submitted && registerForm.emailConfirm.$invalid}">
 															<span class="invalid" ng-if="registerForm.$submitted && registerForm.emailConfirm.$invalid">E-mails não conferem.</span>
 														</div>
 														<div class="form-group">
@@ -65,7 +67,7 @@
 															<span class="invalid" ng-if="registerForm.$submitted && registerForm.password.$invalid">Senha inválida.</span>
 														</div>
 														<div class="form-group">
-															<input placeholder="Confirmar Senha" name="passwordConfirm" type="password" required compare-to="user.senha" ng-model="user.passwordConfirm" ng-class="{'has-error': registerForm.$submitted && registerForm.passwordConfirm.$invalid}">
+															<input placeholder="Confirmar Senha" name="passwordConfirm" type="password" required compare-to="user.senha" ng-class="{'has-error': registerForm.$submitted && registerForm.passwordConfirm.$invalid}">
 															<span class="invalid" ng-if="registerForm.$submitted && registerForm.passwordConfirm.$invalid">Senhas não conferem.</span>
 														</div>
 														<div id="alert-group" class="form-group" ng-if="message.type && registerForm.$submitted && registerForm.$valid && !showLoading">

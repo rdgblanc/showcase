@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.security.access.annotation.Secured;
 
 import br.com.vitrinedecristal.dao.IUserDAO;
+import br.com.vitrinedecristal.dto.CreateUserDTO;
 import br.com.vitrinedecristal.dto.LoginDTO;
+import br.com.vitrinedecristal.dto.UpdateUserPasswordDTO;
 import br.com.vitrinedecristal.dto.UserDTO;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
@@ -41,11 +43,11 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	/**
 	 * Cria o usuário
 	 * 
-	 * @param userVO
+	 * @param createUserDTO informações para o cadastro do usuário
 	 * @return usuário criado
 	 * @throws BusinessException
 	 */
-	UserDTO createUser(UserVO userVO) throws BusinessException;
+	UserDTO createUser(CreateUserDTO createUserDTO) throws BusinessException;
 
 	/**
 	 * Atualiza as informações do usuário
@@ -55,7 +57,7 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	 * @throws BusinessException
 	 */
 	@Secured(ROLE_USER)
-	UserDTO updateUser(UserVO userVO) throws BusinessException;
+	UserVO updateUser(UserVO userVO) throws BusinessException;
 
 	/**
 	 * Altera o status do usuário
@@ -66,6 +68,14 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	 */
 	@Secured(ROLE_ADMIN)
 	void updateStatus(Long id, UserStatusEnum status) throws BusinessException;
+
+	/**
+	 * Altera a senha do usuário
+	 * 
+	 * @param updateUserPasswordDTO objeto com o ID e a nova senha do usuário
+	 */
+	@Secured(ROLE_USER)
+	void updatePassword(UpdateUserPasswordDTO updateUserPasswordDTO) throws BusinessException;
 
 	/**
 	 * Envia um e-mail de recuperação de senha para o usuário
@@ -92,6 +102,6 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	 * @param loginDTO informações para o login do usuário
 	 * @return usuário logado
 	 */
-	UserDTO login(LoginDTO loginDTO);
+	UserVO login(LoginDTO loginDTO);
 
 }

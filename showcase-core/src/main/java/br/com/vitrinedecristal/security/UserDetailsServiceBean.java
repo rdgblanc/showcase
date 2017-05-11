@@ -29,7 +29,12 @@ public class UserDetailsServiceBean implements UserDetailsService {
 			throw new BadCredentialsException("Bad credentials");
 		}
 
-		User user = this.userDAO.findByEmail(username, null);
+		User user = null;
+		try {
+			user = this.userDAO.findByEmail(username, null);
+		} catch (Exception e) {
+			throw new BadCredentialsException("Usuário não encontrado com o e-mail informado.");
+		}
 
 		List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 		for (RoleEnum role : user.getRoles()) {

@@ -15,7 +15,9 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
+import br.com.vitrinedecristal.dto.CreateUserDTO;
 import br.com.vitrinedecristal.dto.LoginDTO;
+import br.com.vitrinedecristal.dto.UpdateUserPasswordDTO;
 import br.com.vitrinedecristal.dto.UserDTO;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
@@ -75,13 +77,12 @@ public class UserController extends SpringBeanAutowiringSupport {
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class)
 	})
-	public UserDTO create(UserVO userVO) throws ApiException, BusinessException {
-		if (userVO == null) {
+	public UserDTO create(CreateUserDTO createUserDTO) throws ApiException, BusinessException {
+		if (createUserDTO == null) {
 			throw new EmptyRequestBodyException();
 		}
 
-		userVO.setId(null);
-		return this.userService.createUser(userVO);
+		return this.userService.createUser(createUserDTO);
 	}
 
 	@PUT
@@ -93,13 +94,31 @@ public class UserController extends SpringBeanAutowiringSupport {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
 			@ApiResponse(code = 404, message = EntityNotFoundException.MESSAGE, response = ApiExceptionResponse.class)
 	})
-	public UserDTO update(@PathParam("id") Long id, UserVO userVO) throws ApiException, BusinessException {
+	public UserVO update(@PathParam("id") Long id, UserVO userVO) throws ApiException, BusinessException {
 		if (userVO == null) {
 			throw new EmptyRequestBodyException();
 		}
 
 		userVO.setId(id);
 		return this.userService.updateUser(userVO);
+	}
+
+	@PUT
+	@Path("/{id}/password")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Atualiza um usuário", notes = "Atualiza as informações do usuário.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
+			@ApiResponse(code = 404, message = EntityNotFoundException.MESSAGE, response = ApiExceptionResponse.class)
+	})
+	public void update(@PathParam("id") Long id, UpdateUserPasswordDTO updateUserPasswordDTO) throws ApiException, BusinessException {
+		if (updateUserPasswordDTO == null) {
+			throw new EmptyRequestBodyException();
+		}
+
+		updateUserPasswordDTO.setId(id);
+		this.userService.updatePassword(updateUserPasswordDTO);
 	}
 
 	@DELETE
@@ -122,7 +141,7 @@ public class UserController extends SpringBeanAutowiringSupport {
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class)
 	})
-	public UserDTO login(@ApiParam LoginDTO loginDetails) throws ApiException {
+	public UserVO login(@ApiParam LoginDTO loginDetails) throws ApiException {
 		if (loginDetails == null) {
 			throw new EmptyRequestBodyException();
 		}

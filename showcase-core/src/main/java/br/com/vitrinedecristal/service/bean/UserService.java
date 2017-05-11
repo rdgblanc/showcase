@@ -17,7 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import br.com.vitrinedecristal.application.ApplicationBeanFactory;
 import br.com.vitrinedecristal.dao.IUserDAO;
+import br.com.vitrinedecristal.dto.CreateUserDTO;
 import br.com.vitrinedecristal.dto.LoginDTO;
+import br.com.vitrinedecristal.dto.UpdateUserPasswordDTO;
 import br.com.vitrinedecristal.dto.UserDTO;
 import br.com.vitrinedecristal.enums.RoleEnum;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
@@ -98,39 +100,40 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 
 	@Override
 	@Transactional
-	public UserDTO createUser(UserVO userVO) throws BusinessException {
-		if (userVO == null) {
+	public UserDTO createUser(CreateUserDTO createUserDTO) throws BusinessException {
+		if (createUserDTO == null) {
 			throw new IllegalArgumentException("A entidade usuário não pode ser nula.");
 		}
 
-		if (StringUtils.isBlank(userVO.getNome())) {
+		if (StringUtils.isBlank(createUserDTO.getNome())) {
 			throw new BusinessException("O campo nome é obrigatório");
 		}
 
-		if (StringUtils.isBlank(userVO.getEmail())) {
+		if (StringUtils.isBlank(createUserDTO.getEmail())) {
 			throw new BusinessException("O campo e-mail é obrigatório");
 		}
-		this.validateEmail(userVO.getEmail());
+		this.validateEmail(createUserDTO.getEmail());
 
-		if (StringUtils.isBlank(userVO.getSenha())) {
+		if (StringUtils.isBlank(createUserDTO.getSenha())) {
 			throw new BusinessException("O campo senha é obrigatório");
 		}
 
-		userVO.setSenha(this.encryptPassword(userVO.getSenha()));
-		userVO.setStatus(UserStatusEnum.INCOMPLETE);
-		userVO.setDtAtualizacao(new Date());
-		userVO.setRoles(Arrays.asList(RoleEnum.ROLE_USER));
+		User user = ParserUtil.parse(createUserDTO, User.class);
+		user.setSenha(this.encryptPassword(createUserDTO.getSenha()));
+		user.setStatus(UserStatusEnum.INCOMPLETE);
+		user.setDtAtualizacao(new Date());
+		user.setRoles(Arrays.asList(RoleEnum.ROLE_USER));
 
-		logger.info("Criando usuário: " + userVO);
-		User user = super.save(ParserUtil.parse(userVO, User.class));
+		logger.info("Criando usuário: " + user);
+		User storedUser = super.save(user);
 		logger.info("Usuário criado com sucesso!");
 
-		return ParserUtil.parse(user, UserDTO.class);
+		return ParserUtil.parse(storedUser, UserDTO.class);
 	}
 
 	@Override
 	@Transactional
-	public UserDTO updateUser(UserVO userVO) throws BusinessException {
+	public UserVO updateUser(UserVO userVO) throws BusinessException {
 		logger.info("Atualizando usuário: " + userVO);
 
 		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !userVO.getId().equals(AuthenticationUtils.getUserId())) {
@@ -164,17 +167,6 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 			storedUser.setNome(userVO.getNome());
 		}
 
-		if (StringUtils.isNotBlank(userVO.getNovaSenha())) {
-			if (AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString())) {
-				this.updateUserPassword(userVO.getId(), null, userVO.getNovaSenha());
-			} else {
-				if (StringUtils.isBlank(userVO.getSenha())) {
-					throw new IllegalArgumentException("A senha atual não foi informada.");
-				}
-				this.updateUserPassword(userVO.getId(), userVO.getSenha(), userVO.getNovaSenha());
-			}
-		}
-
 		if (userVO.getSexo() != null) {
 			storedUser.setSexo(userVO.getSexo());
 		}
@@ -192,7 +184,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		storedUser = super.save(storedUser);
 		logger.info("Usuário atualizado com sucesso!");
 
-		return ParserUtil.parse(storedUser, UserDTO.class);
+		return ParserUtil.parse(storedUser, UserVO.class);
 	}
 
 	@Override
@@ -221,6 +213,26 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		super.save(storedUser);
 
 		logger.info("Status do usuário atualizado com sucesso!");
+	}
+
+	@Override
+	@Transactional
+	public void updatePassword(UpdateUserPasswordDTO updateUserPasswordDTO) throws BusinessException {
+		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !updateUserPasswordDTO.getId().equals(AuthenticationUtils.getUserId())) {
+			throw new InvalidPermissionException();
+		}
+
+		if (updateUserPasswordDTO == null) {
+			throw new IllegalArgumentException("A entidade não pode ser nula.");
+		}
+
+		logger.info("Alterando a senha do usuário [" + updateUserPasswordDTO.getId() + "]");
+		User storedUser = getDAO().findByPrimaryKey(updateUserPasswordDTO.getId());
+		if (storedUser == null) {
+			throw new EntityNotFoundException();
+		}
+
+		this.updateUserPassword(updateUserPasswordDTO.getId(), null, updateUserPasswordDTO.getSenha());
 	}
 
 	// TODO função para atualizar a classificação do usuário (calcular a média e atualizad na base..)
@@ -258,7 +270,11 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	}
 
 	@Override
-	public UserDTO login(LoginDTO loginDTO) {
+	public UserVO login(LoginDTO loginDTO) {
+		if (loginDTO == null) {
+			throw new IllegalArgumentException("A entidade usuário não pode ser nula.");
+		}
+
 		logger.info("Usuário logando: " + loginDTO.getEmail());
 
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getSenha());
@@ -266,20 +282,20 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		Authentication auth = this.authenticationManager.authenticate(token);
 		AuthenticationUtils.login(auth);
 
-		UserDTO dto = null;
+		UserVO vo = null;
 		if (auth != null && auth.getPrincipal() instanceof UserCredentials) {
 			UserCredentials userDetails = (UserCredentials) auth.getPrincipal();
 
 			User user = super.findByPrimaryKey(userDetails.getId());
 			if (user == null) {
-				throw new EntityNotFoundException();
+				throw new EntityNotFoundException("Não foi encontrado nenhum usuário com o e-mail informado.");
 			}
 
 			this.userLoginService.saveLastAccess(user);
-			dto = ParserUtil.parse(user, UserDTO.class);
+			vo = ParserUtil.parse(user, UserVO.class);
 		}
 
-		return dto;
+		return vo;
 	}
 
 	/**
@@ -345,6 +361,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		}
 
 		user.setSenha(newPasswordEncrypted);
+		user.setDtAtualizacao(new Date());
 		super.save(user);
 
 		// TODO add MailSender

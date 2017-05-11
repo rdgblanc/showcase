@@ -10,9 +10,29 @@ angular.module('showcase').controller("showcaseHeaderController", [
 
 		$scope.user = {};
 		$scope.showLoading = false;
-
-
 		//$scope.userLogged = true;
+
+		/* LOGIN MODAL */
+		$scope.auth = function() {
+			$log.info('Autenticando usuário.. [ShowcaseHeaderController]');
+			$log.info(JSON.stringify($scope.user));
+			$scope.showLoading = true;
+
+			userService.authenticate($scope.user, function(response) {
+				$log.info('Usuário logado!! [ShowcaseHeaderController]');
+				$log.info(JSON.stringify(response));
+
+				if (response && response.data) {
+					$scope.user = response.data;
+				}
+				$scope.userLogged = true;
+				$scope.showLoading = false;
+				$('#modal-login').modal('hide');
+			}, function(responseError) {
+				$log.error("Error auth: " + JSON.stringify(responseError));
+				$scope.setErrorMessage(responseError, "Não foi possível efetuar o login, por favor tente novamente mais tarde.");
+			});
+		};
 
 		$scope.create = function() {
 			$log.info('Criando usuário.. [ShowcaseHeaderController]');
@@ -38,7 +58,9 @@ angular.module('showcase').controller("showcaseHeaderController", [
 				$scope.setErrorMessage(responseError, "Não foi possível efetuar o cadastro, por favor tente novamente mais tarde.");
 			});
 		};
+		/* LOGIN MODAL end */
 
+		/* PERSONAL MODAL */
 		$scope.update = function() {
 			$log.info('Alterando usuário.. [ShowcaseHeaderController]');
 			$log.info(JSON.stringify($scope.user));
@@ -65,43 +87,27 @@ angular.module('showcase').controller("showcaseHeaderController", [
 			});
 		};
 
-		$scope.auth = function() {
-			$log.info('Autenticando usuário.. [ShowcaseHeaderController]');
+		$scope.updatePassword = function() {
+			$log.info('Alterando senha do usuário.. [ShowcaseHeaderController]');
 			$log.info(JSON.stringify($scope.user));
-			$scope.showLoading = true;
 
-			userService.authenticate($scope.user, function(response) {
-				$log.info('Usuário logado!! [ShowcaseHeaderController]');
+			$scope.showLoading = true;
+			userService.updateUser($scope.user.id, $scope.user, function(response) {
+				$log.info('Senha do usuário alterada com sucesso! [ShowcaseHeaderController]');
 				$log.info(JSON.stringify(response));
 
-				if (response && response.data) {
-					$scope.user = response.data;
-				}
-				$scope.userLogged = true;
 				$scope.showLoading = false;
-				$('#modal-login').modal('hide');
+				$scope.message = {
+					"type" : "success",
+					"title" : "Ok!",
+					"body" : "Senha alterada com sucesso!"
+				};
 			}, function(responseError) {
-				$log.error("Error auth: " + JSON.stringify(responseError));
-				$scope.setErrorMessage(responseError, "Não foi possível efetuar o login, por favor tente novamente mais tarde.");
+				$log.error("Error update user password: " + JSON.stringify(responseError));
+				$scope.setErrorMessage(responseError, "Não foi possível alterar a senha, por favor tente novamente mais tarde.");
 			});
 		};
-
-		/*$scope.getCurrentUser = function() {
-			$log.info('Obtendo informações do usuário logado.. [ShowcaseHeaderController]');
-			userService.getCurrentUser(function(response) {
-				$log.info('Informações obtidas do usuário logado!! [ShowcaseHeaderController]');
-				$log.info(JSON.stringify(response));
-
-				if (response && response.data) {
-					$scope.user = response.data;
-				}
-			}, function(responseError) {
-				$scope.userNotFound = true;
-				$('#btnUpdateUser').prop('disabled', true);
-				$log.error("Error getCurrentUser: " + JSON.stringify(responseError));
-				$scope.setErrorMessage(responseError, "Não foi possível recuperar as informações do usuário logado.");
-			});
-		};*/
+		/* PERSONAL MODAL end */
 
 		$scope.setErrorMessage = function(responseError, defaultMessage) {
 			var msg = defaultMessage;
@@ -132,8 +138,8 @@ angular.module('showcase').controller("showcaseHeaderController", [
 			$scope.showLoading = false;
 			$scope.userNotFound = false;
 
-			//registerForm.$setPristine();
-      		//registerForm.$setUntouched();
+			//$('#registerForm').$setPristine();
+      		//$('#registerForm').$setUntouched();
 		};
 
 		$('#datepicker').datepicker({
