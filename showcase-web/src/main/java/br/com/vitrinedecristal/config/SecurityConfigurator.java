@@ -18,6 +18,7 @@ public class SecurityConfigurator extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/**").permitAll();
 		// http.formLogin().loginPage("/login.jsp").permitAll();
 		http.logout().permitAll();
+		http.logout().logoutSuccessUrl("/index.html");
 		http.csrf().disable();
 
 		logger.debug("Spring Security config applied");

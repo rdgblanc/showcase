@@ -60,7 +60,7 @@ public class UserController extends SpringBeanAutowiringSupport {
 			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class),
 			@ApiResponse(code = 404, message = EntityNotFoundException.MESSAGE, response = ApiExceptionResponse.class)
 	})
-	public UserDTO get(@ApiParam @PathParam("id") String id) throws ApiException, BusinessException {
+	public UserVO get(@ApiParam @PathParam("id") String id) throws ApiException, BusinessException {
 		if (id == null) {
 			throw new EmptyRequestBodyException();
 		}

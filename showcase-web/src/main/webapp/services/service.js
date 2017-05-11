@@ -19,6 +19,18 @@ angular.module('showcase').service('requestService',[
 		}
 
 		/**
+		 * Puts request.
+		 *
+		 * @param  {String} url Url to put.
+		 * @param  {Object} data Data that to passt to api.
+		 * @param  {Object} options Some configurations for request.
+		 * @return {Promise} $http promise resolved.
+		 */
+		function put(url, data, options) {
+			return $http.put(config.ENDPOINTS.SHOWCASE + url, data, options);
+		}
+
+		/**
 		 * Posts request.
 		 *
 		 * @param  {String} url Url to post.
@@ -42,6 +54,7 @@ angular.module('showcase').service('requestService',[
 
 		return {
 			get: get,
+			put: put,
 			post: post,
 			remove: remove
 		}

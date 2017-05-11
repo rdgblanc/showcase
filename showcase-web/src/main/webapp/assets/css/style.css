@@ -1329,7 +1329,7 @@ h2.resp-accordion {
     color: #212121;
     padding-left: 1.5em;
 }
-.register input[type="text"],.register input[type="email"],.register input[type="password"]{
+.register input[type="text"],.register input[type="email"],.register input[type="password"], .register input[type="tel"] {
 	outline:none;
 	border:1px solid #DFDFDF;
 	background:#f5f5f5;
@@ -1338,16 +1338,27 @@ h2.resp-accordion {
 	width:100%;
 	font-size:14px;
 }
-.register input[type="password"],.register input[type="email"]{
+/*.register input[type="password"],.register input[type="email"], .register div.alert, .register input[type="tel"] {
 	margin:1em 0 0;
+}*/
+.register input[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
-div#horizontalTab ul {
+.register input.has-error {
+    border:1px solid #FF9B05;
+}
+div.form-group span.invalid {
+    color: #FF9B05;
+    font-size: 14px;
+}
+div#horizontalTab ul, div#horizontalTabLogin ul, div#horizontalTabPersonal ul {
     padding-bottom: 1.5em;
 }
 ::-webkit-input-placeholder{
-	color:#212121 !important;
+	color:#9e9e9e !important;
 }
-.register input[type="submit"]{
+.register input[type="submit"], .register input[type="button"] {
 	outline:none;
 	border:none;
 	background:#212121;
@@ -1356,24 +1367,23 @@ div#horizontalTab ul {
 	width:40%;
 	font-size:1em;
 	text-transform:uppercase;
-	margin:2em 0 0;
+	/*margin:2em 0 0;*/
 }
-.register input[type="submit"]:hover{
+.register input[type="submit"][disabled]:hover, .register input[type="button"][disabled]:hover {
+    background:#212121;
+}
+.register input[type="submit"]:hover, .register input[type="button"]:hover{
 	background:#ff9b05;
 }
-.register input[type="button"]{
-    outline:none;
-    border:none;
-    background:#212121;
-    padding:10px 0;
-    color:#fff;
-    width:40%;
-    font-size:1em;
-    text-transform:uppercase;
-    margin:2em 0 0;
+.spinnerr {
+    margin: -1.3em 0 0;
 }
-.register input[type="button"]:hover{
-    background:#ff9b05;
+#gender-group {
+    margin:1em 0 0;
+}
+#radioBtn .notActive{
+    color: #3276b1;
+    background-color: #fff;
 }
 div#OR {
     height: 30px;
@@ -3185,7 +3195,7 @@ td.invert-image a img {
 	h3.other-nw {
 		margin: 2em 0 2em;
 	}
-	.register input[type="submit"] {
+	.register input[type="submit"], .register input[type="button"] {
 		width: 50%;
 		font-size: 14px;
 	}
@@ -3582,7 +3592,7 @@ td.invert-image a img {
 	.social {
 		width: 9.5em;
 	}
-	.register input[type="submit"] {
+	.register input[type="submit"], .register input[type="button"] {
 		width: 70%;
 	}
 	.nav > li > a {
@@ -4181,7 +4191,7 @@ td.invert-image a img {
 	div#horizontalTab ul {
 		padding-bottom: 0.5em;
 	}
-	.register input[type="submit"] {
+	.register input[type="submit"], .register input[type="button"] {
 		width: 100%;
 		margin: 1em 0 0;
 	}

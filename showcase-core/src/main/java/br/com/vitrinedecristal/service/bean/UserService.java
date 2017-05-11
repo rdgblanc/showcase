@@ -68,7 +68,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	}
 
 	@Override
-	public UserDTO get(String id) throws BusinessException {
+	public UserVO get(String id) throws BusinessException {
 		logger.info("Obtendo usuário pelo id: " + id);
 
 		Long userId = null;
@@ -93,7 +93,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 			throw new EntityNotFoundException();
 		}
 
-		return ParserUtil.parse(user, UserDTO.class);
+		return ParserUtil.parse(user, UserVO.class);
 	}
 
 	@Override
