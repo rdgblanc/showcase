@@ -16,13 +16,13 @@
 							<div class="sap_tabs">	
 								<div id="horizontalTabLogin" style="display: block; width: 100%; margin: 0px;">
 									<ul>
-										<li class="resp-tab-item" aria-controls="tab_item-0" ng-click="reset()"><span>Login</span></li>
-										<li class="resp-tab-item" aria-controls="tab_item-1" ng-click="reset()"><span>Cadastre-se</span></li>
+										<li id="tabLogin" class="resp-tab-item" aria-controls="tab_item-0" ng-click="resetLoginForm()"><span>Login</span></li>
+										<li id="tabCadastre" class="resp-tab-item" aria-controls="tab_item-1" ng-click="resetRegisterForm()"><span>Cadastre-se</span></li>
 									</ul>
 									<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-0">
 										<div class="facts">
 											<div class="register">
-												<form name="loginForm" novalidate role="form" ng-submit="loginForm.$valid && auth()">
+												<form id="loginForm" name="loginForm" novalidate role="form" ng-submit="loginForm.$valid && auth()">
 													<div class="form-group">
 														<input placeholder="Email" name="email" type="text" required ng-model="user.email" ng-class="{'has-error': loginForm.$submitted && loginForm.email.$error.required}">
 														<span class="invalid" ng-if="loginForm.$submitted && loginForm.email.$invalid">E-mail inválido.</span>
@@ -48,7 +48,7 @@
 									<div class="tab-2 resp-tab-content" aria-labelledby="tab_item-1">
 										<div class="facts">
 											<div class="register">
-												<form name="registerForm" novalidate role="form" ng-submit="registerForm.$valid && create()">
+												<form id="registerForm" name="registerForm" novalidate role="form" ng-submit="registerForm.$valid && create()">
 													<fieldset>
 														<div class="form-group">
 															<input placeholder="Nome" name="nome" type="text" required ng-model="user.nome" ng-class="{'has-error': registerForm.$submitted && registerForm.nome.$error.required}">
@@ -59,7 +59,7 @@
 															<span class="invalid" ng-if="registerForm.$submitted && registerForm.email.$invalid">E-mail inválido.</span>
 														</div>
 														<div class="form-group">
-															<input placeholder="Confirmar Email" name="emailConfirm" type="email" required compare-to="user.email" ng-class="{'has-error': registerForm.$submitted && registerForm.emailConfirm.$invalid}">
+															<input placeholder="Confirmar Email" name="emailConfirm" type="email" required compare-to="user.email" ng-model="user.emailConfirm" ng-class="{'has-error': registerForm.$submitted && registerForm.emailConfirm.$invalid}">
 															<span class="invalid" ng-if="registerForm.$submitted && registerForm.emailConfirm.$invalid">E-mails não conferem.</span>
 														</div>
 														<div class="form-group">
@@ -67,7 +67,7 @@
 															<span class="invalid" ng-if="registerForm.$submitted && registerForm.password.$invalid">Senha inválida.</span>
 														</div>
 														<div class="form-group">
-															<input placeholder="Confirmar Senha" name="passwordConfirm" type="password" required compare-to="user.senha" ng-class="{'has-error': registerForm.$submitted && registerForm.passwordConfirm.$invalid}">
+															<input placeholder="Confirmar Senha" name="passwordConfirm" type="password" required compare-to="user.senha" ng-model="user.senhaConfirm" ng-class="{'has-error': registerForm.$submitted && registerForm.passwordConfirm.$invalid}">
 															<span class="invalid" ng-if="registerForm.$submitted && registerForm.passwordConfirm.$invalid">Senhas não conferem.</span>
 														</div>
 														<div id="alert-group" class="form-group" ng-if="message.type && registerForm.$submitted && registerForm.$valid && !showLoading">
@@ -121,9 +121,9 @@
 							<div class="sap_tabs">
 								<div id="horizontalTabPersonal" style="display: block; width: 100%; margin: 0px;">
 									<ul>
-										<li class="resp-tab-item" aria-controls="tab_item-0" ng-click="reset()"><span>Dados Pessoais</span></li>
-										<li class="resp-tab-item" aria-controls="tab_item-1" ng-click="reset()"><span>Endereço</span></li>
-										<li class="resp-tab-item" aria-controls="tab_item-2" ng-click="reset()"><span>Senha</span></li>
+										<li id="tabPersonal" class="resp-tab-item" aria-controls="tab_item-0" ng-click="resetUpdateForm()"><span>Dados Pessoais</span></li>
+										<li id="tabAddress" class="resp-tab-item" aria-controls="tab_item-1" ng-click="resetAddressForm()"><span>Endereço</span></li>
+										<li id="tabPassword" class="resp-tab-item" aria-controls="tab_item-2" ng-click="resetPasswordForm()"><span>Senha</span></li>
 									</ul>
 									<div class="tab-1 resp-tab-content" aria-labelledby="tab_item-0">
 										<div class="facts">
@@ -131,24 +131,24 @@
 												<form id="updateForm" name="updateForm" novalidate role="form" ng-submit="updateForm.$valid && update()">
 													<fieldset>
 														<div class="form-group">
-															<input placeholder="Nome" name="nome" type="text" required ng-model="user.nome" ng-class="{'has-error': updateForm.$submitted && updateForm.nome.$error.required}">
+															<input placeholder="Nome" name="nome" type="text" required ng-model="currentUser.nome" ng-class="{'has-error': updateForm.$submitted && updateForm.nome.$error.required}">
 															<span class="invalid" ng-if="updateForm.$submitted && updateForm.nome.$invalid">Nome inválido.</span>
 														</div>
 														<div class="form-group">
-															<input name="email" placeholder="Email" type="email" disabled ng-model="user.email">
+															<input name="email" placeholder="Email" type="email" disabled ng-model="currentUser.email">
 														</div>
 														<div class="form-group">
-															<input placeholder="Telefone" ng-model="user.telefone" type="tel" class="input-medium bfh-phone" data-format="dd-dddd-dddd">
+															<input placeholder="Telefone" ng-model="currentUser.telefone" type="tel" class="input-medium bfh-phone" data-format="dd-dddd-dddd">
 														</div>
 														<div id="gender-group" class="form-group">
 															<label style="float: left; font-weight: normal; margin: 3px;">Sexo:</label>
 															<div class="col-sm-7 col-md-6" style="width: 43%;">
 																<div class="input-group" style="margin-bottom: 0px">
 																	<div id="radioBtn" class="btn-group">
-																		<a class="btn btn-primary btn-sm notActive" data-toggle="gender" data-title="MALE">Masculino</a>
-																		<a class="btn btn-primary btn-sm notActive" data-toggle="gender" data-title="FEMALE">Feminino</a>
+																		<a id="radioMale" class="btn btn-primary btn-sm notActive" data-toggle="gender" data-title="MALE">Masculino</a>
+																		<a id="radioFemale" class="btn btn-primary btn-sm notActive" data-toggle="gender" data-title="FEMALE">Feminino</a>
 																	</div>
-																	<input type="hidden" name="gender" id="gender">
+																	<input type="hidden" name="gender" id="gender" ng-model="currentUser.sexo" ng-value="{{this.value}}">
 																</div>
 															</div>
 														</div>
@@ -178,32 +178,32 @@
 									<div class="tab-2 resp-tab-content" aria-labelledby="tab_item-1">
 										<div class="facts">
 											<div class="register">
-												<form name="addressForm" novalidate role="form" ng-submit="addressForm.$valid && saveAddress()">
+												<form id="addressForm" name="addressForm" novalidate role="form" ng-submit="addressForm.$valid && saveAddress()">
 													<fieldset>
 														<!-- <div class="form-group">
-															<input placeholder="Descrição (Residencial, Comercial...)" name="descricao" type="text" required ng-model="user.descricao" ng-class="{'has-error': addressForm.$submitted && addressForm.descricao.$error.required}">
+															<input placeholder="Descrição (Residencial, Comercial...)" name="descricao" type="text" required ng-model="address.descricao" ng-class="{'has-error': addressForm.$submitted && addressForm.descricao.$error.required}">
 															<span class="invalid" ng-if="addressForm.$submitted && addressForm.descricao.$invalid">Descrição inválida.</span>
 														</div> -->
 														<div class="form-group">
-															<input placeholder="CEP" id="cep" name="cep" type="text" required class="cep" maxlength="9" ng-model="user.cep" ng-class="{'has-error': addressForm.$submitted && addressForm.cep.$invalid}">
+															<input placeholder="CEP" id="cep" name="cep" type="text" required class="cep" maxlength="9" ng-model="address.cep" ng-class="{'has-error': addressForm.$submitted && addressForm.cep.$invalid}">
 															<span class="invalid" ng-if="addressForm.$submitted && addressForm.cep.$invalid">CEP inválido.</span>
 														</div>
 														<div class="form-group">
-															<input placeholder="Endereço" id="endereco" name="endereco" type="text" disabled ng-model="user.endereco">
+															<input placeholder="Endereço" id="endereco" name="endereco" type="text" disabled ng-model="address.endereco">
 														</div>
 														<div class="form-group">
 															<div class="form-group" style="width: 40%;float: left;padding-right: 5px;">
-																<input placeholder="Número" id="numeroEndereco" name="numeroEndereco" type="text" required class="integer" ng-model="user.numero" ng-class="{'has-error': addressForm.$submitted && addressForm.numeroEndereco.$error.required}">
+																<input placeholder="Número" id="numeroEndereco" name="numeroEndereco" type="text" required class="integer" ng-model="address.numero" ng-class="{'has-error': addressForm.$submitted && addressForm.numeroEndereco.$error.required}">
 																<span class="invalid" ng-if="addressForm.$submitted && addressForm.numeroEndereco.$invalid">Número inválido.</span>
 															</div>
-															<input placeholder="Complemento" name="complemento" type="text" style="width: 60%" ng-model="user.complemento">
+															<input placeholder="Complemento" name="complemento" type="text" style="width: 60%" ng-model="address.complemento">
 														</div>
 														<div class="form-group">
-															<input placeholder="Bairro" id="bairro" name="bairro" type="text" disabled ng-model="user.bairro">
+															<input placeholder="Bairro" id="bairro" name="bairro" type="text" disabled ng-model="address.bairro">
 														</div>
 														<div class="form-group">
-															<input placeholder="Cidade" id="cidade" name="cidade" type="text" disabled style="width: 80%" ng-model="user.cidade">
-															<input placeholder="Estado" id="estado" name="estado" type="text" disabled style="width: 19%" ng-model="user.estado">
+															<input placeholder="Cidade" id="cidade" name="cidade" type="text" disabled style="width: 80%" ng-model="address.cidade">
+															<input placeholder="Estado" id="estado" name="estado" type="text" disabled style="width: 19%" ng-model="address.estado">
 														</div>
 														<div id="alert-group" class="form-group" ng-if="cepError">
 															<div class="alert alert-{{message.type}}" role="alert">
@@ -223,14 +223,14 @@
 									<div class="tab-3 resp-tab-content" aria-labelledby="tab_item-2">
 										<div class="facts">
 											<div class="register">
-												<form name="passwordForm" novalidate role="form" ng-submit="passwordForm.$valid && updatePassword()">
+												<form id="passwordForm" name="passwordForm" novalidate role="form" ng-submit="passwordForm.$valid && updatePassword()">
 													<fieldset>
 														<div class="form-group">
-															<input placeholder="Senha" name="password" type="password" required ng-model="user.senha" ng-class="{'has-error': passwordForm.$submitted && passwordForm.password.$error.required}">
+															<input placeholder="Senha" name="password" type="password" required ng-model="currentUser.senha" ng-class="{'has-error': passwordForm.$submitted && passwordForm.password.$error.required}">
 															<span class="invalid" ng-if="passwordForm.$submitted && passwordForm.password.$invalid">Senha inválida.</span>
 														</div>
 														<div class="form-group">
-															<input placeholder="Confirmar Senha" name="passwordConfirm" type="password" required compare-to="user.senha" ng-model="user.passwordConfirm" ng-class="{'has-error': passwordForm.$submitted && passwordForm.passwordConfirm.$invalid}">
+															<input placeholder="Confirmar Senha" name="passwordConfirm" type="password" required compare-to="currentUser.senha" ng-model="currentUser.senhaConfirm" ng-class="{'has-error': passwordForm.$submitted && passwordForm.passwordConfirm.$invalid}">
 															<span class="invalid" ng-if="passwordForm.$submitted && passwordForm.passwordConfirm.$invalid">Senhas não conferem.</span>
 														</div>
 														<div id="alert-group" class="form-group" ng-if="message.type && passwordForm.$submitted && passwordForm.$valid && !showLoading">
@@ -287,23 +287,15 @@
 	</div>
 	<script>
 		//$('#modal-login').modal('hide'); // show/hide
-		$('#radioBtn a').on('click', function() {
-			var sel = $(this).data('title');
-			var tog = $(this).data('toggle');
-			$('#'+tog).prop('value', sel);
-
-			$('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
-			$('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
-		})
 	</script>
 	<div class="header">
 		<div class="container">
-			<div class="w3l_login" ng-click="reset()">
+			<div class="w3l_login">
 				<a href="#" data-toggle="modal" data-target="#modal-login">
 					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 				</a>
 				<a href="#" data-toggle="modal" data-target="#modal-login" class="nick">
-					<h5>{{userLogged &amp;&amp; user ? (user.nome ? "Olá, " + user.nome : "Bem vindo!") : "Entre"}}</h5>
+					<h5>{{userLogged &amp;&amp; currentUser ? (currentUser.nome ? "Olá, " + currentUser.nome : "Bem vindo!") : "Entre"}}</h5>
 				</a>
 			</div>
 			<div class="w3l_logo">

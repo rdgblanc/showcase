@@ -2,7 +2,10 @@ package br.com.vitrinedecristal.dto;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 @SuppressWarnings("serial")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UpdateUserPasswordDTO implements Serializable {
 
 	private Long id;

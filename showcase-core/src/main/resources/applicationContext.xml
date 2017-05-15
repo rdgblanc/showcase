@@ -69,6 +69,11 @@
 	<bean id="applicationBeanFactory" class="br.com.vitrinedecristal.application.ApplicationBeanFactory" />
 	
 	<!-- DAO -->
+	<bean id="addressDAO" class="br.com.vitrinedecristal.dao.bean.AddressDAO">
+		<constructor-arg>
+			<ref bean="entityManager" />
+		</constructor-arg>
+	</bean>
 	<bean id="tokenDAO" class="br.com.vitrinedecristal.dao.bean.TokenDAO">
 		<constructor-arg>
 			<ref bean="entityManager" />
@@ -87,6 +92,11 @@
 	<!--/ DAO -->
 	
 	<!-- Service -->
+	<bean id="addressService" class="br.com.vitrinedecristal.service.bean.AddressService">
+		<constructor-arg>
+			<ref bean="addressDAO" />
+		</constructor-arg>
+	</bean>
 	<bean id="tokenService" class="br.com.vitrinedecristal.service.bean.TokenService">
 		<constructor-arg>
 			<ref bean="tokenDAO" />

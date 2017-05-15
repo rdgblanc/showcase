@@ -26,60 +26,45 @@ import br.com.vitrinedecristal.enums.TokenEnum;
  * Representa um token que controla as permissões do usuário
  */
 @Entity
-@Table(
-	name = "TOKEN")
+@Table(name = "TOKEN")
 public class Token implements IID<Long> {
 
 	@Id
-	@Column(
-		name = "ID", nullable = false, unique = true)
-	@GeneratedValue(
-		strategy = GenerationType.IDENTITY)
+	@Column(name = "ID", nullable = false, unique = true)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	/** String única. */
-	@Column(
-		name = "HASH")
+	@Column(name = "HASH")
 	private String hash;
 
 	/** Indica se o token foi usado. */
-	@Column(
-		name = "USADO")
+	@Column(name = "USADO")
 	private boolean usado;
 
 	/** Tipo do token. */
-	@Column(
-		name = "TIPO", nullable = false)
-	@Enumerated(
-		value = EnumType.ORDINAL)
+	@Column(name = "TIPO", nullable = false)
+	@Enumerated(value = EnumType.ORDINAL)
 	private TokenEnum tipo;
 
 	/** Data de inserção. */
-	@Column(
-		name = "DT_INSERCAO")
-	@Temporal(
-		value = TemporalType.TIMESTAMP)
+	@Column(name = "DT_INSERCAO")
+	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date dtInsercao;
 
 	/** Data em que o token foi usado. */
-	@Column(
-		name = "DT_ATIVACAO")
-	@Temporal(
-		value = TemporalType.TIMESTAMP)
+	@Column(name = "DT_ATIVACAO")
+	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date dtAtivacao;
 
 	/** Data de expiração. */
-	@Column(
-		name = "DT_EXPIRACAO")
-	@Temporal(
-		value = TemporalType.TIMESTAMP)
+	@Column(name = "DT_EXPIRACAO")
+	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date dtExpiracao;
 
 	/** Usuário associado. */
-	@ManyToOne(
-		targetEntity = User.class)
-	@JoinColumn(
-		name = "ID_USUARIO")
+	@ManyToOne(targetEntity = User.class)
+	@JoinColumn(name = "ID_USUARIO")
 	private User usuario;
 
 	/**

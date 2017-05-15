@@ -3,7 +3,7 @@ package br.com.vitrinedecristal.exception;
 public class EntityNotFoundException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
-	public static final String MESSAGE = "Entity not found.";
+	public static final String MESSAGE = "Entidade não encontrada.";
 
 	public EntityNotFoundException() {
 		super(MESSAGE);

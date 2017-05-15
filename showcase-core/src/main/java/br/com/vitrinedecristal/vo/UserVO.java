@@ -3,14 +3,18 @@ package br.com.vitrinedecristal.vo;
 import java.util.Date;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
 import br.com.vitrinedecristal.enums.GenderEnum;
 import br.com.vitrinedecristal.enums.RoleEnum;
 import br.com.vitrinedecristal.enums.UserStatusEnum;
 import br.com.vitrinedecristal.model.User;
+import br.com.vitrinedecristal.vo.base.BaseVO;
 
 /**
- * Classe VO para representação de um objeto {@link User} nos clientes.
+ * Classe VO para representação de um objeto {@link User}.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserVO extends BaseVO<User> {
 
 	private static final long serialVersionUID = 1L;

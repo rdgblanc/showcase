@@ -38,7 +38,7 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	 * @throws BusinessException
 	 */
 	@Secured(ROLE_USER)
-	UserVO get(String id) throws BusinessException;
+	UserVO getUser(String id) throws BusinessException;
 
 	/**
 	 * Cria o usuário

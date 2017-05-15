@@ -67,7 +67,7 @@ public class UserController extends SpringBeanAutowiringSupport {
 			throw new EmptyRequestBodyException();
 		}
 
-		return this.userService.get(id);
+		return this.userService.getUser(id);
 	}
 
 	@POST

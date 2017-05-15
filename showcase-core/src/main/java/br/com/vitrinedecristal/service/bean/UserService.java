@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -70,7 +71,7 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	}
 
 	@Override
-	public UserVO get(String id) throws BusinessException {
+	public UserVO getUser(String id) throws BusinessException {
 		logger.info("Obtendo usuário pelo id: " + id);
 
 		Long userId = null;
@@ -136,12 +137,12 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	public UserVO updateUser(UserVO userVO) throws BusinessException {
 		logger.info("Atualizando usuário: " + userVO);
 
-		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !userVO.getId().equals(AuthenticationUtils.getUserId())) {
-			throw new InvalidPermissionException();
-		}
-
 		if (userVO == null) {
 			throw new IllegalArgumentException("A entidade usuário não pode ser nula.");
+		}
+
+		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !userVO.getId().equals(AuthenticationUtils.getUserId())) {
+			throw new InvalidPermissionException();
 		}
 
 		User storedUser = getDAO().findByPrimaryKey(userVO.getId());
@@ -218,12 +219,12 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	@Override
 	@Transactional
 	public void updatePassword(UpdateUserPasswordDTO updateUserPasswordDTO) throws BusinessException {
-		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !updateUserPasswordDTO.getId().equals(AuthenticationUtils.getUserId())) {
-			throw new InvalidPermissionException();
-		}
-
 		if (updateUserPasswordDTO == null) {
 			throw new IllegalArgumentException("A entidade não pode ser nula.");
+		}
+
+		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !updateUserPasswordDTO.getId().equals(AuthenticationUtils.getUserId())) {
+			throw new InvalidPermissionException();
 		}
 
 		logger.info("Alterando a senha do usuário [" + updateUserPasswordDTO.getId() + "]");
@@ -238,23 +239,23 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	// TODO função para atualizar a classificação do usuário (calcular a média e atualizad na base..)
 
 	@Override
-	public void recoveryPassword(User usuario) throws BusinessException {
-		User user = null;
+	public void recoveryPassword(User user) throws BusinessException {
+		User storedUser = null;
 
-		if (usuario == null || StringUtils.isBlank(usuario.getEmail())) {
+		if (user == null || StringUtils.isBlank(user.getEmail())) {
 			throw new BusinessException("E-mail informado para a recuperação de senha é inválido.");
 		}
 
-		logger.info("Recuperando senha do usuário: " + usuario.getId());
+		logger.info("Recuperando senha do usuário: " + user.getId());
 
 		try {
-			user = getDAO().findByEmail(usuario.getEmail(), null);
+			storedUser = getDAO().findByEmail(user.getEmail(), null);
 		} catch (Exception e) {
 			throw new BusinessException("E-mail informado para a recuperação de senha é inválido.");
 		}
 
 		ITokenService tokenBO = ApplicationBeanFactory.getBean(ITokenService.class);
-		Token token = tokenBO.createTokenForPasswordRecovery(user);
+		Token token = tokenBO.createTokenForPasswordRecovery(storedUser);
 
 		// TODO add MailSender
 		// IMailSender mailSender = MailSenderFactory.createEmailSender();
@@ -279,8 +280,13 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 
 		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getSenha());
 
-		Authentication auth = this.authenticationManager.authenticate(token);
-		AuthenticationUtils.login(auth);
+		Authentication auth = null;
+		try {
+			auth = this.authenticationManager.authenticate(token);
+			AuthenticationUtils.login(auth);
+		} catch (BadCredentialsException e) {
+			throw new BadCredentialsException("Usuário e/ou senha incorretos.");
+		}
 
 		UserVO vo = null;
 		if (auth != null && auth.getPrincipal() instanceof UserCredentials) {

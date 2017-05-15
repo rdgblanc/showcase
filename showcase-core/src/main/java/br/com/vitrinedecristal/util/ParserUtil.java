@@ -7,7 +7,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import org.dozer.DozerBeanMapper;
 
-import br.com.vitrinedecristal.vo.BaseVO;
+import br.com.vitrinedecristal.vo.base.BaseVO;
 
 public class ParserUtil {
 

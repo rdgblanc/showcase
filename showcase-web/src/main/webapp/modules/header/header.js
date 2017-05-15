@@ -4,8 +4,8 @@
 * Header controller
 */
 angular.module('showcase').controller("showcaseHeaderController", [
-	'$scope', '$log', 'userService',
-	function($scope, $log, userService) {
+	'$scope', '$log', 'userService', 'addressService',
+	function($scope, $log, userService, addressService) {
 		$log.info('Controller initialized [ShowcaseHeaderController]');
 
 		$scope.user = {};
@@ -23,7 +23,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
-					$scope.user = response.data;
+					$scope.currentUser = response.data;
 				}
 				$scope.userLogged = true;
 				$scope.showLoading = false;
@@ -50,9 +50,9 @@ angular.module('showcase').controller("showcaseHeaderController", [
 					"body" : "Cadastro efetuado com sucesso. Valide seu e-mail para ter acesso ao site."
 				};
 
-				setTimeout(function() {
+				/*setTimeout(function() {
 					$('#modal-login').modal('hide');
-				}, 5000);
+				}, 5000);*/
 			}, function(responseError) {
 				$log.error("Error create user: " + JSON.stringify(responseError));
 				$scope.setErrorMessage(responseError, "Não foi possível efetuar o cadastro, por favor tente novamente mais tarde.");
@@ -63,10 +63,11 @@ angular.module('showcase').controller("showcaseHeaderController", [
 		/* PERSONAL MODAL */
 		$scope.update = function() {
 			$log.info('Alterando usuário.. [ShowcaseHeaderController]');
-			$log.info(JSON.stringify($scope.user));
+			$log.info(JSON.stringify($scope.currentUser));
+			$scope.currentUser.dtNascimento = $('#datepicker').datepicker('getDate');
 
 			$scope.showLoading = true;
-			userService.updateUser($scope.user.id, $scope.user, function(response) {
+			userService.updateUser($scope.currentUser.id, $scope.currentUser, function(response) {
 				$log.info('Usuário alterado com sucesso! [ShowcaseHeaderController]');
 				$log.info(JSON.stringify(response));
 
@@ -76,23 +77,113 @@ angular.module('showcase').controller("showcaseHeaderController", [
 					"title" : "Ok!",
 					"body" : "Cadastro alterado com sucesso!"
 				};
-				$scope.user = response;
 
-				setTimeout(function() {
+				if (response && response.data) {
+					$scope.currentUser = response.data;
+				}
+
+				/*setTimeout(function() {
 					$('#modal-personal').modal('hide');
-				}, 5000);
+				}, 5000);*/
 			}, function(responseError) {
 				$log.error("Error update user: " + JSON.stringify(responseError));
 				$scope.setErrorMessage(responseError, "Não foi possível alterar o cadastro, por favor tente novamente mais tarde.");
 			});
 		};
 
-		$scope.updatePassword = function() {
-			$log.info('Alterando senha do usuário.. [ShowcaseHeaderController]');
-			$log.info(JSON.stringify($scope.user));
+		$scope.getAddressByUser = function() {
+			$log.info('Obtendo endereço do usuário.. [ShowcaseHeaderController]');
+			$log.info(JSON.stringify($scope.currentUser));
+
+			//$scope.showLoading = true;
+			addressService.getAddressByUser($scope.currentUser.id, function(response) {
+				$log.info('Endereço do usuário obtido com sucesso! [ShowcaseHeaderController]');
+				$log.info(JSON.stringify(response));
+
+				//$scope.showLoading = false;
+				/*$scope.message = {
+					"type" : "success",
+					"title" : "Ok!",
+					"body" : "Cadastro alterado com sucesso!"
+				};*/
+
+				if (response && response.data && response.data.length > 0) {
+					$scope.address = response.data[0];
+				}
+			}, function(responseError) {
+				$log.error("Error get address by user: " + JSON.stringify(responseError));
+				$scope.setErrorMessage(responseError, "Não foi possível recuperar o endereço do usuário, por favor tente novamente mais tarde.");
+			});
+		};
+
+		$scope.saveAddress = function() {
+			if ($scope.address && $scope.address.id) {
+				$scope.updateAddress();
+			} else {
+				$scope.createAddress();
+			}
+		};
+
+		$scope.createAddress = function() {
+			$log.info('Criando endereço do usuário.. [ShowcaseHeaderController]');
+
+			if ($scope.address) {
+				$scope.address.usuario = $scope.currentUser;
+			}
+			$log.info(JSON.stringify($scope.address));
 
 			$scope.showLoading = true;
-			userService.updateUser($scope.user.id, $scope.user, function(response) {
+			addressService.createAddress($scope.address, function(response) {
+				$log.info('Endereço criado com sucesso! [ShowcaseHeaderController]');
+				$log.info(JSON.stringify(response));
+
+				$scope.showLoading = false;
+				$scope.message = {
+					"type" : "success",
+					"title" : "Ok!",
+					"body" : "Endereço criado com sucesso!"
+				};
+
+				if (response && response.data) {
+					$scope.address = response.data;
+				}
+			}, function(responseError) {
+				$log.error("Error create address: " + JSON.stringify(responseError));
+				$scope.setErrorMessage(responseError, "Não foi possível criar o endereço do usuário, por favor tente novamente mais tarde.");
+			});
+		};
+
+		$scope.updateAddress = function() {
+			$log.info('Alterando endereço do usuário.. [ShowcaseHeaderController]');
+			$log.info(JSON.stringify($scope.address));
+
+			$scope.showLoading = true;
+			addressService.updateAddress($scope.address.id, $scope.address, function(response) {
+				$log.info('Endereço alterado com sucesso! [ShowcaseHeaderController]');
+				$log.info(JSON.stringify(response));
+
+				$scope.showLoading = false;
+				$scope.message = {
+					"type" : "success",
+					"title" : "Ok!",
+					"body" : "Endereço alterado com sucesso!"
+				};
+
+				if (response && response.data) {
+					$scope.address = response.data;
+				}
+			}, function(responseError) {
+				$log.error("Error update address: " + JSON.stringify(responseError));
+				$scope.setErrorMessage(responseError, "Não foi possível alterar o endereço do usuário, por favor tente novamente mais tarde.");
+			});
+		};
+
+		$scope.updatePassword = function() {
+			$log.info('Alterando senha do usuário.. [ShowcaseHeaderController]');
+			$log.info(JSON.stringify($scope.currentUser));
+
+			$scope.showLoading = true;
+			userService.updatePassword($scope.currentUser.id, $scope.currentUser, function(response) {
 				$log.info('Senha do usuário alterada com sucesso! [ShowcaseHeaderController]');
 				$log.info(JSON.stringify(response));
 
@@ -132,24 +223,101 @@ angular.module('showcase').controller("showcaseHeaderController", [
 			}
 		};
 
-		$scope.reset = function () {
-			$scope.user = {};
+		/* RESETs */
+		$scope.resetMessages = function() {
 			$scope.message = {};
 			$scope.showLoading = false;
-			$scope.userNotFound = false;
-
-			//$('#registerForm').$setPristine();
-      		//$('#registerForm').$setUntouched();
 		};
 
+		$scope.resetModalLogin = function() {
+			$scope.user = {};
+			$scope.resetMessages();
+		};
+
+		$scope.resetLoginForm = function() {
+			$scope.resetModalLogin();
+			$scope.loginForm.$setPristine();
+		};
+
+		$scope.resetRegisterForm = function() {
+			$scope.resetModalLogin();
+			$scope.registerForm.$setPristine();
+		};
+
+		$scope.resetUpdateForm = function() {
+			$scope.resetMessages();
+			$scope.updateForm.$setPristine();
+		};
+
+		$scope.resetAddressForm = function() {
+			$scope.resetMessages();
+			$scope.addressForm.$setPristine();
+		};
+
+		$scope.resetPasswordForm = function() {
+			$scope.resetMessages();
+			$scope.passwordForm.$setPristine();
+		};
+
+		$('#modal-login').on('hide.bs.modal', function() {
+			$scope.resetModalLogin();
+			$('#tabLogin').trigger('click');
+			$scope.loginForm.$setPristine();
+			$scope.registerForm.$setPristine();
+		});
+
+		$('#modal-personal').on('hide.bs.modal', function() {
+			$scope.resetMessages();
+			$('#tabPersonal').trigger('click');
+			$scope.updateForm.$setPristine();
+			$scope.addressForm.$setPristine();
+			$scope.passwordForm.$setPristine();
+		});
+		/* RESETs end */
+
+		$('#modal-personal').on('show.bs.modal', function() {
+			console.log($scope.currentUser);
+			if ($scope.currentUser && $scope.currentUser.sexo) {
+				if ($scope.currentUser.sexo === 'MALE') {
+					$('#radioMale').trigger('click');
+				} else if ($scope.currentUser.sexo === 'FEMALE') {
+					$('#radioFemale').trigger('click');
+				}
+			}
+			if ($scope.currentUser && $scope.currentUser.dtNascimento) {
+				$('#datepicker').datepicker('setDate', new Date($scope.currentUser.dtNascimento));
+			}
+
+			$scope.getAddressByUser();
+		});
+
+		$("input[type=text], input[type=email], input[type=tel], input[type=password]").keyup(function() {
+			$scope.resetMessages();
+		});
+
+		$('#radioBtn a').on('click', function() {
+			var sel = $(this).data('title');
+			var tog = $(this).data('toggle');
+			$('#'+tog).prop('value', sel);
+			$scope.currentUser.sexo = sel;
+
+			$('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+			$('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+		});
+
 		$('#datepicker').datepicker({
-			language: "pt-BR",
-			format: "dd/mm/yyyy",
+			language: 'pt-BR',
+			format: 'dd/mm/yyyy',
 			autoclose : true,
-			todayHighlight: true,
+			changeMonth: true,
+            changeYear: true,
+            //yearRange: '1910:2010',
+            //maxDate: '-18Y',
+    		//minDate: '-20Y',
+    		//defaultDate: '-18Y',
+			//todayHighlight: true,
 			toggleActive: true
 		});
-		//$('#datepicker').datepicker('setDate', $scope.filterDate);
 
 		function resetAddressForm() {
 			// Limpa valores do formulário de endereço.
@@ -179,20 +347,28 @@ angular.module('showcase').controller("showcaseHeaderController", [
 				if(validacep.test(cep)) {
 					//Preenche os campos com "..." enquanto consulta webservice.
 					$("#endereco").val("...");
+					$scope.address.endereco = null;
 					$("#bairro").val("...");
+					$scope.address.bairro = null;
 					$("#cidade").val("...");
+					$scope.address.cidade = null;
 					$("#estado").val("...");
-					$scope.showLoading = true;
+					$scope.address.estado = null;
+					//$scope.showLoading = true;
 
 					//Consulta o webservice viacep.com.br/
 					$.getJSON("//viacep.com.br/ws/"+ cep +"/json/?callback=?", function(dados) {
-						$scope.showLoading = false;
+						//$scope.showLoading = false;
 						if (!("erro" in dados)) {
 							//Atualiza os campos com os valores da consulta.
 							$("#endereco").val(dados.logradouro);
+							$scope.address.endereco = dados.logradouro;
 							$("#bairro").val(dados.bairro);
+							$scope.address.bairro = dados.bairro;
 							$("#cidade").val(dados.localidade);
+							$scope.address.cidade = dados.localidade;
 							$("#estado").val(dados.uf);
+							$scope.address.estado = dados.uf;
 						} else {
 							//CEP pesquisado não foi encontrado.
 							resetAddressForm();

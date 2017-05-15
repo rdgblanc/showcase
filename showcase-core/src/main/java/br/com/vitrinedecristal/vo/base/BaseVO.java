@@ -1,4 +1,4 @@
-package br.com.vitrinedecristal.vo;
+package br.com.vitrinedecristal.vo.base;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -28,8 +28,7 @@ public abstract class BaseVO<T> implements Serializable {
 	 * Popula os campos do VO com os valores da entidade.<br>
 	 * Todos os campos da entidade que no VO correspondem a um campo de um tipo que estende {@link BaseVO} também serão convertidos para o VO correspondente.
 	 * 
-	 * @param object
-	 *            a entidade cujos valores serão copiados para o VO.
+	 * @param object a entidade cujos valores serão copiados para o VO.
 	 */
 	public BaseVO(T object) {
 		if (object == null) {
@@ -164,8 +163,7 @@ public abstract class BaseVO<T> implements Serializable {
 	/**
 	 * Converte uma lista de VOs para uma lista de entidades. Se o parâmetro for nulo, será retornada uma lista vazia.
 	 * 
-	 * @param value
-	 *            a lista de VOs.
+	 * @param value a lista de VOs.
 	 * @return a lista de entidades.
 	 */
 	public List<T> parse(List<? extends BaseVO<T>> value) {
@@ -185,8 +183,7 @@ public abstract class BaseVO<T> implements Serializable {
 	/**
 	 * Converte uma lista de VOs para uma lista de entidades.
 	 * 
-	 * @param value
-	 *            a lista de VOs.
+	 * @param value a lista de VOs.
 	 * @return a lista de entidades.
 	 */
 	@SuppressWarnings("rawtypes")
@@ -203,19 +200,13 @@ public abstract class BaseVO<T> implements Serializable {
 	/**
 	 * Converte uma lista de entidades para uma lista de VOs. Se o tipo da lista no VO não estende {@link BaseVO} será retornada a lista passada por parâmetro.
 	 * 
-	 * @param field
-	 *            o campo que representa a lista no VO.
-	 * @param list
-	 *            a lista de entidades a serem convertidas para VOs.
+	 * @param field o campo que representa a lista no VO.
+	 * @param list a lista de entidades a serem convertidas para VOs.
 	 * @return a lista de entidades de VOs.
-	 * @throws NoSuchMethodException
-	 *             caso não seja possível instanciar um VO.
-	 * @throws IllegalAccessException
-	 *             caso não seja possível instanciar um VO.
-	 * @throws InvocationTargetException
-	 *             caso não seja possível instanciar um VO.
-	 * @throws InstantiationException
-	 *             caso não seja possível instanciar um VO.
+	 * @throws NoSuchMethodException caso não seja possível instanciar um VO.
+	 * @throws IllegalAccessException caso não seja possível instanciar um VO.
+	 * @throws InvocationTargetException caso não seja possível instanciar um VO.
+	 * @throws InstantiationException caso não seja possível instanciar um VO.
 	 */
 	private List<?> parseEntityList(Field field, List<?> list) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
 		if (list.isEmpty()) {
@@ -254,8 +245,7 @@ public abstract class BaseVO<T> implements Serializable {
 	 * Retorna a classe que representa o VO.
 	 * 
 	 * @return a classe que representa o VO.
-	 * @throws ClassNotFoundException
-	 *             caso a classe do VO não seja encontrada.
+	 * @throws ClassNotFoundException caso a classe do VO não seja encontrada.
 	 */
 	@SuppressWarnings("unchecked")
 	private Class<T> getClassVO() {
