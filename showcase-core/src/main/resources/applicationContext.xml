@@ -74,6 +74,11 @@
 			<ref bean="entityManager" />
 		</constructor-arg>
 	</bean>
+	<bean id="categoryDAO" class="br.com.vitrinedecristal.dao.bean.CategoryDAO">
+		<constructor-arg>
+			<ref bean="entityManager" />
+		</constructor-arg>
+	</bean>
 	<bean id="tokenDAO" class="br.com.vitrinedecristal.dao.bean.TokenDAO">
 		<constructor-arg>
 			<ref bean="entityManager" />
@@ -95,6 +100,11 @@
 	<bean id="addressService" class="br.com.vitrinedecristal.service.bean.AddressService">
 		<constructor-arg>
 			<ref bean="addressDAO" />
+		</constructor-arg>
+	</bean>
+	<bean id="categoryService" class="br.com.vitrinedecristal.service.bean.CategoryService">
+		<constructor-arg>
+			<ref bean="categoryDAO" />
 		</constructor-arg>
 	</bean>
 	<bean id="tokenService" class="br.com.vitrinedecristal.service.bean.TokenService">
