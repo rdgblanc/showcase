@@ -298,7 +298,10 @@ ul.multi-column-dropdown h6 {
     float: none;
 }
 .navbar-nav > li:nth-child(1) {
-    margin-left: 12em;
+    margin-left: 22em;
+}
+.first-child-logged {
+    margin-left: 15em !important;
 }
 .dropdown-menu {
     left: -130%;

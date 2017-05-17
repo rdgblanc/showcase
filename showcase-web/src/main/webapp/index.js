@@ -56,24 +56,33 @@ window.module.run(['$rootScope', '$location', '$route',
 		$rootScope.$on("$routeChangeSuccess", function(event, currentRoute) {
 			$rootScope.checkActiveMenu();
 		});
+
+		$rootScope.$on("$includeContentLoaded", function(event, templateName){
+			console.log('Template has loaded! ' + templateName);
+		});
 	}
 ]);
 
 angular.module('showcase').controller("showcaseController", [
 	'$scope', '$log', '$anchorScroll', '$location', '$route',
 	function($scope, $log, $anchorScroll, $location, $route) {
-		$log.info('Showcase controller.....');
+		$log.info('Controller initialized [ShowcaseController]');
 
 		$scope.viewsEnum = Object.freeze({
 			HOME: 'pages/home/home.html',
 
 			ABOUT: 'pages/about/about.html',
-			GUIDELINE: 'pages/guideline/guideline.html',
+			ADS: 'pages/ads/ads.html',
 			CONTACT: 'pages/contact/contact.html',
-			FAQ: 'pages/faq/faq.html'
+			FAQ: 'pages/faq/faq.html',
+			GUIDELINE: 'pages/guideline/guideline.html',
+
+			REGISTER_PRODUCT: 'pages/product/register.html'
 		});
 
 		$scope.currentView = $scope.viewsEnum.HOME;
+		$scope.currentUser = null;
+		$scope.currentProduct = null;
 
 		$scope.initialize = function() {
 			var path = $location.$$path.split("/");
@@ -87,7 +96,7 @@ angular.module('showcase').controller("showcaseController", [
 				}
 			}
 		};
-		
+
 		$scope.checkActiveMenu = function() {
 			$log.info('$scope.checkActiveMenu()');
 			//var path = $location.$$path.split("/");
@@ -104,17 +113,27 @@ angular.module('showcase').controller("showcaseController", [
 					$("#nav-about").children("a").addClass("act");
 					break;
 			}
-			
+
 			//$route.reload();
 			//$scope.$digest();
 		};
 
+		$scope.setCurrentProduct = function(product) {
+			$log.info('Set current product.. "' + JSON.stringify(product) + '" [ShowcaseController]');
+			$scope.currentProduct = product;
+		};
+
+		$scope.setCurrentUser = function(user) {
+			$log.info('Set current user.. "' + JSON.stringify(user) + '" [ShowcaseController]');
+			$scope.currentUser = user;
+		};
+
 		$scope.switchView = function(view) {
-			$log.info('switch view..1');
+			$log.info('Switch view.. "' + view + '" [ShowcaseController]');
 			$scope.currentView = view;
 			$anchorScroll();
 			//$scope.checkActiveMenu();
-			$log.info('switch view..2');
+			//$log.info('switch view..2');
 		};
 
 		$scope.anchorScroll = function() {
@@ -123,6 +142,7 @@ angular.module('showcase').controller("showcaseController", [
 
 		$scope.initialize();
 
+		$log.info('Controller execution ended [ShowcaseController]');
 	}]);
 
 var DEFAULT_ERROR_CALLBACK = function(responseData) {

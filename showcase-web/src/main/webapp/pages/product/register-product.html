@@ -1,0 +1,198 @@
+<div>
+	<!-- banner -->
+	<div class="banner10" id="home1">
+		<div class="container">
+			<h2>Cadastro de Produtos</h2>
+		</div>
+	</div>
+	<!-- //banner -->
+
+	<!-- breadcrumbs -->
+	<div class="breadcrumb_dress">
+		<div class="container">
+			<ul>
+				<li>
+					<a href="#/home" ng-click="switchView(viewsEnum.HOME)">
+						<span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a> <i>/</i>
+				</li>
+				<li>
+					<a href="#/ads" ng-click="switchView(viewsEnum.ADS)">
+						<span class="glyphicon" aria-hidden="true"></span> Meus Anúncios</a> <i>/</i>
+				</li>
+				<li>Cadastro de Produtos</li>
+			</ul>
+		</div>
+	</div>
+	<!-- //breadcrumbs -->
+
+	<!-- register product -->
+	<div class="registerProduct">
+		<div class="container">	
+			<div class="container">
+				<form class="well form-horizontal" method="post" id="registerProductForm">
+					<fieldset>
+						<!-- Select Basic -->
+						<div class="form-group">
+							<label class="col-md-4 control-label">Categoria</label>
+							<div class="col-md-6 selectContainer">
+								<div class="input-group">
+									<span class="input-group-addon"><i
+										class="glyphicon glyphicon-list"></i></span> <select name="categoria"
+										class="form-control selectpicker">
+										<option value=" ">Selecione uma categoria</option>
+										<option>Roupa</option>
+										<option>Sapatos</option>
+										<option>Acessórios</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-4 control-label">Sub Categoria</label>
+							<div class="col-md-6 selectContainer">
+								<div class="input-group">
+									<span class="input-group-addon"><i
+										class="glyphicon glyphicon-list"></i></span> <select name="categoria"
+										class="form-control selectpicker">
+										<option value=" ">Selecione a subcategoria</option>
+										<option>sub 1</option>
+										<option>sub 2</option>
+										<option>sub 3</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<!-- Form Name -->
+
+						<div class="form-group">
+							<label class="col-md-4 control-label">Nome do Produto</label>
+							<div class="col-md-8 inputGroupContainer">
+								<div class="input-group">
+									<input name="produto" placeholder="Nome Produto"
+										class="form-control" type="text">
+								</div>
+							</div>
+						</div>
+
+						<!-- Text area -->
+
+						<div class="form-group">
+							<label class="col-md-4 control-label">Descrição</label>
+							<div class="col-md-6 inputGroupContainer">
+								<div class="input-group">
+									<span class="input-group-addon"><i
+										class="glyphicon glyphicon-pencil"></i></span>
+									<textarea class="form-control" name="descricao"
+										placeholder="Descrição"></textarea>
+								</div>
+							</div>
+						</div>
+						<!-- Text input-->
+
+						<div class="form-group">
+							<label class="col-md-4 control-label">Tamanho</label>
+							<div class="col-md-6 inputGroupContainer">
+								<div class="input-group">
+									<input name="tamanho" placeholder="Tamanho" class="form-control"
+										type="text">
+								</div>
+							</div>
+						</div>
+
+						<!-- Text input-->
+						<div class="form-group">
+							<label class="col-md-4 control-label">Cor</label>
+							<div class="col-md-6 inputGroupContainer">
+								<div class="input-group">
+									<input name="cor" placeholder="Cor" class="form-control"
+										type="text">
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-4 control-label">Local entrega</label>
+							<div class="col-md-6 inputGroupContainer">
+								<div class="input-group">
+									<input name="entrega" placeholder="entrega" class="form-control"
+										type="text">
+								</div>
+							</div>
+						</div>
+					<!-- Valor input-->
+						<div class="form-group">
+							<label class="col-md-4 control-label">Preço</label>
+							<div class="col-md-2 inputGroupContainer">
+								<div class="input-number">
+									<input name="preço" placeholder="Valor (R$)" class="form-control" type="text">
+								</div>
+							</div>
+						</div>
+						
+						<!-- radio checks -->
+						<div class="form-group">
+							<label class="col-md-4 control-label">Estado do Produto</label>
+							<div class="col-md-2">
+								<div class="radio">
+									<label> <input type="radio" name="hosting" value="novo" />
+										Novo
+									</label>
+								</div>
+								<div class="radio">
+									<label> <input type="radio" name="hosting" value="usado" />
+										Usado
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-md-4 control-label">Opção de Negociação</label>
+							<div class="col-md-5">
+								<div class="checkbox">
+									<label> 
+										<input type="checkbox" name="hosting" value="Venda" /> Venda 
+										<input type="checkbox" name="hosting" value="Troca" /> Troca 
+										<input type="checkbox" name="hosting" value="Emprestimo" /> Emprestimo 
+										<input type="checkbox" name="hosting" value="Outros" /> Outros
+									</label>
+								</div>
+							</div>
+						</div>
+						
+	<!-- Imagens input-->
+						<div class="form-group">
+							<label class="col-md-4 control-label">Fotos</label>
+							<div class="col-md-6 inputGroupContainer">
+								<div class="image-container__box">
+									<input type="file" class="box__field"
+										accept=".gif, .jpg, .jpeg, .png" multiple="">
+									<svg class="box__icon" width="35" height="30"
+										viewBox="0 0 35 30"></svg>
+									<div class="box__icon_spin hide">
+										<img src="http://static.olx.com.br/olxads/ai/images/rolling.gif">
+									</div>
+									<span class="box__main-text">Adicionar fotos</span>
+									<span class="box__info-text"> JPG, GIF e PNG somente </span>
+								</div>
+							</div>
+						</div>
+						<!-- Button -->
+						<div class="form-group">
+							<label class="col-md-4 control-label"></label>
+							<div class="col-md-4">
+								<button type="submit" class="btn btn-warning">
+									Cadastrar <span class="glyphicon glyphicon-send"></span>
+								</button>
+							</div>
+						</div>
+
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- //register product -->
+</div>

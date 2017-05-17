@@ -1,4 +1,4 @@
-<div data-ng-controller="showcaseHeaderController">
+<div data-ng-controller="showcaseHeaderController as headerCtrl">
 	<div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="modal-login" aria-hidden="true">
 		<div class="modal-dialog modal-lg" style="width: 500px;">
 			<div class="modal-content">
@@ -131,14 +131,14 @@
 												<form id="updateForm" name="updateForm" novalidate role="form" ng-submit="updateForm.$valid && update()">
 													<fieldset>
 														<div class="form-group">
-															<input placeholder="Nome" name="nome" type="text" required ng-model="currentUser.nome" ng-class="{'has-error': updateForm.$submitted && updateForm.nome.$error.required}">
+															<input placeholder="Nome" name="nome" type="text" required ng-model="$parent.currentUser.nome" ng-class="{'has-error': updateForm.$submitted && updateForm.nome.$error.required}">
 															<span class="invalid" ng-if="updateForm.$submitted && updateForm.nome.$invalid">Nome inválido.</span>
 														</div>
 														<div class="form-group">
-															<input name="email" placeholder="Email" type="email" disabled ng-model="currentUser.email">
+															<input name="email" placeholder="Email" type="email" disabled ng-model="$parent.currentUser.email">
 														</div>
 														<div class="form-group">
-															<input placeholder="Telefone" ng-model="currentUser.telefone" type="tel" class="input-medium bfh-phone" data-format="dd-dddd-dddd">
+															<input placeholder="Telefone" ng-model="$parent.currentUser.telefone" type="tel" class="input-medium bfh-phone" data-format="dd-dddd-dddd">
 														</div>
 														<div id="gender-group" class="form-group">
 															<label style="float: left; font-weight: normal; margin: 3px;">Sexo:</label>
@@ -148,7 +148,7 @@
 																		<a id="radioMale" class="btn btn-primary btn-sm notActive" data-toggle="gender" data-title="MALE">Masculino</a>
 																		<a id="radioFemale" class="btn btn-primary btn-sm notActive" data-toggle="gender" data-title="FEMALE">Feminino</a>
 																	</div>
-																	<input type="hidden" name="gender" id="gender" ng-model="currentUser.sexo" ng-value="{{this.value}}">
+																	<input type="hidden" name="gender" id="gender" ng-model="$parent.currentUser.sexo" ng-value="{{this.value}}">
 																</div>
 															</div>
 														</div>
@@ -226,11 +226,11 @@
 												<form id="passwordForm" name="passwordForm" novalidate role="form" ng-submit="passwordForm.$valid && updatePassword()">
 													<fieldset>
 														<div class="form-group">
-															<input placeholder="Senha" name="password" type="password" required ng-model="currentUser.senha" ng-class="{'has-error': passwordForm.$submitted && passwordForm.password.$error.required}">
+															<input placeholder="Senha" name="password" type="password" required ng-model="$parent.currentUser.senha" ng-class="{'has-error': passwordForm.$submitted && passwordForm.password.$error.required}">
 															<span class="invalid" ng-if="passwordForm.$submitted && passwordForm.password.$invalid">Senha inválida.</span>
 														</div>
 														<div class="form-group">
-															<input placeholder="Confirmar Senha" name="passwordConfirm" type="password" required compare-to="currentUser.senha" ng-model="currentUser.senhaConfirm" ng-class="{'has-error': passwordForm.$submitted && passwordForm.passwordConfirm.$invalid}">
+															<input placeholder="Confirmar Senha" name="passwordConfirm" type="password" required compare-to="$parent.currentUser.senha" ng-model="$parent.currentUser.senhaConfirm" ng-class="{'has-error': passwordForm.$submitted && passwordForm.passwordConfirm.$invalid}">
 															<span class="invalid" ng-if="passwordForm.$submitted && passwordForm.passwordConfirm.$invalid">Senhas não conferem.</span>
 														</div>
 														<div id="alert-group" class="form-group" ng-if="message.type && passwordForm.$submitted && passwordForm.$valid && !showLoading">
@@ -295,7 +295,7 @@
 					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 				</a>
 				<a href="#" data-toggle="modal" data-target="#modal-login" class="nick">
-					<h5>{{userLogged &amp;&amp; currentUser ? (currentUser.nome ? "Olá, " + currentUser.nome : "Bem vindo!") : "Entre"}}</h5>
+					<h5>{{userLogged &amp;&amp; $parent.currentUser ? "Olá, " + $parent.currentUser.nome : "Entre"}}</h5>
 				</a>
 			</div>
 			<div class="w3l_logo">
@@ -331,7 +331,7 @@
 				</div>
 				<div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="#/" class="act" ng-click="switchView(viewsEnum.HOME)">Home</a></li>
+						<li class="active" ng-class="{'first-child-logged': userLogged}"><a href="#/" class="act" ng-click="switchView(viewsEnum.HOME)">Home</a></li>
 						<li><a href="#/products" ng-click="switchView(viewsEnum.PRODUCTS)">Produtos/Buscar</a></li>
 						<!-- Mega Menu -->
 						<li class="dropdown">
@@ -367,8 +367,9 @@
 										<ul class="multi-column-dropdown">
 											<h6>Vendas</h6>
 											<li><a href="#/ads" ng-click="switchView(viewsEnum.ADS)">Meus Anúncios</a></li>
-											<li><a href="#/negotiations" ng-click="switchView(viewsEnum.NEGOTIATIOS)">Minhas Negociações</a></li>
+											<li><a href="#/negotiations" ng-click="switchView(viewsEnum.NEGOTIATIONS)">Minhas Negociações</a></li>
 											<li><a href="#/messages" ng-click="switchView(viewsEnum.QUESTIONS)">Chat/Mensagens</a></li>
+											<li><a href="#/register_product" ng-click="switchView(viewsEnum.REGISTER_PRODUCT)"><i>Novo Produto</i></a></li>
 										</ul>
 									</div>
 									<div class="col-sm-4">

@@ -60,7 +60,7 @@ public class Address implements IID<Long> {
 	private AddressStatusEnum status;
 
 	@ManyToOne(targetEntity = User.class)
-	@JoinColumn(name = "ID_USUARIO")
+	@JoinColumn(name = "ID_USUARIO", nullable = false)
 	private User usuario;
 
 	public Long getId() {

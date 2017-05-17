@@ -10,7 +10,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 
 		$scope.user = {};
 		$scope.showLoading = false;
-		//$scope.userLogged = true;
+		$scope.userLogged = true;
 
 		/* LOGIN MODAL */
 		$scope.auth = function() {
@@ -23,7 +23,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
-					$scope.currentUser = response.data;
+					$scope.setCurrentUser(response.data);
 				}
 				$scope.userLogged = true;
 				$scope.showLoading = false;
@@ -63,11 +63,11 @@ angular.module('showcase').controller("showcaseHeaderController", [
 		/* PERSONAL MODAL */
 		$scope.update = function() {
 			$log.info('Alterando usuário.. [ShowcaseHeaderController]');
-			$log.info(JSON.stringify($scope.currentUser));
-			$scope.currentUser.dtNascimento = $('#datepicker').datepicker('getDate');
+			$log.info(JSON.stringify($scope.$parent.currentUser));
+			$scope.$parent.currentUser.dtNascimento = $('#datepicker').datepicker('getDate');
 
 			$scope.showLoading = true;
-			userService.updateUser($scope.currentUser.id, $scope.currentUser, function(response) {
+			userService.updateUser($scope.$parent.currentUser.id, $scope.$parent.currentUser, function(response) {
 				$log.info('Usuário alterado com sucesso! [ShowcaseHeaderController]');
 				$log.info(JSON.stringify(response));
 
@@ -79,7 +79,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 				};
 
 				if (response && response.data) {
-					$scope.currentUser = response.data;
+					$scope.setCurrentUser(response.data);
 				}
 
 				/*setTimeout(function() {
@@ -93,10 +93,10 @@ angular.module('showcase').controller("showcaseHeaderController", [
 
 		$scope.getAddressByUser = function() {
 			$log.info('Obtendo endereço do usuário.. [ShowcaseHeaderController]');
-			$log.info(JSON.stringify($scope.currentUser));
+			$log.info(JSON.stringify($scope.$parent.currentUser));
 
 			//$scope.showLoading = true;
-			addressService.getAddressByUser($scope.currentUser.id, function(response) {
+			addressService.getAddressByUser($scope.$parent.currentUser.id, function(response) {
 				$log.info('Endereço do usuário obtido com sucesso! [ShowcaseHeaderController]');
 				$log.info(JSON.stringify(response));
 
@@ -126,9 +126,8 @@ angular.module('showcase').controller("showcaseHeaderController", [
 
 		$scope.createAddress = function() {
 			$log.info('Criando endereço do usuário.. [ShowcaseHeaderController]');
-
-			if ($scope.address) {
-				$scope.address.usuario = $scope.currentUser;
+			if ($scope.address && !$scope.address.usuario) {
+				$scope.address.usuario = $scope.$parent.currentUser;
 			}
 			$log.info(JSON.stringify($scope.address));
 
@@ -180,10 +179,10 @@ angular.module('showcase').controller("showcaseHeaderController", [
 
 		$scope.updatePassword = function() {
 			$log.info('Alterando senha do usuário.. [ShowcaseHeaderController]');
-			$log.info(JSON.stringify($scope.currentUser));
+			$log.info(JSON.stringify($scope.$parent.currentUser));
 
 			$scope.showLoading = true;
-			userService.updatePassword($scope.currentUser.id, $scope.currentUser, function(response) {
+			userService.updatePassword($scope.$parent.currentUser.id, $scope.$parent.currentUser, function(response) {
 				$log.info('Senha do usuário alterada com sucesso! [ShowcaseHeaderController]');
 				$log.info(JSON.stringify(response));
 
@@ -260,32 +259,36 @@ angular.module('showcase').controller("showcaseHeaderController", [
 		};
 
 		$('#modal-login').on('hide.bs.modal', function() {
-			$scope.resetModalLogin();
-			$('#tabLogin').trigger('click');
-			$scope.loginForm.$setPristine();
-			$scope.registerForm.$setPristine();
+			setTimeout(function() {
+				$scope.resetModalLogin();
+				$('#tabLogin').trigger('click');
+				$scope.loginForm.$setPristine();
+				$scope.registerForm.$setPristine();
+			}, 500);
 		});
 
 		$('#modal-personal').on('hide.bs.modal', function() {
-			$scope.resetMessages();
-			$('#tabPersonal').trigger('click');
-			$scope.updateForm.$setPristine();
-			$scope.addressForm.$setPristine();
-			$scope.passwordForm.$setPristine();
+			setTimeout(function() {
+				$scope.resetMessages();
+				$('#tabPersonal').trigger('click');
+				$scope.updateForm.$setPristine();
+				$scope.addressForm.$setPristine();
+				$scope.passwordForm.$setPristine();
+			}, 500);
 		});
 		/* RESETs end */
 
 		$('#modal-personal').on('show.bs.modal', function() {
-			console.log($scope.currentUser);
-			if ($scope.currentUser && $scope.currentUser.sexo) {
-				if ($scope.currentUser.sexo === 'MALE') {
+			console.log($scope.$parent.currentUser);
+			if ($scope.$parent.currentUser && $scope.$parent.currentUser.sexo) {
+				if ($scope.$parent.currentUser.sexo === 'MALE') {
 					$('#radioMale').trigger('click');
-				} else if ($scope.currentUser.sexo === 'FEMALE') {
+				} else if ($scope.$parent.currentUser.sexo === 'FEMALE') {
 					$('#radioFemale').trigger('click');
 				}
 			}
-			if ($scope.currentUser && $scope.currentUser.dtNascimento) {
-				$('#datepicker').datepicker('setDate', new Date($scope.currentUser.dtNascimento));
+			if ($scope.$parent.currentUser && $scope.$parent.currentUser.dtNascimento) {
+				$('#datepicker').datepicker('setDate', new Date($scope.$parent.currentUser.dtNascimento));
 			}
 
 			$scope.getAddressByUser();
@@ -299,7 +302,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 			var sel = $(this).data('title');
 			var tog = $(this).data('toggle');
 			$('#'+tog).prop('value', sel);
-			$scope.currentUser.sexo = sel;
+			$scope.$parent.currentUser.sexo = sel;
 
 			$('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
 			$('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
