@@ -303,7 +303,7 @@ ul.multi-column-dropdown h6 {
 .first-child-logged {
     margin-left: 15em !important;
 }
-.dropdown-menu {
+.navbar-nav .dropdown-menu {
     left: -130%;
 }
 .w3ls_products_pos h4 {
@@ -452,7 +452,7 @@ ul.multi-column-dropdown h6 {
 }
 /*-- //banner --*/
 /*-- banner-bottom --*/
-.banner-bottom,.team,.checkout,.additional_info,.team-bottom,.single,.mail,.special-deals,.about,.faq,.typo,.new-products,.banner-bottom1,.top-brands,.dresses,.w3l_related_products{
+.banner-bottom,.team,.checkout,.additional_info,.team-bottom,.single,.mail,.special-deals,.about,.faq,.typo,.new-products,.banner-bottom1,.top-brands,.dresses,.w3l_related_products,.register-product{
 	padding:5em 0;
 }
 .modal-body iframe {

@@ -1,4 +1,4 @@
-<div>
+<div data-ng-controller="showcaseRegisterProductController">
 	<!-- banner -->
 	<div class="banner10" id="home1">
 		<div class="container">
@@ -26,72 +26,72 @@
 	<!-- //breadcrumbs -->
 
 	<!-- register product -->
-	<div class="registerProduct">
+	<div class="register-product">
 		<div class="container">	
-			<div class="container">
-				<form class="well form-horizontal" method="post" id="registerProductForm">
+			<div class="container register" style="width: 800px; padding: 1em 3em 2em; border: 1px solid #999; border-radius: 4px">
+				<!-- <form class="well form-horizontal" method="post" id="registerProductForm"> -->
+				<form id="registerProductForm" class="form-horizontal" style="font-weight: 300; font-size: 14px;" name="registerProductForm" novalidate role="form" ng-submit="registerProductForm.$valid && saveProduct()">
 					<fieldset>
-						<!-- Select Basic -->
-						<div class="form-group">
-							<label class="col-md-4 control-label">Categoria</label>
-							<div class="col-md-6 selectContainer">
-								<div class="input-group">
-									<span class="input-group-addon"><i
-										class="glyphicon glyphicon-list"></i></span> <select name="categoria"
-										class="form-control selectpicker">
-										<option value=" ">Selecione uma categoria</option>
-										<option>Roupa</option>
-										<option>Sapatos</option>
-										<option>Acessórios</option>
-									</select>
+						<div id="category-group" class="form-group row">
+							<!-- <label style="float: left; font-weight: normal; margin: 3px;">Categoria:</label> -->
+							<label style="font-weight: normal; margin: 6px 0;">Categoria</label>
+							<!-- <div class="col-sm-10"> -->
+							<div>
+								<div class="input-group" style="margin-bottom: 0px; width: 50%;">
+									<ol name="categorySelect" class="nya-bs-select" style="width: 100%" ng-model="$parent.currentProduct.categoria.categoriaPai" required ng-disabled="disable" data-live-search="true" title="Selecione uma categoria...">
+										<li nya-bs-option="category in categories">
+											<a>{{category.nome}}</a>
+										</li>
+									</ol>
 								</div>
 							</div>
 						</div>
-
-						<div class="form-group">
-							<label class="col-md-4 control-label">Sub Categoria</label>
-							<div class="col-md-6 selectContainer">
-								<div class="input-group">
-									<span class="input-group-addon"><i
-										class="glyphicon glyphicon-list"></i></span> <select name="categoria"
-										class="form-control selectpicker">
-										<option value=" ">Selecione a subcategoria</option>
-										<option>sub 1</option>
-										<option>sub 2</option>
-										<option>sub 3</option>
-									</select>
+						<div id="subcategory-group" class="form-group row">
+							<label style="font-weight: normal; margin: 6px 0;">Subcategoria</label>
+							<div>
+								<div class="input-group" style="margin-bottom: 0px; width: 50%;">
+									<ol name="subcategorySelect" class="nya-bs-select" style="width: 100%" ng-model="$parent.currentProduct.categoria" required ng-disabled="disable" data-live-search="true" title="Selecione uma subcategoria...">
+										<li nya-bs-option="subcategory in subcategories">
+											<a>{{subcategory.nome}}</a>
+										</li>
+									</ol>
 								</div>
 							</div>
 						</div>
 
 						<!-- Form Name -->
-
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label class="col-md-4 control-label">Nome do Produto</label>
 							<div class="col-md-8 inputGroupContainer">
 								<div class="input-group">
-									<input name="produto" placeholder="Nome Produto"
-										class="form-control" type="text">
+									<input name="produto" placeholder="Nome Produto" class="form-control" type="text" ng-model="$parent.currentProduct.nome" required>
 								</div>
 							</div>
+						</div> -->
+						<div class="form-group row">
+							<!-- <label style="float: left; font-weight: normal; margin: 3px;">Nome do produto:</label> -->
+							<input placeholder="Nome do produto" name="nome" type="text" required ng-model="$parent.currentProduct.nome" ng-class="{'has-error': registerProductForm.$submitted && registerProductForm.nome.$error.required}">
+							<span class="invalid" ng-if="registerProductForm.$submitted && registerProductForm.nome.$invalid">Nome do produto inválido.</span>
 						</div>
 
 						<!-- Text area -->
-
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label class="col-md-4 control-label">Descrição</label>
 							<div class="col-md-6 inputGroupContainer">
 								<div class="input-group">
-									<span class="input-group-addon"><i
-										class="glyphicon glyphicon-pencil"></i></span>
-									<textarea class="form-control" name="descricao"
-										placeholder="Descrição"></textarea>
+									<span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+									<textarea name="descricao" placeholder="Descrição" class="form-control" ng-model="$parent.currentProduct.descricao" required></textarea>
 								</div>
 							</div>
+						</div> -->
+						<div class="form-group row">
+							<!-- <label style="float: left; font-weight: normal; margin: 3px;">Descrição do produto:</label> -->
+							<textarea placeholder="Descrição do produto" name="descricao" class="form-control" style="border: 1px solid #DFDFDF; background: #f5f5f5; border-radius: 0px" required ng-model="$parent.currentProduct.descricao" ng-class="{'has-error': registerProductForm.$submitted && registerProductForm.descricao.$error.required}"></textarea>
+							<span class="invalid" ng-if="registerProductForm.$submitted && registerProductForm.descricao.$invalid">Descrição do produto inválido.</span>
 						</div>
-						<!-- Text input-->
 
-						<div class="form-group">
+						<!-- Text input-->
+						<!-- <div class="form-group">
 							<label class="col-md-4 control-label">Tamanho</label>
 							<div class="col-md-6 inputGroupContainer">
 								<div class="input-group">
@@ -99,10 +99,14 @@
 										type="text">
 								</div>
 							</div>
+						</div> -->
+						<div class="form-group row">
+							<!-- <label style="float: left; font-weight: normal; margin: 3px;">Tamanho:</label> -->
+							<input placeholder="Tamanho" name="tamanho" type="text" ng-model="$parent.currentProduct.tamanho">
 						</div>
 
 						<!-- Text input-->
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label class="col-md-4 control-label">Cor</label>
 							<div class="col-md-6 inputGroupContainer">
 								<div class="input-group">
@@ -110,9 +114,9 @@
 										type="text">
 								</div>
 							</div>
-						</div>
+						</div> -->
 
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label class="col-md-4 control-label">Local entrega</label>
 							<div class="col-md-6 inputGroupContainer">
 								<div class="input-group">
@@ -120,19 +124,25 @@
 										type="text">
 								</div>
 							</div>
-						</div>
-					<!-- Valor input-->
-						<div class="form-group">
+						</div> -->
+
+						<!-- Valor input-->
+						<!-- <div class="form-group">
 							<label class="col-md-4 control-label">Preço</label>
 							<div class="col-md-2 inputGroupContainer">
 								<div class="input-number">
 									<input name="preço" placeholder="Valor (R$)" class="form-control" type="text">
 								</div>
 							</div>
+						</div> -->
+						<div class="form-group row">
+							<!-- <label style="float: left; font-weight: normal; margin: 3px;">Preço:</label> -->
+							<input placeholder="Valor (R$)" id="preco" name="preco" type="text" class="decimal-2-places" ng-model="$parent.currentProduct.preco">
+							<span class="invalid" ng-if="registerProductForm.$submitted && registerProductForm.preco.$invalid">Preço inválido.</span>
 						</div>
 						
 						<!-- radio checks -->
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label class="col-md-4 control-label">Estado do Produto</label>
 							<div class="col-md-2">
 								<div class="radio">
@@ -146,9 +156,23 @@
 									</label>
 								</div>
 							</div>
+						</div> -->
+						<div id="conservation-state-group" class="form-group">
+							<!-- <label class="col-sm-2" style="font-weight: normal; margin: 6px 0;">Estado do produto:</label> -->
+							<label style="font-weight: normal; margin: 6px 0;">Estado do produto</label>
+							<div>
+								<div class="input-group" style="margin-bottom: 0px">
+									<div id="radioBtnConservationState" class="btn-group">
+										<a id="radioNew" class="btn btn-primary btn-sm notActive" data-toggle="conservationState" data-title="NEW">Novo</a>
+										<a id="radioSemiNew" class="btn btn-primary btn-sm notActive" data-toggle="conservationState" data-title="SEMI_NEW">Seminovo</a>
+										<a id="radioUser" class="btn btn-primary btn-sm notActive" data-toggle="conservationState" data-title="USED">Usado</a>
+									</div>
+									<input type="hidden" name="conservationState" id="conservationState" ng-model="$parent.currentProduct.estadoConservacao" ng-value="{{this.value}}">
+								</div>
+							</div>
 						</div>
 
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label class="col-md-4 control-label">Opção de Negociação</label>
 							<div class="col-md-5">
 								<div class="checkbox">
@@ -160,11 +184,26 @@
 									</label>
 								</div>
 							</div>
+						</div> -->
+						<div id="negotiation-type-group" class="form-group">
+							<label style="font-weight: normal; margin: 6px 0;">Opção de negociação</label>
+							<div>
+								<div class="input-group" style="margin-bottom: 0px">
+									<div id="radioBtnNegotiationType" class="btn-group">
+										<a id="radioDonation" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="DONATION">Doação</a>
+										<a id="radioLoan" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="LOAN">Empréstimo</a>
+										<a id="radioExchange" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="EXCHANGE">Troca</a>
+										<a id="radioSale" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="SALE">Venda</a>
+										<a id="radioExchangeOrSale" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="EXCHANGE_OR_SALE">Troca ou Venda</a>
+									</div>
+									<input type="hidden" name="negotiationType" id="negotiationType" ng-model="$parent.currentProduct.tipoNegociacao" ng-value="{{this.value}}">
+								</div>
+							</div>
 						</div>
 						
-	<!-- Imagens input-->
+						<!-- Imagens input-->
 						<div class="form-group">
-							<label class="col-md-4 control-label">Fotos</label>
+							<!-- <label class="col-md-4 control-label">Fotos</label>
 							<div class="col-md-6 inputGroupContainer">
 								<div class="image-container__box">
 									<input type="file" class="box__field"
@@ -177,22 +216,70 @@
 									<span class="box__main-text">Adicionar fotos</span>
 									<span class="box__info-text"> JPG, GIF e PNG somente </span>
 								</div>
+							</div> -->
+							<!-- The fileinput-button span is used to style the file input field as button -->
+							<!-- <span class="btn btn-success fileinput-button">
+								<i class="glyphicon glyphicon-plus"></i>
+								<span>Add files...</span>
+								<input id="fileupload" type="file" name="files[]" multiple>
+							</span>
+							<button id="startUploadBtn" type="button" class="btn btn-primary start">
+								<i class="glyphicon glyphicon-upload"></i>
+								<span>Start upload</span>
+							</button>
+							<br>
+							<br>
+							<div id="progress" class="progress">
+								<div class="progress-bar progress-bar-success"></div>
 							</div>
+							<div id="files" class="files"></div> -->
+							<input id="input-700" name="kartik-input-700[]" type="file" multiple class="file-loading">
 						</div>
+						<!-- <div id="upload-file-group" class="form-group row"> -->
+							<!-- The file upload form used as target for the file upload widget -->
+
+						<!-- </div> -->
+
 						<!-- Button -->
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<label class="col-md-4 control-label"></label>
 							<div class="col-md-4">
 								<button type="submit" class="btn btn-warning">
 									Cadastrar <span class="glyphicon glyphicon-send"></span>
 								</button>
 							</div>
+						</div> -->
+						<div id="alert-group" class="form-group" ng-if="message.type && registerProductForm.$submitted && registerProductForm.$valid && !showLoading">
+							<div class="alert alert-{{message.type}}" role="alert">
+								<strong ng-if="message.title">{{message.title}} </strong>{{message.body}}
+							</div>
 						</div>
-
+						<div class="sign-up form-group">
+							<input id="btnSaveProduct" type="submit" value="Salvar" />
+							<!-- Loading -->
+							<div class="spinnerr" data-spinner data-ng-if="showLoading" />
+						</div>
 					</fieldset>
 				</form>
+				
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		$(document).ready(function () {
+			$(".decimal-2-places").numeric({ decimalPlaces: 2, altDecimal: ".", decimal : "," });
+
+			// initialize with defaults
+			$("#input-id").fileinput();
+
+			// with plugin options
+			//$("#input-id").fileinput({'showUpload':false, 'previewFileType':'any'});
+			$("#input-700").fileinput({
+				uploadUrl: "http://localhost:8080/showcase/api/product/upload", // server upload action
+				uploadAsync: true,
+				maxFileCount: 5
+			});
+		});
+	</script>
 	<!-- //register product -->
 </div>

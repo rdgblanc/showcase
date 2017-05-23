@@ -7,13 +7,17 @@ angular.module('showcase').factory('categoryService', [
 	'requestService',
 	function(request) {
 		var service = {
-			getSubCategories : function(userId, successCallback, errorCallback) {
+			getCategories : function(successCallback, errorCallback) {
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
-				return request.get("/category/subCategories/" + userId).then(successCallback, errorCallback);
+				return request.get("/category/").then(successCallback, errorCallback);
 			},
-			getCategories : function(id, successCallback, errorCallback) {
+			getSubCategories : function(successCallback, errorCallback) {
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
-				return request.get("/category/" + id).then(successCallback, errorCallback);
+				return request.get("/category/subCategories/").then(successCallback, errorCallback);
+			},
+			getSubCategoriesByCategoryId : function(categoryId, successCallback, errorCallback) {
+				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
+				return request.get("/category/subCategories/" + categoryId).then(successCallback, errorCallback);
 			}/*,
 			createCategory : function(category, successCallback, errorCallback) {
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;

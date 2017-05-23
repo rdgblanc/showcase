@@ -4,75 +4,154 @@
 * Register Product controller
 */
 angular.module('showcase').controller('showcaseRegisterProductController', [
-	'$scope', '$log', 'categoryService', 'productService',
-	function($scope, $log, categoryService, productService) {
+	'$scope', '$log', '$timeout', 'categoryService', 'productService',
+	function($scope, $log, $timeout, categoryService, productService) {
 		$log.info('Controller initialized [ShowcaseRegisterProductController]');
 
-		$scope.productStatusEnum = Object.freeze({
-			INACTIVE: 'Inativo',
-			ACTIVE: 'Ativo',
-			DENOUNCED: 'Denunciado',
-			BLOCKED: 'Bloqueado'
+		$scope.showLoading = false;
+
+		$scope.productNegotiationTypeEnum = Object.freeze({
+			DONATION: 			'Doação',
+			LOAN: 				'Empréstimo',
+			EXCHANGE: 			'Troca',
+			SALE: 				'Venda',
+			EXCHANGE_OR_SALE: 	'Troca ou Venda'
 		});
 
-		$scope.getProductsByUser = function() {
-			$log.info('Obtendo produtos do usuário.. [ShowcaseAdsController]');
-			$log.info(JSON.stringify($scope.$parent.currentUser));
+		$scope.productConservationStateEnum = Object.freeze({
+			NEW: 		'Novo',
+			SEMI_NEW: 	'Seminovo',
+			USED: 		'Usado'
+		});
 
-			//$scope.showLoading = true;
-			productService.getProductsByUser($scope.$parent.currentUser.id, function(response) {
-				$log.info('Produtos do usuário obtido com sucesso! [ShowcaseAdsController]');
-				$log.info(JSON.stringify(response));
+		$scope.initialize = function() {
+			$log.info('Current product: ' + JSON.stringify($scope.$parent.currentProduct));
 
-				if (response && response.data) {
-					$scope.products = response.data;
+			if ($scope.$parent.currentProduct && $scope.$parent.currentProduct.estadoConservacao) {
+				if ($scope.$parent.currentProduct.estadoConservacao === 'NEW') {
+					$('#radioNew').trigger('click');
+				} else if ($scope.$parent.currentProduct.estadoConservacao === 'SEMI_NEW') {
+					$('#radioSemiNew').trigger('click');
+				} else if ($scope.$parent.currentProduct.estadoConservacao === 'USED') {
+					$('#radioUsed').trigger('click');
 				}
-			}, function(responseError) {
-				$log.error("Error get products by user: " + JSON.stringify(responseError));
-				//$scope.setErrorMessage(responseError, "Não foi possível recuperar os produtos do usuário, por favor tente novamente mais tarde.");
+			}
+
+			if ($scope.$parent.currentProduct && $scope.$parent.currentProduct.tipoNegociacao) {
+				if ($scope.$parent.currentProduct.tipoNegociacao === 'DONATION') {
+					$('#radioDonation').trigger('click');
+				} else if ($scope.$parent.currentProduct.tipoNegociacao === 'LOAN') {
+					$('#radioLoan').trigger('click');
+				} else if ($scope.$parent.currentProduct.tipoNegociacao === 'EXCHANGE') {
+					$('#radioExchange').trigger('click');
+				} else if ($scope.$parent.currentProduct.tipoNegociacao === 'SALE') {
+					$('#radioSale').trigger('click');
+				} else if ($scope.$parent.currentProduct.tipoNegociacao === 'EXCHANGE_OR_SALE') {
+					$('#radioExchangeOrSale').trigger('click');
+				}
+			}
+
+			$scope.categories = [
+				{
+					id: 3,
+					nome: "Acessórios"
+				},
+				{
+					id: 2,
+					nome: "Calçados"
+				},
+				{
+					id: 1,
+					nome: "Roupas"
+				}
+			];
+			
+
+			$scope.subcategories = [
+				{
+					id: 9,
+					nome: "Sandália"
+				},
+				{
+					id: 10,
+					nome: "Sapato"
+				}
+			];
+
+			$scope.setCurrentProduct({});
+
+			$timeout(function() {
+				$scope.$watch('$parent.currentProduct.categoria.categoriaPai', function() {
+					$log.info('>>> category changed.......');
+					//$scope.getSubCategoriesByCategoryId();
+				}, true);
 			});
 		};
 
-		$scope.editProduct = function(product) {
-			$scope.setCurrentProduct(product);
-			$scope.switchView($scope.viewsEnum.REGISTER_PRODUCT);
-		};
-
-		$scope.deleteProduct = function(product) {
-			$log.info('Removendo o produto.. [ShowcaseAdsController]');
-			$log.info(JSON.stringify(product));
-
-			//$scope.showLoading = true;
-			productService.deleteProduct(product.id, function(response) {
-				$log.info('Produto removido com sucesso! [ShowcaseAdsController]');
-				$log.info(JSON.stringify(response));
-
-				$scope.getProductsByUser();
-			}, function(responseError) {
-				$log.error("Error delete product: " + JSON.stringify(responseError));
-				//$scope.setErrorMessage(responseError, "Não foi possível remover o produto, por favor tente novamente mais tarde.");
-			});
-		};
-
-		/*$scope.getCategories = function() {
-			$log.info('Obtendo categorias.. [ShowcaseAdsController]');
+		$scope.getCategories = function() {
+			$log.info('Obtendo categorias.. [ShowcaseRegisterProductController]');
 
 			//$scope.showLoading = true;
 			categoryService.getCategories(function(response) {
-				$log.info('Categorias obtidas com sucesso! [ShowcaseAdsController]');
+				$log.info('Categorias obtidas com sucesso! [ShowcaseRegisterProductController]');
 				$log.info(JSON.stringify(response));
 
-				if (response && response.data && response.data.length > 0) {
-					$scope.address = response.data[0];
+				if (response && response.data) {
+					$scope.categories = response.data;
 				}
 			}, function(responseError) {
-				$log.error("Error get categories by user: " + JSON.stringify(responseError));
+				$log.error("Error get categories: " + JSON.stringify(responseError));
 				//$scope.setErrorMessage(responseError, "Não foi possível recuperar as categorias, por favor tente novamente mais tarde.");
 			});
-		};*/
+		};
 
-		$scope.getProductsByUser();
+		$scope.getSubCategoriesByCategoryId = function() {
+			$log.info('Obtendo subcategorias da categoria.. [ShowcaseRegisterProductController]');
+			$log.info(JSON.stringify($scope.currentCategory));
 
-		$log.info('Controller execution ended [ShowcaseAdsController]');
+			//$scope.showLoading = true;
+			categoryService.getSubCategoriesByCategoryId(function(response) {
+				$log.info('Subcategorias obtidas com sucesso! [ShowcaseRegisterProductController]');
+				$log.info(JSON.stringify(response));
+
+				if (response && response.data) {
+					$scope.subcategories = response.data;
+				}
+			}, function(responseError) {
+				$log.error("Error get categories: " + JSON.stringify(responseError));
+				//$scope.setErrorMessage(responseError, "Não foi possível recuperar as categorias, por favor tente novamente mais tarde.");
+			});
+		};
+
+		$scope.setCurrentCategory = function(category) {
+			$log.info('Set current category.. "' + JSON.stringify(category) + '" [ShowcaseRegisterProductController]');
+			$scope.currentCategory = category;
+		};
+
+		$('#radioBtnConservationState a').on('click', function() {
+			var sel = $(this).data('title');
+			var tog = $(this).data('toggle');
+			$('#'+tog).prop('value', sel);
+			$scope.$parent.currentProduct.estadoConservacao = sel;
+
+			$('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+			$('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+		});
+
+		$('#radioBtnNegotiationType a').on('click', function() {
+			var sel = $(this).data('title');
+			var tog = $(this).data('toggle');
+			$('#'+tog).prop('value', sel);
+			$scope.$parent.currentProduct.tipoNegociacao = sel;
+
+			$('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');
+			$('a[data-toggle="'+tog+'"][data-title="'+sel+'"]').removeClass('notActive').addClass('active');
+		});
+
+		//$(".selectpicker").selectpicker();
+
+		$scope.initialize();
+
+		$log.info('Controller execution ended [ShowcaseRegisterProductController]');
 	}
 ]);

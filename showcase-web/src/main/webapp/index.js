@@ -1,6 +1,6 @@
 "use strict";
 
-window.module = window.angular.module("showcase", ["ngAnimate", "ngRoute"]);
+window.module = window.angular.module("showcase", ["ngAnimate", "ngRoute", "nya.bootstrap.select"]);
 /*window.module.config(function($httpProvider) {
 	$httpProvider.interceptors.push("httpInterceptor");
 });*/
@@ -77,12 +77,14 @@ angular.module('showcase').controller("showcaseController", [
 			FAQ: 'pages/faq/faq.html',
 			GUIDELINE: 'pages/guideline/guideline.html',
 
-			REGISTER_PRODUCT: 'pages/product/register.html'
+			REGISTER_PRODUCT: 'pages/product/register-product.html'
+			//REGISTER_PRODUCT: 'pages/upload-file/index.html'
 		});
 
 		$scope.currentView = $scope.viewsEnum.HOME;
 		$scope.currentUser = null;
-		$scope.currentProduct = null;
+		//$scope.currentProduct = {};
+		//$scope.currentProduct = {"id":1,"nome":"Tênis masculino","descricao":"Tênis masculino branco","marca":"Nike","preco":99.9,"quantidade":1,"estadoConservacao":"NEW","tipoNegociacao":"SALE","dtAtualizacao":"2017-05-16T21:15:11.000+0000","status":"ACTIVE","categoria":{"id":9,"nome":"Sapatos","categoriaPai":{"id":2,"nome":"Calçados"}},"usuario":{"id":1,"nome":"Silmara Santos","email":"s@s.com","sexo":"FEMALE","dtAtualizacao":"2017-05-16T21:43:00.000+0000","status":"ACTIVE","roles":["ROLE_USER","ROLE_ADMIN"]}}
 
 		$scope.initialize = function() {
 			var path = $location.$$path.split("/");

@@ -20,9 +20,19 @@ public class AllowOriginFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		HttpServletResponse res = (HttpServletResponse) response;
+
 		res.addHeader("Access-Control-Allow-Origin", "*");
-		res.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
-		res.addHeader("Access-Control-Allow-Headers", "Content-Type");
+		res.addHeader("Access-Control-Allow-Credentials", "true");
+		res.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, HEAD, OPTIONS");
+		res.addHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+		
+		HttpServletRequest req = (HttpServletRequest) request;
+		// Just ACCEPT and REPLY OK if OPTIONS
+	    if (req.getMethod().equals("OPTIONS")) {
+	        res.setStatus(HttpServletResponse.SC_OK);
+	        return;
+	    }
+		
 		chain.doFilter(request, response);
 
 		HttpServletRequest httpRequest = (HttpServletRequest) request;

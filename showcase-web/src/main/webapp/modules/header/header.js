@@ -279,7 +279,8 @@ angular.module('showcase').controller("showcaseHeaderController", [
 		/* RESETs end */
 
 		$('#modal-personal').on('show.bs.modal', function() {
-			console.log($scope.$parent.currentUser);
+			$log.info('Current user: ' + JSON.stringify($scope.$parent.currentUser));
+
 			if ($scope.$parent.currentUser && $scope.$parent.currentUser.sexo) {
 				if ($scope.$parent.currentUser.sexo === 'MALE') {
 					$('#radioMale').trigger('click');
@@ -287,6 +288,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 					$('#radioFemale').trigger('click');
 				}
 			}
+
 			if ($scope.$parent.currentUser && $scope.$parent.currentUser.dtNascimento) {
 				$('#datepicker').datepicker('setDate', new Date($scope.$parent.currentUser.dtNascimento));
 			}
@@ -298,7 +300,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 			$scope.resetMessages();
 		});
 
-		$('#radioBtn a').on('click', function() {
+		$('#radioBtnGender a').on('click', function() {
 			var sel = $(this).data('title');
 			var tog = $(this).data('toggle');
 			$('#'+tog).prop('value', sel);
