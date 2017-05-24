@@ -49,58 +49,13 @@
 									<i class="fa fa-trash-o"></i>
 								</button>
 							</td>
-							<td data-ng-bind="product.categoria"></td>
+							<td data-ng-bind="getCategoryLabel(product)"></td>
 							<td style="vertical-align: middle;" data-ng-bind="product.nome"></td>
-							<td data-ng-bind="product.estadoConservacao"></td>
-							<td data-ng-bind="product.tipoNegociacao"></td>
-							<td data-ng-bind="product.dtAtualizacao | date:'yyyy/MM/dd HH:mm'"></td>
+							<td data-ng-bind="productConservationStateEnum[product.estadoConservacao]"></td>
+							<td data-ng-bind="productNegotiationTypeEnum[product.tipoNegociacao]"></td>
+							<td data-ng-bind="product.dtAtualizacao | date:'dd/MM/yyyy HH:mm'"></td>
 							<td data-ng-bind="productStatusEnum[product.status]"></td>
 						</tr>
-						<!-- <tr>
-							<td>
-								<button class="btn btn-xs btn-info" ng-click="showDataGenre('edit', product)">
-									<i class="fa fa-pencil"></i>
-								</button>
-								<button class="btn btn-xs btn-danger" ng-click="deletePopUp(product, $index)">
-									<i class="fa fa-trash-o"></i>
-								</button>
-							</td>
-							<td>Roupas - Camisas</td>
-							<td>Camisa Polo</td>
-							<td>Troca</td>
-							<td>16/05/2017 15:50</td>
-							<td>Ativo</td>
-						</tr>
-						<tr>
-							<td>
-								<button class="btn btn-xs btn-info" ng-click="showDataGenre('edit', product)">
-									<i class="fa fa-pencil"></i>
-								</button>
-								<button class="btn btn-xs btn-danger" ng-click="deletePopUp(product, $index)">
-									<i class="fa fa-trash-o"></i>
-								</button>
-							</td>
-							<td>Acessórios - Relógios</td>
-							<td>Relógio de pulso TECHNOS</td>
-							<td>Venda</td>
-							<td>15/05/2017 13:50</td>
-							<td>Inativo</td>
-						</tr>
-						<tr>
-							<td>
-								<button class="btn btn-xs btn-info" ng-click="showDataGenre('edit', product)">
-									<i class="fa fa-pencil"></i>
-								</button>
-								<button class="btn btn-xs btn-danger" ng-click="deletePopUp(product, $index)">
-									<i class="fa fa-trash-o"></i>
-								</button>
-							</td>
-							<td>Calçados - Sapatos</td>
-							<td>Sapato masculino</td>
-							<td>Empréstimo</td>
-							<td>16/05/2017 17:23</td>
-							<td>Denunciado</td>
-						</tr> -->
 					</tbody>
 				</table>
 			</div>

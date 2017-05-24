@@ -10,20 +10,6 @@ angular.module('showcase').controller('showcaseRegisterProductController', [
 
 		$scope.showLoading = false;
 
-		$scope.productNegotiationTypeEnum = Object.freeze({
-			DONATION: 			'Doação',
-			LOAN: 				'Empréstimo',
-			EXCHANGE: 			'Troca',
-			SALE: 				'Venda',
-			EXCHANGE_OR_SALE: 	'Troca ou Venda'
-		});
-
-		$scope.productConservationStateEnum = Object.freeze({
-			NEW: 		'Novo',
-			SEMI_NEW: 	'Seminovo',
-			USED: 		'Usado'
-		});
-
 		$scope.initialize = function() {
 			$log.info('Current product: ' + JSON.stringify($scope.$parent.currentProduct));
 
@@ -51,7 +37,16 @@ angular.module('showcase').controller('showcaseRegisterProductController', [
 				}
 			}
 
-			$scope.categories = [
+			// initialize with defaults
+			var uploadUrl = $scope.$parent.currentProduct && $scope.$parent.currentProduct.id ? "http://localhost:8080/showcase/api/product/" + $scope.$parent.currentProduct.id + "/image" : "http://localhost:8080/showcase/api/product/{id}/image";
+			$log.info('Upload image url...' + uploadUrl);
+			$("#input-700").fileinput({
+				uploadUrl: uploadUrl,
+				uploadAsync: true,
+				maxFileCount: 5
+			});
+
+			/*$scope.categories = [
 				{
 					id: 3,
 					nome: "Acessórios"
@@ -70,22 +65,34 @@ angular.module('showcase').controller('showcaseRegisterProductController', [
 			$scope.subcategories = [
 				{
 					id: 9,
-					nome: "Sandália"
+					nome: "Sandália",
+						categoriaPai: {
+						id: 2,
+						nome: "Calçados"
+					}
 				},
 				{
 					id: 10,
-					nome: "Sapato"
+					nome: "Sapato",
+					categoriaPai: {
+						id: 2,
+						nome: "Calçados"
+					}
 				}
-			];
+			];*/
 
-			$scope.setCurrentProduct({});
+			if ($scope.$parent.currentProduct && $scope.$parent.currentProduct.categoria && $scope.$parent.currentProduct.categoria.categoriaPai) {
+				$scope.currentCategory = $scope.$parent.currentProduct.categoria.categoriaPai;
+			}
 
-			$timeout(function() {
-				$scope.$watch('$parent.currentProduct.categoria.categoriaPai', function() {
-					$log.info('>>> category changed.......');
-					//$scope.getSubCategoriesByCategoryId();
-				}, true);
-			});
+			$scope.getCategories();
+			$scope.$watch('currentCategory', function() {
+				if ($scope.currentCategory) {
+					$log.info('Categoria selecionada...' + JSON.stringify($scope.currentCategory));
+					$scope.currentSubCategory = null;
+					$scope.getSubCategoriesByCategoryId($scope.currentCategory);
+				}
+			}, true);
 		};
 
 		$scope.getCategories = function() {
@@ -105,17 +112,21 @@ angular.module('showcase').controller('showcaseRegisterProductController', [
 			});
 		};
 
-		$scope.getSubCategoriesByCategoryId = function() {
+		$scope.getSubCategoriesByCategoryId = function(category) {
 			$log.info('Obtendo subcategorias da categoria.. [ShowcaseRegisterProductController]');
-			$log.info(JSON.stringify($scope.currentCategory));
+			$log.info(JSON.stringify(category));
 
 			//$scope.showLoading = true;
-			categoryService.getSubCategoriesByCategoryId(function(response) {
+			categoryService.getSubCategoriesByCategoryId(category.id, function(response) {
 				$log.info('Subcategorias obtidas com sucesso! [ShowcaseRegisterProductController]');
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
 					$scope.subcategories = response.data;
+				}
+
+				if ($scope.$parent.currentProduct && $scope.$parent.currentProduct.categoria) {
+					$scope.currentSubCategory = $scope.$parent.currentProduct.categoria;
 				}
 			}, function(responseError) {
 				$log.error("Error get categories: " + JSON.stringify(responseError));
@@ -123,9 +134,89 @@ angular.module('showcase').controller('showcaseRegisterProductController', [
 			});
 		};
 
-		$scope.setCurrentCategory = function(category) {
-			$log.info('Set current category.. "' + JSON.stringify(category) + '" [ShowcaseRegisterProductController]');
-			$scope.currentCategory = category;
+		$scope.saveProduct = function() {
+			if ($scope.$parent.currentProduct && $scope.$parent.currentProduct.id) {
+				$scope.updateProduct();
+			} else {
+				$scope.createProduct();
+			}
+		};
+
+		$scope.createProduct = function() {
+			$log.info('Criando produto.. [ShowcaseRegisterProductController]');
+			$scope.$parent.currentProduct.usuario = $scope.$parent.currentUser;
+			$scope.$parent.currentProduct.categoria = $scope.currentSubCategory;
+			$log.info(JSON.stringify($scope.$parent.currentProduct));
+
+			$scope.showLoading = true;
+			productService.createProduct($scope.$parent.currentProduct, function(response) {
+				$log.info('Produto criado com sucesso! [ShowcaseRegisterProductController]');
+				$log.info(JSON.stringify(response));
+
+				$scope.showLoading = false;
+				$scope.message = {
+					"type" : "success",
+					"title" : "Ok!",
+					"body" : "Produto criado com sucesso!"
+				};
+
+				if (response && response.data) {
+					$scope.setCurrentProduct(response.data);
+				}
+
+				var uploadUrl = "http://localhost:8080/showcase/api/product/" + response.data.id + "/image";
+				$log.info('Upload image url changed...' + uploadUrl);
+				$("#input-700").fileinput('refresh', {
+					uploadUrl: uploadUrl,
+					uploadAsync: true,
+					maxFileCount: 5
+				});
+			}, function(responseError) {
+				$log.error("Error create product: " + JSON.stringify(responseError));
+				$scope.setErrorMessage(responseError, "Não foi possível criar o produto, por favor tente novamente mais tarde.");
+			});
+		};
+
+		$scope.updateProduct = function() {
+			$log.info('Alterando produto.. [ShowcaseRegisterProductController]');
+			$scope.$parent.currentProduct.categoria = $scope.currentSubCategory;
+			$log.info(JSON.stringify($scope.$parent.currentProduct));
+
+			$scope.showLoading = true;
+			productService.updateProduct($scope.$parent.currentProduct.id, $scope.$parent.currentProduct, function(response) {
+				$log.info('Produto alterado com sucesso! [ShowcaseRegisterProductController]');
+				$log.info(JSON.stringify(response));
+
+				$scope.showLoading = false;
+				$scope.message = {
+					"type" : "success",
+					"title" : "Ok!",
+					"body" : "Produto alterado com sucesso!"
+				};
+
+				if (response && response.data) {
+					$scope.setCurrentProduct(response.data);
+				}
+
+				// TODO salvar as imagens do produto
+			}, function(responseError) {
+				$log.error("Error update product: " + JSON.stringify(responseError));
+				$scope.setErrorMessage(responseError, "Não foi possível alterar o produto, por favor tente novamente mais tarde.");
+			});
+		};
+
+		$scope.setErrorMessage = function(responseError, defaultMessage) {
+			var msg = defaultMessage;
+			if (responseError && responseError.data && responseError.data.message) {
+				msg = responseError.data.message;
+			}
+
+			$scope.showLoading = false;
+			$scope.message = {
+				"type" : "danger",
+				"title" : "Ops!",
+				"body" : msg
+			};
 		};
 
 		$('#radioBtnConservationState a').on('click', function() {

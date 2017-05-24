@@ -79,6 +79,11 @@
 			<ref bean="entityManager" />
 		</constructor-arg>
 	</bean>
+	<bean id="imageDAO" class="br.com.vitrinedecristal.dao.bean.ImageDAO">
+		<constructor-arg>
+			<ref bean="entityManager" />
+		</constructor-arg>
+	</bean>
 	<bean id="productDAO" class="br.com.vitrinedecristal.dao.bean.ProductDAO">
 		<constructor-arg>
 			<ref bean="entityManager" />
@@ -110,6 +115,11 @@
 	<bean id="categoryService" class="br.com.vitrinedecristal.service.bean.CategoryService">
 		<constructor-arg>
 			<ref bean="categoryDAO" />
+		</constructor-arg>
+	</bean>
+	<bean id="imageService" class="br.com.vitrinedecristal.service.bean.ImageService">
+		<constructor-arg>
+			<ref bean="imageDAO" />
 		</constructor-arg>
 	</bean>
 	<bean id="productService" class="br.com.vitrinedecristal.service.bean.ProductService">

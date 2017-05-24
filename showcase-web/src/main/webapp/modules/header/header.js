@@ -10,7 +10,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 
 		$scope.user = {};
 		$scope.showLoading = false;
-		$scope.userLogged = true;
+		//$scope.userLogged = true;
 
 		/* LOGIN MODAL */
 		$scope.auth = function() {

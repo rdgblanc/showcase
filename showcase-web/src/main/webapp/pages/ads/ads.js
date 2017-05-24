@@ -4,18 +4,17 @@
 * Adverts controller
 */
 angular.module('showcase').controller('showcaseAdsController', [
-	'$scope', '$log', 'categoryService', 'productService',
-	function($scope, $log, categoryService, productService) {
+	'$scope', '$log', 'productService',
+	function($scope, $log, productService) {
 		$log.info('Controller initialized [ShowcaseAdsController]');
 
-		$scope.productStatusEnum = Object.freeze({
-			INACTIVE: 'Inativo',
-			ACTIVE: 'Ativo',
-			DENOUNCED: 'Denunciado',
-			BLOCKED: 'Bloqueado'
-		});
+		$scope.initialize = function() {
+			$scope.getProductsByUser();
+		}
 
 		$scope.getProductsByUser = function() {
+			/*$scope.products = [$scope.$parent.currentProduct];
+			return;*/
 			$log.info('Obtendo produtos do usuário.. [ShowcaseAdsController]');
 			$log.info(JSON.stringify($scope.$parent.currentUser));
 
@@ -54,24 +53,11 @@ angular.module('showcase').controller('showcaseAdsController', [
 			});
 		};
 
-		/*$scope.getCategories = function() {
-			$log.info('Obtendo categorias.. [ShowcaseAdsController]');
+		$scope.getCategoryLabel = function(product) {
+			return product.categoria.categoriaPai.nome + " - " + product.categoria.nome;
+		};
 
-			//$scope.showLoading = true;
-			categoryService.getCategories(function(response) {
-				$log.info('Categorias obtidas com sucesso! [ShowcaseAdsController]');
-				$log.info(JSON.stringify(response));
-
-				if (response && response.data && response.data.length > 0) {
-					$scope.address = response.data[0];
-				}
-			}, function(responseError) {
-				$log.error("Error get categories by user: " + JSON.stringify(responseError));
-				//$scope.setErrorMessage(responseError, "Não foi possível recuperar as categorias, por favor tente novamente mais tarde.");
-			});
-		};*/
-
-		$scope.getProductsByUser();
+		$scope.initialize();
 
 		$log.info('Controller execution ended [ShowcaseAdsController]');
 	}

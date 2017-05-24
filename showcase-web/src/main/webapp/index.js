@@ -78,7 +78,27 @@ angular.module('showcase').controller("showcaseController", [
 			GUIDELINE: 'pages/guideline/guideline.html',
 
 			REGISTER_PRODUCT: 'pages/product/register-product.html'
-			//REGISTER_PRODUCT: 'pages/upload-file/index.html'
+		});
+
+		$scope.productNegotiationTypeEnum = Object.freeze({
+			DONATION: 			'Doação',
+			LOAN: 				'Empréstimo',
+			EXCHANGE: 			'Troca',
+			SALE: 				'Venda',
+			EXCHANGE_OR_SALE: 	'Troca ou Venda'
+		});
+
+		$scope.productConservationStateEnum = Object.freeze({
+			NEW: 		'Novo',
+			SEMI_NEW: 	'Seminovo',
+			USED: 		'Usado'
+		});
+
+		$scope.productStatusEnum = Object.freeze({
+			INACTIVE: 	'Inativo',
+			ACTIVE: 	'Ativo',
+			DENOUNCED: 	'Denunciado',
+			BLOCKED: 	'Bloqueado'
 		});
 
 		$scope.currentView = $scope.viewsEnum.HOME;
