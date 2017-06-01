@@ -101,6 +101,8 @@ angular.module('showcase').controller("showcaseController", [
 			BLOCKED: 	'Bloqueado'
 		});
 
+		$scope.imagesUploadPath = "http://localhost/showcase-web/src/main/webapp/assets/upload/";
+
 		$scope.currentView = $scope.viewsEnum.HOME;
 		$scope.currentUser = null;
 		//$scope.currentProduct = {};

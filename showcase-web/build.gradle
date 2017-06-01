@@ -8,8 +8,6 @@ dependencies {
 
 	compile "io.swagger:swagger-jaxrs:1.5.3"
 
-	compile "com.sun.jersey.contribs:jersey-multipart:1.12"
-
 	compile "org.springframework:spring-context:$SPRING_VERSION"
 	compile "org.springframework:spring-web:$SPRING_VERSION"
 
@@ -21,6 +19,7 @@ dependencies {
 	}
 
 	providedCompile "org.jboss.resteasy:resteasy-jaxrs:2.3.2.Final"
+	providedCompile "org.jboss.resteasy:resteasy-multipart-provider:2.2.0.GA"
 	providedCompile "javax.servlet:javax.servlet-api:3.1.0"
 	providedCompile "javax.inject:javax.inject:1"
 }

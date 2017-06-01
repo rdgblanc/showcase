@@ -22,7 +22,7 @@ public class ImageDAO extends BaseDAO<Long, Image> implements IImageDAO {
 			throw new IllegalArgumentException("O id do produto deve ser informado para a busca de imagens por produto.");
 		}
 
-		StringBuffer query = new StringBuffer("SELECT p FROM Product p WHERE p.produto.id = :productId");
+		StringBuffer query = new StringBuffer("SELECT i FROM Image i WHERE i.produto.id = :productId");
 
 		Query q = getEntityManager().createQuery(query.toString());
 		q.setParameter("productId", productId);

@@ -39,4 +39,27 @@ public class ProductDAO extends BaseDAO<Long, Product> implements IProductDAO {
 		return (List<Product>) q.getResultList();
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Product> findByCategory(Long categoryId, List<ProductStatusEnum> status) {
+		if (categoryId == null) {
+			throw new IllegalArgumentException("O id da categoria deve ser informado para a busca de produtos por categoria.");
+		}
+
+		StringBuffer query = new StringBuffer("SELECT p FROM Product p WHERE p.categoria IN (SELECT c FROM Category c WHERE c.categoriaPai.id = :categoryId)");
+
+		if (status != null) {
+			query.append(" AND p.status IN (:status)");
+		}
+
+		Query q = getEntityManager().createQuery(query.toString());
+		q.setParameter("categoryId", categoryId);
+
+		if (status != null) {
+			q.setParameter("status", status);
+		}
+
+		return (List<Product>) q.getResultList();
+	}
+
 }

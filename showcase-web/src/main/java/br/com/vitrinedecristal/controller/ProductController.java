@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.Consumes;
@@ -19,14 +18,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.apache.commons.io.IOUtils;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import br.com.vitrinedecristal.dto.ImageDTO;
+import br.com.vitrinedecristal.dto.ProductDTO;
 import br.com.vitrinedecristal.enums.ProductStatusEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.exception.EntityNotFoundException;
@@ -131,7 +130,7 @@ public class ProductController extends SpringBeanAutowiringSupport {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
 			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
 	})
-	public List<ProductVO> list(@ApiParam @PathParam("userId") Long userId) throws ApiException, BusinessException {
+	public List<ProductDTO> listByUser(@ApiParam @PathParam("userId") Long userId) throws ApiException, BusinessException {
 		if (userId == null) {
 			throw new EmptyRequestBodyException();
 		}
@@ -139,42 +138,46 @@ public class ProductController extends SpringBeanAutowiringSupport {
 		return this.productService.listProductByUser(userId);
 	}
 
+	@GET
+	@Path("/category/{categoryId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Lista os produtos da categoria", notes = "Lista os produtos cadastrados do categoria.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
+			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
+	})
+	public List<ProductDTO> listByCategory(@ApiParam @PathParam("categoryId") Long categoryId) throws ApiException, BusinessException {
+		if (categoryId == null) {
+			throw new EmptyRequestBodyException();
+		}
+
+		return this.productService.listProductByCategory(categoryId);
+	}
+
 	@POST
-	@Path("{id}/image")
+	@Path("/image")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@ApiOperation(value = "Upload de imagem", notes = "Faz o upload das imagens do produto.")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
 			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
 	})
-	// public void uploadImage(@ApiParam @PathParam("id") Long id, @FormDataParam("file") InputStream uploadedStream) throws BusinessException, IOException {
-	public void uploadImage(@ApiParam @PathParam("id") Long id, MultipartFormDataInput multipart) throws BusinessException, IOException {
+	public void uploadImage(MultipartFormDataInput multipart) throws BusinessException, IOException {
+		String dataNameProductId = "productId";
+		Long productId = multipart.getFormDataPart(dataNameProductId, Long.class, null);
+
 		String inputNameFileIndex = "file_id";
 		Integer fileIndex = multipart.getFormDataPart(inputNameFileIndex, Integer.class, null);
 
 		String inputNameFileContent = "file";
-		Map<String, List<InputPart>> uploadForm = multipart.getFormDataMap();
-		List<InputPart> inputParts = uploadForm.get(inputNameFileContent);
+		InputStream uploadedStream = multipart.getFormDataPart(inputNameFileContent, InputStream.class, null);
+		String filename = this.writeFile(uploadedStream, productId);
 
-		this.createDirectory(id);
-
-		for (InputPart inputPart : inputParts) {
-			// Retrieve headers, read the Content-Disposition header to obtain the original name of the file
-			@SuppressWarnings("unused")
-			MultivaluedMap<String, String> header = inputPart.getHeaders();
-
-			String filename = id + File.separator + new Date().getTime() + ".jpg";
-
-			// Handle the body of that part with an InputStream
-			InputStream uploadedStream = inputPart.getBody(InputStream.class, null);
-			this.writeFile(uploadedStream, filename);
-
-			this.imageService.createImage(id, filename);
-		}
+		this.imageService.createImage(productId, filename, fileIndex);
 	}
 
-	@DELETE
-	@Path("/{id}/image")
+	@POST
+	@Path("/image/{id}")
 	@ApiOperation(value = "Remove a imagem", notes = "Remove a imagem do produto.")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
@@ -201,25 +204,26 @@ public class ProductController extends SpringBeanAutowiringSupport {
 		return this.imageService.listImagesByProduct(id);
 	}
 
-	private void createDirectory(Long productId) {
+	private String writeFile(InputStream uploadedStream, Long productId) throws IOException, BusinessException {
 		File directory = new File(UPLOAD_FOLDER + productId);
 		if (!directory.exists()) {
 			directory.mkdir();
 		}
-	}
 
-	private void writeFile(InputStream uploadedStream, String filename) throws IOException, BusinessException {
+		String filename = productId + File.separator + new Date().getTime() + ".jpg";
 		File file = new File(UPLOAD_FOLDER + filename);
-		FileOutputStream fop = new FileOutputStream(file);
-
-		int read = 0;
-		byte[] bytes = new byte[1024];
-		while ((read = uploadedStream.read(bytes)) != -1) {
-			fop.write(bytes, 0, read);
+		if (!file.exists()) {
+			file.createNewFile();
 		}
+
+		byte[] bytes = IOUtils.toByteArray(uploadedStream);
+		FileOutputStream fop = new FileOutputStream(file);
+		fop.write(bytes);
 
 		fop.flush();
 		fop.close();
+
+		return filename;
 	}
 
 }

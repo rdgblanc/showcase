@@ -1,10 +1,10 @@
 <div data-ng-controller="showcaseRegisterProductController">
 	<!-- banner -->
-	<div class="banner10" id="home1">
+	<!-- <div class="banner10" id="home1">
 		<div class="container">
 			<h2>Cadastro de Produtos</h2>
 		</div>
-	</div>
+	</div> -->
 	<!-- //banner -->
 
 	<!-- breadcrumbs -->
@@ -30,7 +30,7 @@
 		<div class="container">	
 			<div class="container register" style="width: 800px; padding: 1em 3em 2em; border: 1px solid #999; border-radius: 4px">
 				<!-- <form class="well form-horizontal" method="post" id="registerProductForm"> -->
-				<form id="registerProductForm" class="form-horizontal" style="font-weight: 300; font-size: 14px;" name="registerProductForm" novalidate role="form" ng-submit="registerProductForm.$valid && saveProduct()">
+				<form id="registerProductForm" class="form-horizontal" style="font-weight: 300; font-size: 14px;" name="registerProductForm" novalidate role="form" ng-submit="saveProduct()">
 					<fieldset>
 						<div id="category-group" class="form-group row">
 							<!-- <label style="float: left; font-weight: normal; margin: 3px;">Categoria:</label> -->
@@ -118,7 +118,7 @@
 						<!-- Imagens input-->
 						<div class="form-group row">
 							<label style="font-weight: normal; margin: 6px 0;">Imagens</label>
-							<input id="input-700" name="kartik-input-700[]" type="file" multiple class="file-loading">
+							<input id="input-700" name="file" type="file" multiple class="file-loading" accept="image/*">
 						</div>
 
 						<div id="alert-group" class="form-group row" ng-if="message.type && registerProductForm.$submitted && registerProductForm.$valid && !showLoading">

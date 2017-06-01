@@ -1,10 +1,10 @@
 <div data-ng-controller="showcaseAdsController">
 	<!-- banner -->
-	<div class="banner10" id="home1">
+	<!-- <div class="banner10" id="home1">
 		<div class="container">
 			<h2>Meus Anúncios</h2>
 		</div>
-	</div>
+	</div> -->
 	<!-- //banner -->
 
 	<!-- breadcrumbs -->
@@ -42,19 +42,19 @@
 					<tbody>
 						<tr data-ng-repeat="product in products">
 							<td>
-								<button class="btn btn-xs btn-info" ng-click="editProduct(product)">
+								<button class="btn btn-xs btn-info" ng-click="editProduct(product.product)">
 									<i class="fa fa-pencil"></i>
 								</button>
-								<button class="btn btn-xs btn-danger" ng-click="deleteProduct(product)">
+								<button class="btn btn-xs btn-danger" ng-click="deleteProduct(product.product)">
 									<i class="fa fa-trash-o"></i>
 								</button>
 							</td>
-							<td data-ng-bind="getCategoryLabel(product)"></td>
-							<td style="vertical-align: middle;" data-ng-bind="product.nome"></td>
-							<td data-ng-bind="productConservationStateEnum[product.estadoConservacao]"></td>
-							<td data-ng-bind="productNegotiationTypeEnum[product.tipoNegociacao]"></td>
-							<td data-ng-bind="product.dtAtualizacao | date:'dd/MM/yyyy HH:mm'"></td>
-							<td data-ng-bind="productStatusEnum[product.status]"></td>
+							<td data-ng-bind="getCategoryLabel(product.product)"></td>
+							<td style="vertical-align: middle;" data-ng-bind="product.product.nome"></td>
+							<td data-ng-bind="productConservationStateEnum[product.product.estadoConservacao]"></td>
+							<td data-ng-bind="productNegotiationTypeEnum[product.product.tipoNegociacao]"></td>
+							<td data-ng-bind="product.product.dtAtualizacao | date:'dd/MM/yyyy HH:mm'"></td>
+							<td data-ng-bind="productStatusEnum[product.product.status]"></td>
 						</tr>
 					</tbody>
 				</table>

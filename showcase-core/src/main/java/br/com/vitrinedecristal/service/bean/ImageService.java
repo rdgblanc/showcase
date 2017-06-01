@@ -1,16 +1,15 @@
 package br.com.vitrinedecristal.service.bean;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.vitrinedecristal.dao.IImageDAO;
+import br.com.vitrinedecristal.dto.ImageDTO;
+import br.com.vitrinedecristal.enums.ImageTypeEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.exception.EntityNotFoundException;
 import br.com.vitrinedecristal.model.Image;
@@ -52,25 +51,24 @@ public class ImageService extends BaseService<Long, Image, IImageDAO> implements
 
 	@Override
 	@Transactional
-	public ImageVO createImage(Long productId, InputStream imageInputStream) throws BusinessException {
+	public ImageVO createImage(Long productId, String filename, Integer fileIndex) throws BusinessException {
 		logger.info("Criando imagem para o produto: " + productId);
 
-		byte[] bytes = null;
-		try {
-			bytes = IOUtils.toByteArray(imageInputStream);
-		} catch (IOException e) {
-			throw new BusinessException("Não foi possível obter os bytes da imagem", e);
-		}
-
 		Image imagem = new Image();
-		imagem.setConteudo(bytes);
+		imagem.setCaminho(filename);
+
+		if (fileIndex == 0) {
+			imagem.setTipo(ImageTypeEnum.MAIN);
+		} else {
+			imagem.setTipo(ImageTypeEnum.ADDITIONAL);
+		}
 
 		ProductVO productVO = this.productService.getProduct(productId);
 		imagem.setProduto(ParserUtil.parse(productVO, Product.class));
 
 		logger.info("Criando imagem: " + imagem);
 		Image storedImage = super.save(imagem);
-		logger.info("Imagem criado com sucesso!");
+		logger.info("Imagem criada com sucesso!");
 
 		return ParserUtil.parse(storedImage, ImageVO.class);
 	}
@@ -86,11 +84,11 @@ public class ImageService extends BaseService<Long, Image, IImageDAO> implements
 	}
 
 	@Override
-	public List<ImageVO> listImagesByProduct(Long productId) throws BusinessException {
+	public List<ImageDTO> listImagesByProduct(Long productId) throws BusinessException {
 		logger.info("Listando as imagens do produto: " + productId);
 		List<Image> listImages = getDAO().findByProduct(productId);
 		logger.info("Imagens listadas com sucesso!");
 
-		return ParserUtil.parse(listImages, ImageVO.class);
+		return ParserUtil.parse(listImages, ImageDTO.class);
 	}
 }

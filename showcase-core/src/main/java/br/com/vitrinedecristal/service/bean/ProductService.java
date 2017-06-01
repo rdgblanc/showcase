@@ -1,5 +1,6 @@
 package br.com.vitrinedecristal.service.bean;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -8,8 +9,10 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.vitrinedecristal.dao.IProductDAO;
+import br.com.vitrinedecristal.dto.ProductDTO;
 import br.com.vitrinedecristal.enums.ProductStatusEnum;
 import br.com.vitrinedecristal.enums.RoleEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
@@ -18,6 +21,7 @@ import br.com.vitrinedecristal.exception.InvalidPermissionException;
 import br.com.vitrinedecristal.model.Category;
 import br.com.vitrinedecristal.model.Product;
 import br.com.vitrinedecristal.security.util.AuthenticationUtils;
+import br.com.vitrinedecristal.service.IImageService;
 import br.com.vitrinedecristal.service.IProductService;
 import br.com.vitrinedecristal.service.base.BaseService;
 import br.com.vitrinedecristal.util.ParserUtil;
@@ -31,6 +35,9 @@ public class ProductService extends BaseService<Long, Product, IProductDAO> impl
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger logger = Logger.getLogger(ProductService.class);
+
+	@Autowired
+	private IImageService imageService;
 
 	public ProductService(IProductDAO productDAO) {
 		super(productDAO);
@@ -211,11 +218,39 @@ public class ProductService extends BaseService<Long, Product, IProductDAO> impl
 	}
 
 	@Override
-	public List<ProductVO> listProductByUser(Long userId) throws BusinessException {
+	public List<ProductDTO> listProductByUser(Long userId) throws BusinessException {
 		logger.info("Listando os produtos do usuário: " + userId);
+
 		List<Product> listProduct = getDAO().findByUser(userId, Arrays.asList(ProductStatusEnum.ACTIVE));
+		List<ProductDTO> listProductDTO = new ArrayList<ProductDTO>();
+		for (Product product : listProduct) {
+			ProductDTO productDTO = new ProductDTO();
+			productDTO.setProduct(ParserUtil.parse(product, ProductVO.class));
+			productDTO.setImages(this.imageService.listImagesByProduct(productDTO.getProduct().getId()));
+			listProductDTO.add(productDTO);
+		}
+
 		logger.info("Produtos listados com sucesso!");
 
-		return ParserUtil.parse(listProduct, ProductVO.class);
+		return listProductDTO;
 	}
+
+	@Override
+	public List<ProductDTO> listProductByCategory(Long categoryId) throws BusinessException {
+		logger.info("Listando os produtos da categoria: " + categoryId);
+
+		List<Product> listProduct = getDAO().findByCategory(categoryId, Arrays.asList(ProductStatusEnum.ACTIVE));
+		List<ProductDTO> listProductDTO = new ArrayList<ProductDTO>();
+		for (Product product : listProduct) {
+			ProductDTO productDTO = new ProductDTO();
+			productDTO.setProduct(ParserUtil.parse(product, ProductVO.class));
+			productDTO.setImages(this.imageService.listImagesByProduct(productDTO.getProduct().getId()));
+			listProductDTO.add(productDTO);
+		}
+
+		logger.info("Produtos listados com sucesso!");
+
+		return listProductDTO;
+	}
+
 }

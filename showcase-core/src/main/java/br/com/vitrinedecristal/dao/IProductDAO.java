@@ -13,4 +13,6 @@ public interface IProductDAO extends IBaseDAO<Long, Product> {
 
 	List<Product> findByUser(Long userId, List<ProductStatusEnum> status);
 
+	List<Product> findByCategory(Long categoryId, List<ProductStatusEnum> status);
+
 }

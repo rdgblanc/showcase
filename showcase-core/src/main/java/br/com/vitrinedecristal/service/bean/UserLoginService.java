@@ -31,8 +31,11 @@ public class UserLoginService extends BaseService<Long, UserLogin, IUserLoginDAO
 	public void saveLastAccess(User user) {
 		logger.info("Atualizando último acesso do usuário: " + user.getId());
 
+		String ip = RequestUtil.getInstance().getClientIp() != null ? RequestUtil.getInstance().getClientIp() : " ";
+		logger.warn("Não foi possível obter o IP do usuário logado.");
+
 		UserLogin userLogin = new UserLogin();
-		userLogin.setIp(RequestUtil.getInstance().getClientIp());
+		userLogin.setIp(ip);
 		userLogin.setDtInsercao(new Date());
 		userLogin.setUser(user);
 		super.save(userLogin);

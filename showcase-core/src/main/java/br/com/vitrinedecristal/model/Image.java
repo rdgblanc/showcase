@@ -2,6 +2,8 @@ package br.com.vitrinedecristal.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import br.com.vitrinedecristal.dao.base.IID;
+import br.com.vitrinedecristal.enums.ImageTypeEnum;
 
 @Entity
 @Table(name = "TB_IMAGEM")
@@ -22,8 +25,12 @@ public class Image implements IID<Long> {
 	private Long id;
 
 	@Lob
-	@Column(name = "CONTEUDO", nullable = false)
-	private byte[] conteudo;
+	@Column(name = "CAMINHO", nullable = false)
+	private String caminho;
+
+	@Column(name = "TIPO", nullable = true)
+	@Enumerated(value = EnumType.STRING)
+	private ImageTypeEnum tipo;
 
 	@ManyToOne(targetEntity = Product.class)
 	@JoinColumn(name = "ID_PRODUTO", nullable = false)
@@ -37,12 +44,20 @@ public class Image implements IID<Long> {
 		this.id = id;
 	}
 
-	public byte[] getConteudo() {
-		return conteudo;
+	public String getCaminho() {
+		return caminho;
 	}
 
-	public void setConteudo(byte[] conteudo) {
-		this.conteudo = conteudo;
+	public void setCaminho(String caminho) {
+		this.caminho = caminho;
+	}
+
+	public ImageTypeEnum getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(ImageTypeEnum tipo) {
+		this.tipo = tipo;
 	}
 
 	public Product getProduto() {

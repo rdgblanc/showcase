@@ -1,5 +1,6 @@
 package br.com.vitrinedecristal.vo;
 
+import br.com.vitrinedecristal.enums.ImageTypeEnum;
 import br.com.vitrinedecristal.model.Image;
 import br.com.vitrinedecristal.vo.base.BaseVO;
 
@@ -12,7 +13,9 @@ public class ImageVO extends BaseVO<Image> {
 
 	private Long id;
 
-	private byte[] conteudo;
+	private String caminho;
+
+	private ImageTypeEnum tipo;
 
 	private ProductVO produto;
 
@@ -36,12 +39,20 @@ public class ImageVO extends BaseVO<Image> {
 		this.id = id;
 	}
 
-	public byte[] getConteudo() {
-		return conteudo;
+	public String getCaminho() {
+		return caminho;
 	}
 
-	public void setConteudo(byte[] conteudo) {
-		this.conteudo = conteudo;
+	public void setCaminho(String caminho) {
+		this.caminho = caminho;
+	}
+
+	public ImageTypeEnum getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(ImageTypeEnum tipo) {
+		this.tipo = tipo;
 	}
 
 	public ProductVO getProduto() {

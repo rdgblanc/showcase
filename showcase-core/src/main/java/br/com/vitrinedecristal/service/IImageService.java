@@ -1,11 +1,11 @@
 package br.com.vitrinedecristal.service;
 
-import java.io.InputStream;
 import java.util.List;
 
 import org.springframework.security.access.annotation.Secured;
 
 import br.com.vitrinedecristal.dao.IImageDAO;
+import br.com.vitrinedecristal.dto.ImageDTO;
 import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.model.Image;
 import br.com.vitrinedecristal.service.base.IBaseService;
@@ -23,19 +23,20 @@ public interface IImageService extends IBaseService<Long, Image, IImageDAO> {
 	 * @return informações da imagem
 	 * @throws BusinessException
 	 */
-	@Secured(ROLE_USER)
+	//@Secured(ROLE_USER)
 	ImageVO getImage(Long id) throws BusinessException;
 
 	/**
 	 * Cria a imagem
 	 * 
 	 * @param productId id do produto da imagem
-	 * @param imagemInpuStream bytes da imagem
+	 * @param filename caminho da imagem
+	 * @param fileIndex o indice da imagem no grid de upload
 	 * @return imagem criada
 	 * @throws BusinessException
 	 */
-	@Secured(ROLE_USER)
-	ImageVO createImage(Long productId, InputStream imageInputStream) throws BusinessException;
+	//@Secured(ROLE_USER)
+	ImageVO createImage(Long productId, String filename, Integer fileIndex) throws BusinessException;
 
 	/**
 	 * Remove a imagem
@@ -43,7 +44,7 @@ public interface IImageService extends IBaseService<Long, Image, IImageDAO> {
 	 * @param id id da imagem a ser removida
 	 * @throws BusinessException
 	 */
-	@Secured(ROLE_USER)
+	//@Secured(ROLE_USER)
 	void removeImage(Long id) throws BusinessException;
 
 	/**
@@ -53,6 +54,6 @@ public interface IImageService extends IBaseService<Long, Image, IImageDAO> {
 	 * @return lista de imagens do produto
 	 * @throws BusinessException
 	 */
-	@Secured(ROLE_USER)
-	List<ImageVO> listImagesByProduct(Long productId) throws BusinessException;
+	//@Secured(ROLE_USER)
+	List<ImageDTO> listImagesByProduct(Long productId) throws BusinessException;
 }

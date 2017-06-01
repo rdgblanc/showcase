@@ -2,9 +2,8 @@ package br.com.vitrinedecristal.service;
 
 import java.util.List;
 
-import org.springframework.security.access.annotation.Secured;
-
 import br.com.vitrinedecristal.dao.IProductDAO;
+import br.com.vitrinedecristal.dto.ProductDTO;
 import br.com.vitrinedecristal.enums.ProductStatusEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.model.Product;
@@ -23,7 +22,7 @@ public interface IProductService extends IBaseService<Long, Product, IProductDAO
 	 * @return informações do produto
 	 * @throws BusinessException
 	 */
-	@Secured(ROLE_USER)
+	// @Secured(ROLE_USER)
 	ProductVO getProduct(Long id) throws BusinessException;
 
 	/**
@@ -33,7 +32,7 @@ public interface IProductService extends IBaseService<Long, Product, IProductDAO
 	 * @return produto criado
 	 * @throws BusinessException
 	 */
-	@Secured(ROLE_USER)
+	// @Secured(ROLE_USER)
 	ProductVO createProduct(ProductVO productVO) throws BusinessException;
 
 	/**
@@ -43,7 +42,7 @@ public interface IProductService extends IBaseService<Long, Product, IProductDAO
 	 * @return produto alterado
 	 * @throws BusinessException
 	 */
-	@Secured(ROLE_USER)
+	// @Secured(ROLE_USER)
 	ProductVO updateProduct(ProductVO productVO) throws BusinessException;
 
 	/**
@@ -53,7 +52,7 @@ public interface IProductService extends IBaseService<Long, Product, IProductDAO
 	 * @param status novo status do produto
 	 * @throws BusinessException
 	 */
-	@Secured(ROLE_USER)
+	// @Secured(ROLE_USER)
 	void updateStatus(Long id, ProductStatusEnum status) throws BusinessException;
 
 	/**
@@ -63,7 +62,17 @@ public interface IProductService extends IBaseService<Long, Product, IProductDAO
 	 * @return lista de produtos do usuário
 	 * @throws BusinessException
 	 */
-	@Secured(ROLE_USER)
-	List<ProductVO> listProductByUser(Long userId) throws BusinessException;
+	// @Secured(ROLE_USER)
+	List<ProductDTO> listProductByUser(Long userId) throws BusinessException;
+
+	/**
+	 * Lista os produtos por categoria
+	 * 
+	 * @param categoryId id da categoria
+	 * @return lista de produtos da categoria
+	 * @throws BusinessException
+	 */
+	// @Secured(ROLE_USER)
+	List<ProductDTO> listProductByCategory(Long categoryId) throws BusinessException;
 
 }

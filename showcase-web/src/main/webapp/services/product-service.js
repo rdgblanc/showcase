@@ -11,6 +11,10 @@ angular.module('showcase').factory('productService', [
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
 				return request.get("/product/user/" + userId).then(successCallback, errorCallback);
 			},
+			getProductsByCategory : function(categoryId, successCallback, errorCallback) {
+				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
+				return request.get("/product/category/" + categoryId).then(successCallback, errorCallback);
+			},
 			getProduct : function(id, successCallback, errorCallback) {
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
 				return request.get("/product/" + id).then(successCallback, errorCallback);
@@ -26,6 +30,10 @@ angular.module('showcase').factory('productService', [
 			deleteProduct : function(id, successCallback, errorCallback) {
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
 				return request.remove("/product/" + id).then(successCallback, errorCallback);
+			},
+			getImagesByProduct : function(productId, successCallback, errorCallback) {
+				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
+				return request.get("/product/" + productId + "/image").then(successCallback, errorCallback);
 			}
 		};
 
