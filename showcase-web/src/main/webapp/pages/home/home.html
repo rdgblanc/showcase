@@ -55,87 +55,29 @@
 										<div class="w3_hs_bottom">
 											<ul>
 												<li>
-													<a href="#" data-toggle="modal" data-target="#myModal" ng-click="openProductDetails(product)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
+													<a href="#" data-toggle="modal" data-target="#myModal" ng-click="selectProduct(product)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
 												</li>
 											</ul>
 										</div>
 									</div>
 									<h5><a href="#">{{product.product.nome}}</a></h5>
 									<div class="simpleCart_shelfItem">
-										<p ng-if="product.product.preco"><!-- <span>R$320</span>  --><i class="item_price">R${{product.product.preco}}</i></p>
-										<p ng-if="!product.product.preco"><i class="item_price" style="font-style: italic; font-size: .8em; font-weight: 300;">Sem preço</i></p>
-										<p><a class="item_add" href="#">Negociar</a></p>
+										<p ng-if="product.product.preco">
+											<i class="item_price">R${{product.product.preco}}</i>
+										</p>
+										<p ng-if="!product.product.preco">
+											<i class="item_price" style="font-style: italic; font-size: .8em; font-weight: 300;">Sem preço</i>
+										</p>
+										<p>
+											<a class="item_add" href="#" data-toggle="modal" data-target="#myModalNegotiation" ng-click="selectProduct(product)" ng-if="!product.hasNegotiation">Negociar</a>
+											<a class="disabledBtn" href="#" ng-if="product.hasNegotiation">Em negociação</a>
+										</p>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-
-				<!-- modal-products-details -->
-				<div class="modal video-modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
-					<div class="modal-dialog" role="document" style="width: 700px;">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
-							</div>
-							<section>
-								<div class="modal-body">
-									<div class="col-md-4 modal_body_left agile_ecommerce_tab_left">
-										<div class="hs-wrapper">
-											<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in productSelected.images"/>
-											<div class="w3_hs_bottom">
-												<!-- <ul>
-													<li>
-														<a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
-													</li>
-												</ul> -->
-											</div>
-										</div>
-									</div>
-									<div class="col-md-7 modal_body_right">
-										<h4>{{productSelected.product.nome}}</h4>
-										<p>{{productSelected.product.descricao}}</p>
-										<div class="rating">
-											<div class="rating-left">
-												<img src="assets/images/star-.png" alt=" " class="img-responsive" />
-											</div>
-											<div class="rating-left">
-												<img src="assets/images/star-.png" alt=" " class="img-responsive" />
-											</div>
-											<div class="rating-left">
-												<img src="assets/images/star-.png" alt=" " class="img-responsive" />
-											</div>
-											<div class="rating-left">
-												<img src="assets/images/star.png" alt=" " class="img-responsive" />
-											</div>
-											<div class="rating-left">
-												<img src="assets/images/star.png" alt=" " class="img-responsive" />
-											</div>
-											<div class="clearfix"> </div>
-										</div>
-										<div class="modal_body_right_cart simpleCart_shelfItem">
-											<p ng-if="productSelected.product.preco"><!-- <span>R$320</span>  --><i class="item_price">R${{productSelected.product.preco}}</i></p>
-											<p ng-if="!productSelected.product.preco"><i class="item_price" style="font-style: italic; font-size: .8em; font-weight: 300;">Sem preço</i></p>
-											<p><a class="item_add" href="#">Negociar</a></p>
-										</div>
-										<!-- <h5>Cor</h5>
-										<div class="color-quality">
-											<ul>
-												<li><a href="#"><span></span>Vermelho</a></li>
-												<li><a href="#" class="brown"><span></span>Azul</a></li>
-												<li><a href="#" class="purple"><span></span>Roxo</a></li>
-												<li><a href="#" class="gray"><span></span>Rosa</a></li>
-											</ul>
-										</div> -->
-									</div>
-									<div class="clearfix"> </div>
-								</div>
-							</section>
-						</div>
-					</div>
-				</div>
-				<!-- //modal-product-details -->
 			</div>
 			<div class="clearfix"> </div>
 		</div>
@@ -161,9 +103,16 @@
 						</div>
 						<h5><a href="#">{{product.product.nome}}</a></h5>
 						<div class="simpleCart_shelfItem">
-							<p ng-if="product.product.preco"><!-- <span>R$320</span>  --><i class="item_price">R${{product.product.preco}}</i></p>
-							<p ng-if="!product.product.preco"><i class="item_price" style="font-style: italic; font-size: .8em; font-weight: 300;">Sem preço</i></p>
-							<p><a class="item_add" href="#">Negociar</a></p>
+							<p ng-if="product.product.preco">
+								<i class="item_price">R${{product.product.preco}}</i>
+							</p>
+							<p ng-if="!product.product.preco">
+								<i class="item_price" style="font-style: italic; font-size: .8em; font-weight: 300;">Sem preço</i>
+							</p>
+							<p>
+								<a class="item_add" href="#" data-toggle="modal" data-target="#myModalNegotiation" ng-click="selectProduct(product)" ng-if="!product.hasNegotiation">Negociar</a>
+								<a class="disabledBtn" href="#" ng-if="product.hasNegotiation">Em negociação</a>
+							</p>
 						</div>
 					</div>
 				</div>
@@ -172,4 +121,138 @@
 		</div>
 	</div>
 	<!-- //new-products -->
+
+	<!-- modal-products-details -->
+	<div class="modal video-modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
+		<div class="modal-dialog" role="document" style="width: 700px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
+				</div>
+				<section>
+					<div class="modal-body">
+						<div class="col-md-4 modal_body_left agile_ecommerce_tab_left">
+							<div class="hs-wrapper">
+								<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in productSelected.images"/>
+								<div class="w3_hs_bottom">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-7 modal_body_right">
+							<h4>{{productSelected.product.nome}}</h4>
+							<p>{{productSelected.product.descricao}}</p>
+							<!-- <div class="rating">
+								<div class="rating-left">
+									<img src="assets/images/star-.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="assets/images/star-.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="assets/images/star-.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="assets/images/star.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="assets/images/star.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="clearfix"> </div>
+							</div> -->
+							<div class="modal_body_right_cart simpleCart_shelfItem">
+								<p ng-if="productSelected.product.preco">
+									<i class="item_price">R${{productSelected.product.preco}}</i>
+								</p>
+								<p ng-if="!productSelected.product.preco">
+									<i class="item_price" style="font-style: italic; font-size: .8em; font-weight: 300;">Sem preço</i>
+								</p>
+								<p ng-if="showActionsDetails">
+									<a class="item_add" href="#" data-toggle="modal" data-target="#myModalNegotiation" ng-click="selectProduct(productSelected)" ng-if="!productSelected.hasNegotiation">Negociar</a>
+									<a class="disabledBtn" href="#" ng-if="productSelected.hasNegotiation">Em negociação</a>
+									<!-- <a class="item_add" href="#" ng-click="favorite(productSelected)">Favorito{{favoriteLabel}}</a> -->
+								</p>
+							</div>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+	<!-- //modal-product-details -->
+
+	<!-- modal-negotiation -->
+	<div class="modal video-modal fade" id="myModalNegotiation" tabindex="-2" role="dialog" aria-labelledby="myModalNegotiation">
+		<div class="modal-dialog" role="document" style="width: 700px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">
+						Negociação
+					</h4>						
+				</div>
+				<section>
+					<div class="modal-body" style="padding: 1em 3em 2em;">
+						<div class="register">
+							<form id="negotiationForm" name="negotiationForm" novalidate role="form" ng-submit="negotiationForm.$valid && confirmNegotiation()">
+								<fieldset>
+									<div id="negotiation-type-group" class="form-group">
+										<label style="font-weight: normal; margin: 6px 0;">Opção de negociação</label>
+										<div>
+											<div class="input-group" style="margin-bottom: 0px">
+												<div id="radioBtnNegotiationTypeNeg" class="btn-group">
+													<a id="radioDonation" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="DONATION">Doação</a>
+													<a id="radioLoan" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="LOAN">Empréstimo</a>
+													<a id="radioExchange" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="EXCHANGE">Troca</a>
+													<a id="radioBuy" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="BUY">Compra</a>
+													<a id="radioExchangeOrBuy" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="EXCHANGE_OR_BUY">Troca ou Compra</a>
+												</div>
+												<input type="hidden" name="negotiationType" id="negotiationType" ng-model="$parent.currentProduct.tipoNegociacao" ng-value="{{this.value}}">
+											</div>
+										</div>
+									</div>
+									<div class="form-group" ng-if="showProducts">
+										<label style="font-weight: normal; margin: 6px 0;">Produto de troca</label>
+										<div>
+											<div class="input-group" style="margin-bottom: 0px; width: 50%;">
+												<ol name="categorySelect" class="nya-bs-select" style="width: 100%" ng-model="$parent.currentNegotiation" required data-live-search="true" title="Selecione um produto...">
+													<li nya-bs-option="product in products">
+														<a>{{product.product.nome}}</a>
+													</li>
+												</ol>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<textarea placeholder="Observação" name="observacao" class="form-control" style="border: 1px solid #DFDFDF; background: #f5f5f5; border-radius: 0px" required ng-model="$parent.currentNegotiation.observacao" ng-class="{'has-error': negotiationForm.$submitted && negotiationForm.observacao.$error.required}"></textarea>
+										<span class="invalid" ng-if="negotiationForm.$submitted && negotiationForm.observacao.$invalid">Observação inválida.</span>
+									</div>
+									<div class="form-group" ng-if="showPrice">
+										<input placeholder="Valor (R$)" id="valorPgto" name="valorPgto" type="text" class="decimal-2-places" ng-model="$parent.currentNegotiation.valorPgto">
+									</div>
+									<div id="alert-group" class="form-group" ng-if="message.type && updateForm.$submitted && updateForm.$valid && !showLoading">
+										<div class="alert alert-{{message.type}}" role="alert">
+											<strong ng-if="message.title">{{message.title}} </strong>{{message.body}}
+										</div>
+									</div>
+									<div class="sign-up form-group">
+										<input id="btnSaveNegotiation" type="submit" value="Confirmar" />
+										<!-- Loading -->
+										<div class="spinnerr" data-spinner data-ng-if="showLoading" />
+									</div>
+								</fieldset>
+							</form>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+					<script type="text/javascript">
+						$(document).ready(function () {
+							$(".decimal-2-places").numeric({ decimalPlaces: 2 }); //altDecimal: ".", decimal : ","
+						});
+					</script>
+				</section>
+			</div>
+		</div>
+	</div>
+	<!-- //modal-negotiation -->
 </div>

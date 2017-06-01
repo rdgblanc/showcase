@@ -8,7 +8,10 @@
 
       	<class>br.com.vitrinedecristal.model.Address</class>
       	<class>br.com.vitrinedecristal.model.Category</class>
+      	<class>br.com.vitrinedecristal.model.Favorite</class>
       	<class>br.com.vitrinedecristal.model.Image</class>
+      	<class>br.com.vitrinedecristal.model.Message</class>
+      	<class>br.com.vitrinedecristal.model.Negotiation</class>
       	<class>br.com.vitrinedecristal.model.Product</class>
       	<class>br.com.vitrinedecristal.model.Token</class>
       	<class>br.com.vitrinedecristal.model.User</class>

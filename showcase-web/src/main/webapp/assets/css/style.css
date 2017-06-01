@@ -571,6 +571,23 @@ ul.multi-column-dropdown h6 {
 .agile_ecommerce_tab_left p i{
 	font-style:normal;
 }
+.disabledBtn{
+    font-size: 14px;
+    color:#212121;
+    margin: 0;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: .5em 2em;
+    border: 1px solid;
+    border-radius: 25px;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+.disabledBtn:hover{
+    background: none !important;
+    color: #212121 !important;
+    border: 1px solid !important;
+}
 .simpleCart_shelfItem p a{
     font-size: 14px;
     color:#212121;

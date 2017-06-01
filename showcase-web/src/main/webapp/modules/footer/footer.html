@@ -22,22 +22,20 @@
 				</div>
 				<div class="col-md-3 w3_footer_grid">
 					<h3>Categoria</h3>
-					<ul class="info"> 
-						<li><a href="#/">Roupas</a></li>
-						<li><a href="#/">Calçados</a></li>
-						<li><a href="#/">Acessórios</a></li>
-						<li><a href="#/">Cosméticos</a></li>
-						<li><a href="#/">Outros</a></li>
+					<ul class="info">
+						<li data-ng-repeat="category in categories"><a href="#/">{{category.nome}}</a></li>
 					</ul>
 				</div>
 				<div class="col-md-3 w3_footer_grid">
-					<h3>Perfil</h3>
-					<ul class="info">
-						<li><a href="#/order_list" ng-click="switchView(viewsEnum.ORDER_LIST)">Meus Pedidos</a></li>
-						<li><a href="#/wish_list" ng-click="switchView(viewsEnum.WISH_LIST)">Favoritos</a></li>
-						<li><a href="#/ads" ng-click="switchView(viewsEnum.ADS)">Meus Anúncios</a></li>
-						<li><a href="#/negotiations" ng-click="switchView(viewsEnum.NEGOTIATIOS)">Minhas Negociações</a></li>
-					</ul>
+					<div ng-if="currentUser">
+						<h3>Perfil</h3>
+						<ul class="info">
+							<li><a href="#/order_list" ng-click="switchView(viewsEnum.ORDER_LIST)">Meus Pedidos</a></li>
+							<li><a href="#/wish_list" ng-click="switchView(viewsEnum.WISH_LIST)">Favoritos</a></li>
+							<li><a href="#/ads" ng-click="switchView(viewsEnum.ADS)">Meus Anúncios</a></li>
+							<li><a href="#/negotiations" ng-click="switchView(viewsEnum.NEGOTIATIOS)">Minhas Negociações</a></li>
+						</ul>
+					</div>
 					<h4>Siga-nos</h4>
 					<div class="agileits_social_button">
 						<ul>

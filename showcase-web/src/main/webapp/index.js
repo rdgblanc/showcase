@@ -64,8 +64,8 @@ window.module.run(['$rootScope', '$location', '$route',
 ]);
 
 angular.module('showcase').controller("showcaseController", [
-	'$scope', '$log', '$anchorScroll', '$location', '$route',
-	function($scope, $log, $anchorScroll, $location, $route) {
+	'$scope', '$log', '$anchorScroll', '$location', '$route', 'categoryService',
+	function($scope, $log, $anchorScroll, $location, $route, categoryService) {
 		$log.info('Controller initialized [ShowcaseController]');
 
 		$scope.viewsEnum = Object.freeze({
@@ -88,6 +88,14 @@ angular.module('showcase').controller("showcaseController", [
 			EXCHANGE_OR_SALE: 	'Troca ou Venda'
 		});
 
+		$scope.negotiationNegotiationTypeEnum = Object.freeze({
+			DONATION: 			'Doação',
+			LOAN: 				'Empréstimo',
+			EXCHANGE: 			'Troca',
+			BUY: 				'Compra',
+			EXCHANGE_OR_BUY: 	'Troca ou Compra'
+		});
+
 		$scope.productConservationStateEnum = Object.freeze({
 			NEW: 		'Novo',
 			SEMI_NEW: 	'Seminovo',
@@ -101,10 +109,19 @@ angular.module('showcase').controller("showcaseController", [
 			BLOCKED: 	'Bloqueado'
 		});
 
+		$scope.negotiationStatusEnum = Object.freeze({
+			IN_PROGRESS: 	'Em progresso',
+			ACCEPT: 		'Aceita',
+			CANCELED: 		'Cancelada',
+			DENOUNCED: 		'Denunciada',
+			FINISHED: 		'Finalizada'
+		});
+
 		$scope.imagesUploadPath = "http://localhost/showcase-web/src/main/webapp/assets/upload/";
 
 		$scope.currentView = $scope.viewsEnum.HOME;
-		$scope.currentUser = null;
+		//$scope.currentUser = null;
+		$scope.currentUser = {"id":1,"nome":"Silmara Santos","email":"s@s.com","sexo":"MALE","dtAtualizacao":"2017-05-17T23:47:53.000+0000","status":"ACTIVE","roles":["ROLE_USER","ROLE_ADMIN"]};
 		//$scope.currentProduct = {};
 		//$scope.currentProduct = {"id":1,"nome":"Tênis masculino","descricao":"Tênis masculino branco","marca":"Nike","preco":99.9,"quantidade":1,"estadoConservacao":"NEW","tipoNegociacao":"SALE","dtAtualizacao":"2017-05-16T21:15:11.000+0000","status":"ACTIVE","categoria":{"id":9,"nome":"Sapatos","categoriaPai":{"id":2,"nome":"Calçados"}},"usuario":{"id":1,"nome":"Silmara Santos","email":"s@s.com","sexo":"FEMALE","dtAtualizacao":"2017-05-16T21:43:00.000+0000","status":"ACTIVE","roles":["ROLE_USER","ROLE_ADMIN"]}}
 
@@ -113,12 +130,14 @@ angular.module('showcase').controller("showcaseController", [
 			$log.info(path);
 			if (path[1] !== undefined) {
 				var view = path[1].toUpperCase();
-				$log.info('>>>' + view);
-				$log.info('>>>' + $scope.viewsEnum[view]);
+				$log.info('View: ' + view);
+				$log.info('ViewsEnum[view]: ' + $scope.viewsEnum[view]);
 				if ($scope.viewsEnum[view] !== undefined) {
 					$scope.switchView($scope.viewsEnum[view]);
 				}
 			}
+
+			$scope.getCategories();
 		};
 
 		$scope.checkActiveMenu = function() {
@@ -140,6 +159,31 @@ angular.module('showcase').controller("showcaseController", [
 
 			//$route.reload();
 			//$scope.$digest();
+		};
+
+		$scope.getCategories = function() {
+			$log.info('Obtendo categorias.. [ShowcaseController]');
+
+			//$scope.showLoading = true;
+			categoryService.getCategories(function(response) {
+				$log.info('Categorias obtidas com sucesso! [ShowcaseController]');
+				$log.info(JSON.stringify(response));
+
+				if (response && response.data) {
+					$scope.categories = response.data;
+					/*if ($scope.categories && $scope.categories.length > 0) {
+						$scope.selectCategoryTab($scope.categories[0]);
+					}*/
+				}
+			}, function(responseError) {
+				$log.error("Error get categories: " + JSON.stringify(responseError));
+				//$scope.setErrorMessage(responseError, "Não foi possível recuperar as categorias, por favor tente novamente mais tarde.");
+			});
+		};
+
+		$scope.setCurrentNegotiation = function(negotiation) {
+			$log.info('Set current negotiation.. "' + JSON.stringify(negotiation) + '" [ShowcaseController]');
+			$scope.currentNegotiation = negotiation;
 		};
 
 		$scope.setCurrentProduct = function(product) {

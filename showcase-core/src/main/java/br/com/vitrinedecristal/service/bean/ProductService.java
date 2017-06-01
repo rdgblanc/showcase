@@ -206,9 +206,9 @@ public class ProductService extends BaseService<Long, Product, IProductDAO> impl
 			throw new EntityNotFoundException("Não foi encontrado nenhum produto para o id informado.");
 		}
 
-		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !storedProduct.getUsuario().getId().equals(AuthenticationUtils.getUserId())) {
-			throw new InvalidPermissionException();
-		}
+		// if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !storedProduct.getUsuario().getId().equals(AuthenticationUtils.getUserId())) {
+		// throw new InvalidPermissionException();
+		// }
 
 		storedProduct.setStatus(status);
 		storedProduct.setDtAtualizacao(new Date());
