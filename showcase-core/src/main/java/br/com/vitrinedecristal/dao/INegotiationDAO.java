@@ -13,6 +13,8 @@ public interface INegotiationDAO extends IBaseDAO<Long, Negotiation> {
 
 	List<Negotiation> findByUser(Long userId, List<NegotiationStatusEnum> status);
 
+	List<Negotiation> findByUserSeller(Long userId, List<NegotiationStatusEnum> status);
+
 	List<Negotiation> findByProduct(Long productId, List<NegotiationStatusEnum> status);
 
 }

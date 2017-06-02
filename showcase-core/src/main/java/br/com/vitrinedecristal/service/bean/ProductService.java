@@ -236,10 +236,46 @@ public class ProductService extends BaseService<Long, Product, IProductDAO> impl
 	}
 
 	@Override
+	public List<ProductDTO> listProductByAnotherUser(Long userId) throws BusinessException {
+		logger.info("Listando os produtos de outros usuários: " + userId);
+
+		List<Product> listProduct = getDAO().findByAnotherUser(userId, Arrays.asList(ProductStatusEnum.ACTIVE));
+		List<ProductDTO> listProductDTO = new ArrayList<ProductDTO>();
+		for (Product product : listProduct) {
+			ProductDTO productDTO = new ProductDTO();
+			productDTO.setProduct(ParserUtil.parse(product, ProductVO.class));
+			productDTO.setImages(this.imageService.listImagesByProduct(productDTO.getProduct().getId()));
+			listProductDTO.add(productDTO);
+		}
+
+		logger.info("Produtos listados com sucesso!");
+
+		return listProductDTO;
+	}
+
+	@Override
 	public List<ProductDTO> listProductByCategory(Long categoryId) throws BusinessException {
 		logger.info("Listando os produtos da categoria: " + categoryId);
 
 		List<Product> listProduct = getDAO().findByCategory(categoryId, Arrays.asList(ProductStatusEnum.ACTIVE));
+		List<ProductDTO> listProductDTO = new ArrayList<ProductDTO>();
+		for (Product product : listProduct) {
+			ProductDTO productDTO = new ProductDTO();
+			productDTO.setProduct(ParserUtil.parse(product, ProductVO.class));
+			productDTO.setImages(this.imageService.listImagesByProduct(productDTO.getProduct().getId()));
+			listProductDTO.add(productDTO);
+		}
+
+		logger.info("Produtos listados com sucesso!");
+
+		return listProductDTO;
+	}
+
+	@Override
+	public List<ProductDTO> listProductByCategoryAnotherUser(Long categoryId, Long userId) throws BusinessException {
+		logger.info("Listando os produtos da categoria e de outros usuários: " + categoryId + " - " + userId);
+
+		List<Product> listProduct = getDAO().findByCategoryAnotherUser(categoryId, userId, Arrays.asList(ProductStatusEnum.ACTIVE));
 		List<ProductDTO> listProductDTO = new ArrayList<ProductDTO>();
 		for (Product product : listProduct) {
 			ProductDTO productDTO = new ProductDTO();

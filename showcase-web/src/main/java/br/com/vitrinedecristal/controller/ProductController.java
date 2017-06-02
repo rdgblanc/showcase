@@ -139,6 +139,22 @@ public class ProductController extends SpringBeanAutowiringSupport {
 	}
 
 	@GET
+	@Path("/user/{userId}/another")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Lista os produtos de outros usuários", notes = "Lista os produtos cadastrados dos outros usuários.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
+			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
+	})
+	public List<ProductDTO> listByAnotherUser(@ApiParam @PathParam("userId") Long userId) throws ApiException, BusinessException {
+		if (userId == null) {
+			throw new EmptyRequestBodyException();
+		}
+
+		return this.productService.listProductByAnotherUser(userId);
+	}
+
+	@GET
 	@Path("/category/{categoryId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Lista os produtos da categoria", notes = "Lista os produtos cadastrados do categoria.")
@@ -152,6 +168,22 @@ public class ProductController extends SpringBeanAutowiringSupport {
 		}
 
 		return this.productService.listProductByCategory(categoryId);
+	}
+	
+	@GET
+	@Path("/category/{categoryId}/user/{userId}/another")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Lista os produtos da categoria de outros usuários", notes = "Lista os produtos cadastrados do categoria de outros usuários.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
+			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
+	})
+	public List<ProductDTO> listByCategoryAnotherUser(@ApiParam @PathParam("categoryId") Long categoryId, @ApiParam @PathParam("userId") Long userId) throws ApiException, BusinessException {
+		if (categoryId == null) {
+			throw new EmptyRequestBodyException();
+		}
+		
+		return this.productService.listProductByCategoryAnotherUser(categoryId, userId);
 	}
 
 	@POST

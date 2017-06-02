@@ -58,11 +58,21 @@ public interface INegotiationService extends IBaseService<Long, Negotiation, INe
 	 * Lista as negociações do usuário
 	 * 
 	 * @param userId id do usuário
-	 * @return lista de negociaçãos do usuário
+	 * @return lista de negociações do usuário
 	 * @throws BusinessException
 	 */
 	// @Secured(ROLE_USER)
 	List<NegotiationVO> listNegotiationByUser(Long userId) throws BusinessException;
+
+	/**
+	 * Lista as negociações de venda do usuário
+	 * 
+	 * @param userId id do usuário
+	 * @return lista de negociações do usuário
+	 * @throws BusinessException
+	 */
+	// @Secured(ROLE_USER)
+	List<NegotiationVO> listNegotiationByUserSeller(Long userId) throws BusinessException;
 
 	/**
 	 * Lista as negociações do produto

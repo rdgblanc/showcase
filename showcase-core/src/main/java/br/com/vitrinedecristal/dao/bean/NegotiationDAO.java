@@ -41,6 +41,29 @@ public class NegotiationDAO extends BaseDAO<Long, Negotiation> implements INegot
 
 	@Override
 	@SuppressWarnings("unchecked")
+	public List<Negotiation> findByUserSeller(Long userId, List<NegotiationStatusEnum> status) {
+		if (userId == null) {
+			throw new IllegalArgumentException("O id do usuário deve ser informado para a busca de negociações por usuário.");
+		}
+
+		StringBuffer query = new StringBuffer("SELECT n FROM Negotiation n WHERE n.produto IN (SELECT p FROM Product p WHERE p.usuario.id = :userId)");
+
+		if (status != null) {
+			query.append(" AND n.status IN (:status)");
+		}
+
+		Query q = getEntityManager().createQuery(query.toString());
+		q.setParameter("userId", userId);
+
+		if (status != null) {
+			q.setParameter("status", status);
+		}
+
+		return (List<Negotiation>) q.getResultList();
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
 	public List<Negotiation> findByProduct(Long productId, List<NegotiationStatusEnum> status) {
 		if (productId == null) {
 			throw new IllegalArgumentException("O id do produto deve ser informado para a busca de negociações por produto.");

@@ -101,9 +101,9 @@ public class NegotiationController extends SpringBeanAutowiringSupport {
 	}
 
 	@GET
-	@Path("/user/{userId}")
+	@Path("/user/order/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Lista as negociações do usuário", notes = "Lista as negociações cadastradas do usuário.")
+	@ApiOperation(value = "Lista as negociações de comprar do usuário", notes = "Lista as negociações de compra cadastradas do usuário.")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
 			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
@@ -114,6 +114,22 @@ public class NegotiationController extends SpringBeanAutowiringSupport {
 		}
 
 		return this.negotiationService.listNegotiationByUser(userId);
+	}
+
+	@GET
+	@Path("/user/seller/{userId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Lista as negociações de venda do usuário", notes = "Lista as negociações de venda cadastradas do usuário.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
+			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
+	})
+	public List<NegotiationVO> listByUserSeller(@ApiParam @PathParam("userId") Long userId) throws ApiException, BusinessException {
+		if (userId == null) {
+			throw new EmptyRequestBodyException();
+		}
+
+		return this.negotiationService.listNegotiationByUserSeller(userId);
 	}
 
 	@GET

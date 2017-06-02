@@ -166,6 +166,15 @@ public class NegotiationService extends BaseService<Long, Negotiation, INegotiat
 	}
 
 	@Override
+	public List<NegotiationVO> listNegotiationByUserSeller(Long userId) throws BusinessException {
+		logger.info("Listando as negociações de venda do usuário: " + userId);
+		List<Negotiation> listNegotiation = getDAO().findByUserSeller(userId, Arrays.asList(NegotiationStatusEnum.values()));
+		logger.info("Negociações de venda listadas com sucesso!");
+
+		return ParserUtil.parse(listNegotiation, NegotiationVO.class);
+	}
+
+	@Override
 	public List<NegotiationVO> listNegotiationByProduct(Long productId) throws BusinessException {
 		logger.info("Listando as negociações do produto: " + productId);
 		List<Negotiation> listNegotiation = getDAO().findByProduct(productId, Arrays.asList(NegotiationStatusEnum.values()));
