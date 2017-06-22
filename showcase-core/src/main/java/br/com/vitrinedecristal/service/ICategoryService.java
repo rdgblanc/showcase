@@ -2,8 +2,6 @@ package br.com.vitrinedecristal.service;
 
 import java.util.List;
 
-import org.springframework.security.access.annotation.Secured;
-
 import br.com.vitrinedecristal.dao.ICategoryDAO;
 import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.model.Category;
@@ -22,7 +20,7 @@ public interface ICategoryService extends IBaseService<Long, Category, ICategory
 	 * @return informações da categoria
 	 * @throws BusinessException
 	 */
-	//@Secured(ROLE_USER)
+	// @Secured(ROLE_USER)
 	CategoryVO getCategory(Long id) throws BusinessException;
 
 	/**
@@ -32,7 +30,7 @@ public interface ICategoryService extends IBaseService<Long, Category, ICategory
 	 * @return categoria criada
 	 * @throws BusinessException
 	 */
-	//@Secured(ROLE_ADMIN)
+	// @Secured(ROLE_ADMIN)
 	CategoryVO createCategory(CategoryVO categoryVO) throws BusinessException;
 
 	/**
@@ -42,7 +40,7 @@ public interface ICategoryService extends IBaseService<Long, Category, ICategory
 	 * @return categoria alterada
 	 * @throws BusinessException
 	 */
-	//@Secured(ROLE_ADMIN)
+	// @Secured(ROLE_ADMIN)
 	CategoryVO updateCategory(CategoryVO categoryVO) throws BusinessException;
 
 	/**
@@ -51,7 +49,7 @@ public interface ICategoryService extends IBaseService<Long, Category, ICategory
 	 * @param id id da categoria a ser removida
 	 * @throws BusinessException
 	 */
-	//@Secured(ROLE_ADMIN)
+	// @Secured(ROLE_ADMIN)
 	void removeCategory(Long id) throws BusinessException;
 
 	/**
@@ -60,7 +58,7 @@ public interface ICategoryService extends IBaseService<Long, Category, ICategory
 	 * @return lista de categorias
 	 * @throws BusinessException
 	 */
-	//@Secured(ROLE_USER)
+	// @Secured(ROLE_USER)
 	List<CategoryVO> listCategories() throws BusinessException;
 
 	/**
@@ -70,7 +68,7 @@ public interface ICategoryService extends IBaseService<Long, Category, ICategory
 	 * @return lista de sub-categorias
 	 * @throws BusinessException
 	 */
-	//@Secured(ROLE_USER)
+	// @Secured(ROLE_USER)
 	List<CategoryVO> listSubCategories(Long parentId) throws BusinessException;
 
 }

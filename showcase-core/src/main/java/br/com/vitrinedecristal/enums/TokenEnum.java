@@ -9,6 +9,9 @@ import br.com.vitrinedecristal.model.Token;
  */
 public enum TokenEnum {
 
+	/** Cadastro de um usuário */
+	WELCOME,
+
 	/** Login de um usuário */
 	AUTHENTICATION,
 

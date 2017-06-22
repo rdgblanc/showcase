@@ -19,9 +19,10 @@ import br.com.vitrinedecristal.dto.CreateUserDTO;
 import br.com.vitrinedecristal.dto.LoginDTO;
 import br.com.vitrinedecristal.dto.UpdateUserPasswordDTO;
 import br.com.vitrinedecristal.dto.UserDTO;
-import br.com.vitrinedecristal.enums.UserStatusEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.exception.EntityNotFoundException;
+import br.com.vitrinedecristal.model.Token;
+import br.com.vitrinedecristal.service.ITokenService;
 import br.com.vitrinedecristal.service.IUserService;
 import br.com.vitrinedecristal.swagger.ApiException;
 import br.com.vitrinedecristal.swagger.ApiExceptionResponse;
@@ -41,6 +42,9 @@ public class UserController extends SpringBeanAutowiringSupport {
 
 	@Autowired
 	private IUserService userService;
+
+	@Autowired
+	private ITokenService tokenService;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -130,7 +134,7 @@ public class UserController extends SpringBeanAutowiringSupport {
 			@ApiResponse(code = 404, message = EntityNotFoundException.MESSAGE, response = ApiExceptionResponse.class)
 	})
 	public void remove(@ApiParam @PathParam("id") Long id) throws ApiException, BusinessException {
-		this.userService.updateStatus(id, UserStatusEnum.INACTIVE);
+		this.userService.removeUser(id);
 	}
 
 	@POST
@@ -147,6 +151,33 @@ public class UserController extends SpringBeanAutowiringSupport {
 		}
 
 		return this.userService.login(loginDetails);
+	}
+
+	@POST
+	@Path("/password/recovery")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Recuperação de senha", notes = "Solicita e-mail para recuperação de senha.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class)
+	})
+	public void sendPasswordRecoveryEmail(@ApiParam String email) throws ApiException, BusinessException {
+		if (email == null) {
+			throw new EmptyRequestBodyException();
+		}
+
+		this.userService.recoveryPassword(email);
+	}
+
+	@GET
+	@Path("/token/{token}/welcome")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Valida o token de boas vindas", notes = "Valida se o token de boas vindas é válido.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class)
+	})
+	public Token validateWelcomeToken(@ApiParam @PathParam("token") String token) throws ApiException, BusinessException {
+		return this.tokenService.validateWelcomeToken(token);
 	}
 
 }

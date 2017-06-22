@@ -1,3 +1,4 @@
+
 'use strict';
 
 /*
@@ -9,15 +10,14 @@ angular.module('showcase').controller('showcaseHomeController', [
 		$log.info('Controller initialized [ShowcaseHomeController]');
 
 		$scope.initialize = function() {
-			//$log.info('Current product: ' + JSON.stringify($scope.$parent.currentProduct));
-			$scope.getNegotiationByUser();
-			//$scope.getCategories();
+			$scope.getCategories();
+			$scope.getNewProducts();
 		};
 
+		/* GET INFOS QNDO USUÁRIO não LOGADO **********************************/
 		$scope.getCategories = function() {
 			$log.info('Obtendo categorias.. [ShowcaseHomeController]');
 
-			//$scope.showLoading = true;
 			categoryService.getCategories(function(response) {
 				$log.info('Categorias obtidas com sucesso! [ShowcaseHomeController]');
 				$log.info(JSON.stringify(response));
@@ -29,63 +29,62 @@ angular.module('showcase').controller('showcaseHomeController', [
 					}
 				}
 			}, function(responseError) {
-				$log.error("Error get categories: " + JSON.stringify(responseError));
-				//$scope.setErrorMessage(responseError, "Não foi possível recuperar as categorias, por favor tente novamente mais tarde.");
+				$log.error('Error get categories: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
 			});
-		};
-
-		$scope.getNegotiationByUser = function() {
-			$log.info('Obtendo as negociações do usuário.. [ShowcaseHomeController]');
-			$log.info(JSON.stringify($scope.$parent.currentUser));
-
-			//$scope.showLoading = true;
-			negotiationService.getNegotiationByUser($scope.$parent.currentUser.id, function(response) {
-				$log.info('Negociações obtidas com sucesso! [ShowcaseHomeController]');
-				$log.info(JSON.stringify(response));
-
-				if (response && response.data) {
-					$scope.negotiations = response.data;
-				}
-
-				$scope.getCategories();
-			}, function(responseError) {
-				$log.error("Error get categories: " + JSON.stringify(responseError));
-				//$scope.setErrorMessage(responseError, "Não foi possível recuperar as categorias, por favor tente novamente mais tarde.");
-			});
-		};
-
-		$scope.selectCategoryTab = function(category) {
-			$log.info('Categoria/Aba selecionada.. [ShowcaseHomeController]');
-			$log.info(JSON.stringify(category));
-
-			$scope.currentCategoryTab = category;
-			$scope.getProductsByCategory($scope.currentCategoryTab);
 		};
 
 		$scope.getProductsByCategory = function(category) {
 			$log.info('Obtendo os produtos da categoria.. [ShowcaseHomeController]');
 			$log.info(JSON.stringify(category));
 
-			//$scope.showLoading = true;
 			productService.getProductsByCategory(category.id, function(response) {
 				$log.info('Produtos obtidos com sucesso! [ShowcaseHomeController]');
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
 					$scope.products = response.data;
-					$scope.setNegotiations();
 				}
 			}, function(responseError) {
-				$log.error("Error get products by category: " + JSON.stringify(responseError));
-				//$scope.setErrorMessage(responseError, "Não foi possível recuperar os produtos da categoria, por favor tente novamente mais tarde.");
+				$log.error('Error get products by category: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
 			});
 		};
 
+		$scope.getNewProducts = function() {
+			$log.info('Obtendo os novos produtos.. [ShowcaseHomeController]');
+
+			productService.getNewProducts(function(response) {
+				$log.info('Novos produtos obtidos com sucesso! [ShowcaseHomeController]');
+				$log.info(JSON.stringify(response));
+
+				if (response && response.data) {
+					$scope.newProducts = response.data;
+				}
+			}, function(responseError) {
+				$log.error('Error get new products: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+			});
+		};
+		/* //GET INFOS QNDO USUÁRIO não LOGADO **********************************/
+
+		$scope.selectCategoryTab = function(category) {
+			$log.info('Aba/Categoria selecionada.. [ShowcaseHomeController]');
+			$log.info(JSON.stringify(category));
+
+			$scope.currentCategoryTab = category;
+			if ($scope.$parent.currentUser) {
+				$scope.getProductsAnotherUserByCategory($scope.currentCategoryTab);
+			} else {
+				$scope.getProductsByCategory($scope.currentCategoryTab);	
+			}
+		};
+
+		/* FUNÇÕES POPUP DETALHES E NEGOCIAÇÃO **********************************/
 		$scope.selectProduct = function(product) {
 			$log.info('Produto selecionado.. [ShowcaseHomeController]');
 			$log.info(JSON.stringify(product));
 
 			$scope.productSelected = product;
+
+			// ** para mostrar os botões apenas qndo o popup estiver carregado
 			$scope.showActionsDetails = false;
 			setTimeout(function() {
 				$scope.showActionsDetails = true;
@@ -95,14 +94,12 @@ angular.module('showcase').controller('showcaseHomeController', [
 
 		$scope.confirmNegotiation = function() {
 			$log.info('Confirmando negociação.. [ShowcaseHomeController]');
-			$log.info(JSON.stringify($scope.$parent.currentUser));
-			$log.info(JSON.stringify($scope.productSelected));
-			$scope.$parent.currentNegotiation.usuario = $scope.$parent.currentUser;
-			$scope.$parent.currentNegotiation.produto = $scope.productSelected.product;
-			$log.info(JSON.stringify($scope.$parent.currentNegotiation));
+			$scope.currentNegotiation.usuario = $scope.$parent.currentUser;
+			$scope.currentNegotiation.produto = $scope.productSelected.product;
+			$log.info(JSON.stringify($scope.currentNegotiation));
 
 			$scope.showLoading = true;
-			negotiationService.createNegotiation($scope.$parent.currentNegotiation, function(response) {
+			negotiationService.createNegotiation($scope.currentNegotiation, function(response) {
 				$log.info('Negociação criada com sucesso! [ShowcaseHomeController]');
 				$log.info(JSON.stringify(response));
 
@@ -113,11 +110,11 @@ angular.module('showcase').controller('showcaseHomeController', [
 					"body" : "Negociação confirmada com sucesso!"
 				};
 
-				setTimeout(function() {
+				/*setTimeout(function() {
 					$('#myModalNegotiation').modal('hide');
-				}, 2000);
+				}, 2000);*/
 			}, function(responseError) {
-				$log.error("Error create negociation: " + JSON.stringify(responseError));
+				$log.error('Error create negociation: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
 				$scope.setErrorMessage(responseError, "Não foi possível confirmar a negociação, por favor tente novamente mais tarde.");
 			});
 		};
@@ -135,49 +132,126 @@ angular.module('showcase').controller('showcaseHomeController', [
 				"body" : msg
 			};
 		};
+		/* //FUNÇÕES POPUP DETALHES E NEGOCIAÇÃO **********************************/
 
-		$scope.setNegotiations = function() {
-			$log.info('Validando negociações na lista de produtos..');
-			if ($scope.products && $scope.negotiations) {
-				for (var i = 0; i < $scope.products.length; i++) {
-					var product = $scope.products[i].product;
+		/* GET INFOS QNDO USUÁRIO LOGADO **********************************/
+		$scope.$on('showcaseLoginSuccessful', function() {
+			$log.info('.. carregando a home com os dados para um usuário logado .. [ShowcaseHomeController]');
+			$scope.getNegotiationsByUser();
+			$scope.getProductsByUser();
+		});
+
+		$scope.getProductsByUser = function() {
+			$log.info('Obtendo os produtos do usuário.. [ShowcaseHomeController]');
+			$log.info(JSON.stringify($scope.$parent.currentUser));
+
+			productService.getProductsByUser($scope.$parent.currentUser.id, function(response) {
+				$log.info('Produtos do usuário obtidos com sucesso! [ShowcaseHomeController]');
+				$log.info(JSON.stringify(response));
+
+				if (response && response.data) {
+					$scope.myProducts = response.data;
+				}
+			}, function(responseError) {
+				$log.error('Error get products by user: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+			});
+		};
+
+		$scope.getNegotiationsByUser = function() {
+			$log.info('Obtendo as negociações do usuário logado.. [ShowcaseHomeController]');
+			$log.info(JSON.stringify($scope.$parent.currentUser));
+
+			negotiationService.getNegotiationsByUser($scope.$parent.currentUser.id, function(response) {
+				$log.info('Negociações obtidas com sucesso! [ShowcaseHomeController]');
+				$log.info(JSON.stringify(response));
+
+				if (response && response.data) {
+					$scope.negotiations = response.data;
+					$scope.getProductsAnotherUserByCategory($scope.currentCategoryTab);
+				}
+			}, function(responseError) {
+				$log.error('Error get negotiations by user: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+			});
+		};
+
+		$scope.getProductsAnotherUserByCategory = function(category) {
+			$log.info('Obtendo os produtos da categoria selecionada que não sejam do usuário conectado.. [ShowcaseHomeController]');
+			$log.info(JSON.stringify(category));
+			$log.info(JSON.stringify($scope.$parent.currentUser));
+
+			productService.getProductsAnotherUserByCategory(category.id, $scope.$parent.currentUser.id, function(response) {
+				$log.info('Produtos de outros usuários obtidos com sucesso! [ShowcaseHomeController]');
+				$log.info(JSON.stringify(response));
+
+				if (response && response.data) {
+					$scope.products = response.data;
+					$scope.setNegotiationsInProducts($scope.products);
+				}
+			}, function(responseError) {
+				$log.error('Error get products another user by category: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+			});
+		};
+
+		$scope.getNewProductsAnotherUser = function() {
+			$log.info('Obtendo os novos produtos que não seajm do usuário conectado.. [ShowcaseHomeController]');
+			$log.info(JSON.stringify($scope.$parent.currentUser));
+
+			productService.getNewProductsAnotherUser($scope.$parent.currentUser.id, function(response) {
+				$log.info('Novos produtos de outros usuários obtidos com sucesso! [ShowcaseHomeController]');
+				$log.info(JSON.stringify(response));
+
+				if (response && response.data) {
+					$scope.newProducts = response.data;
+					$scope.setNegotiationsInProducts($scope.newProducts);
+				}
+			}, function(responseError) {
+				$log.error('Error get new products another user: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+			});
+		};
+
+		$scope.setNegotiationsInProducts = function(products) {
+			$log.info('Validando negociações na lista de produtos.. [ShowcaseHomeController]');
+
+			if (products && $scope.negotiations) {
+				for (var i = 0; i < products.length; i++) {
+					var product = products[i].product;
 					for (var j = 0; j < $scope.negotiations.length; j++) {
 						var negotiation = $scope.negotiations[j];
 						if (product.id === negotiation.produto.id) {
-							$scope.products[i].hasNegotiation = true;
+							products[i].hasNegotiation = true;
 						}
 					}
 				}
 			}
-			$log.info(JSON.stringify($scope.products));
-		};
 
-		$('#myModalNegotiation').on('show.bs.modal', function() {
-			$log.info('Current negotiation: ' + JSON.stringify($scope.$parent.currentNegotiation));
-
-			var negotiation = {};
-			$scope.setCurrentNegotiation(negotiation);
 			$scope.$digest();
+			$log.info('.. produtos indicando se há negociação em andamento ou não ' + JSON.stringify(products) + ' [ShowcaseHomeController]');
+		};
+		/* //GET INFOS QNDO USUÁRIO LOGADO **********************************/
+
+		$('#myModalNegotiation').on('hide.bs.modal', function() {
+			$log.info('Current negotiation: ' + JSON.stringify($scope.currentNegotiation) + ' [ShowcaseHomeController]');
+			$scope.currentNegotiation = null;
 		});
 
 		$('#radioBtnNegotiationTypeNeg a').on('click', function() {
 			var sel = $(this).data('title');
 			var tog = $(this).data('toggle');
 			$('#'+tog).prop('value', sel);
-			$scope.$parent.currentNegotiation.tipoNegociacao = sel;
 
-			if ($scope.$parent.currentNegotiation.tipoNegociacao === 'EXCHANGE' || $scope.$parent.currentNegotiation.tipoNegociacao === 'EXCHANGE_OR_BUY') {
+			if (sel === 'EXCHANGE_OR_BUY') {
+				$scope.showPrice = true;
+				$scope.showProducts = true;
+			} else if (sel === 'BUY') {
+				$scope.showPrice = true;
+			} else if (sel === 'EXCHANGE') {
 				$scope.showProducts = true;
 			} else {
+				$scope.showPrice = false;
 				$scope.showProducts = false;
 			}
 
-			if ($scope.$parent.currentNegotiation.tipoNegociacao === 'BUY' || $scope.$parent.currentNegotiation.tipoNegociacao === 'EXCHANGE_OR_BUY') {
-				$scope.showPrice = true;
-			} else {
-				$scope.showPrice = false;
-			}
-
+			$scope.currentNegotiation.tipoNegociacao = sel;
 			$scope.$digest();
 
 			$('a[data-toggle="'+tog+'"]').not('[data-title="'+sel+'"]').removeClass('active').addClass('notActive');

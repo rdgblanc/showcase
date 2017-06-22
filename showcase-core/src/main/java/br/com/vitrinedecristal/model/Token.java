@@ -26,7 +26,7 @@ import br.com.vitrinedecristal.enums.TokenEnum;
  * Representa um token que controla as permissões do usuário
  */
 @Entity
-@Table(name = "TOKEN")
+@Table(name = "TB_TOKEN")
 public class Token implements IID<Long> {
 
 	@Id
@@ -44,7 +44,7 @@ public class Token implements IID<Long> {
 
 	/** Tipo do token. */
 	@Column(name = "TIPO", nullable = false)
-	@Enumerated(value = EnumType.ORDINAL)
+	@Enumerated(value = EnumType.STRING)
 	private TokenEnum tipo;
 
 	/** Data de inserção. */

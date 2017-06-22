@@ -15,6 +15,18 @@ angular.module('showcase').factory('productService', [
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
 				return request.get("/product/category/" + categoryId).then(successCallback, errorCallback);
 			},
+			getProductsAnotherUserByCategory : function(categoryId, userId, successCallback, errorCallback) {
+				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
+				return request.get("/product/category/" + categoryId + "/user/" + userId + "/another").then(successCallback, errorCallback);
+			},
+			getNewProducts : function(successCallback, errorCallback) {
+				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
+				return request.get("/product/new").then(successCallback, errorCallback);
+			},
+			getNewProductsAnotherUser : function(userId, successCallback, errorCallback) {
+				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
+				return request.get("/product/new/user/" + userId + "/another").then(successCallback, errorCallback);
+			},
 			getProduct : function(id, successCallback, errorCallback) {
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
 				return request.get("/product/" + id).then(successCallback, errorCallback);

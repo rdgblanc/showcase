@@ -2,8 +2,6 @@ package br.com.vitrinedecristal.service;
 
 import java.util.List;
 
-import org.springframework.security.access.annotation.Secured;
-
 import br.com.vitrinedecristal.dao.IImageDAO;
 import br.com.vitrinedecristal.dto.ImageDTO;
 import br.com.vitrinedecristal.exception.BusinessException;
@@ -23,7 +21,7 @@ public interface IImageService extends IBaseService<Long, Image, IImageDAO> {
 	 * @return informações da imagem
 	 * @throws BusinessException
 	 */
-	//@Secured(ROLE_USER)
+	// @Secured(ROLE_USER)
 	ImageVO getImage(Long id) throws BusinessException;
 
 	/**
@@ -35,7 +33,7 @@ public interface IImageService extends IBaseService<Long, Image, IImageDAO> {
 	 * @return imagem criada
 	 * @throws BusinessException
 	 */
-	//@Secured(ROLE_USER)
+	// @Secured(ROLE_USER)
 	ImageVO createImage(Long productId, String filename, Integer fileIndex) throws BusinessException;
 
 	/**
@@ -44,7 +42,7 @@ public interface IImageService extends IBaseService<Long, Image, IImageDAO> {
 	 * @param id id da imagem a ser removida
 	 * @throws BusinessException
 	 */
-	//@Secured(ROLE_USER)
+	// @Secured(ROLE_USER)
 	void removeImage(Long id) throws BusinessException;
 
 	/**
@@ -54,6 +52,6 @@ public interface IImageService extends IBaseService<Long, Image, IImageDAO> {
 	 * @return lista de imagens do produto
 	 * @throws BusinessException
 	 */
-	//@Secured(ROLE_USER)
+	// @Secured(ROLE_USER)
 	List<ImageDTO> listImagesByProduct(Long productId) throws BusinessException;
 }

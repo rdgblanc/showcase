@@ -87,6 +87,14 @@ public class ImageService extends BaseService<Long, Image, IImageDAO> implements
 	public List<ImageDTO> listImagesByProduct(Long productId) throws BusinessException {
 		logger.info("Listando as imagens do produto: " + productId);
 		List<Image> listImages = getDAO().findByProduct(productId);
+
+		if (listImages != null && !listImages.isEmpty()) {
+			while (listImages.size() < 6) {
+				int randomIndex = (int) (Math.random() * listImages.size());
+				listImages.add(listImages.get(randomIndex));
+			}
+		}
+
 		logger.info("Imagens listadas com sucesso!");
 
 		return ParserUtil.parse(listImages, ImageDTO.class);

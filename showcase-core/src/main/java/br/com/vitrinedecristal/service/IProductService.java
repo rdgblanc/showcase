@@ -66,16 +66,6 @@ public interface IProductService extends IBaseService<Long, Product, IProductDAO
 	List<ProductDTO> listProductByUser(Long userId) throws BusinessException;
 
 	/**
-	 * Lista os produtos de outros usuários
-	 * 
-	 * @param userId id do usuário
-	 * @return lista de produtos dos outros usuários
-	 * @throws BusinessException
-	 */
-	// @Secured(ROLE_USER)
-	List<ProductDTO> listProductByAnotherUser(Long userId) throws BusinessException;
-
-	/**
 	 * Lista os produtos por categoria
 	 * 
 	 * @param categoryId id da categoria
@@ -85,7 +75,34 @@ public interface IProductService extends IBaseService<Long, Product, IProductDAO
 	// @Secured(ROLE_USER)
 	List<ProductDTO> listProductByCategory(Long categoryId) throws BusinessException;
 
+	/**
+	 * Lista os produtos por categoria de outros usuários
+	 * 
+	 * @param categoryId id da categoria
+	 * @param userId id do usuário
+	 * @return lista de produtos da categoria
+	 * @throws BusinessException
+	 */
 	// @Secured(ROLE_USER)
 	List<ProductDTO> listProductByCategoryAnotherUser(Long categoryId, Long userId) throws BusinessException;
+
+	/**
+	 * Lista os novos produtos
+	 * 
+	 * @return lista de novos produtos
+	 * @throws BusinessException
+	 */
+	// @Secured(ROLE_USER)
+	List<ProductDTO> listNewProducts() throws BusinessException;
+
+	/**
+	 * Lista os novos produtos de outros usuários
+	 * 
+	 * @param userId id do usuário
+	 * @return lista de novos produtos dos outros usuários
+	 * @throws BusinessException
+	 */
+	// @Secured(ROLE_USER)
+	List<ProductDTO> listNewProductsAnotherUser(Long userId) throws BusinessException;
 
 }

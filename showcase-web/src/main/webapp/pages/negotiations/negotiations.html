@@ -29,7 +29,7 @@
 							<th>Tipo Negociação</th>
 							<th>Observação</th>
 							<th>Produto</th>
-							<th>Valor</th>
+							<th>Valor (R$)</th>
 							<th>Usuário</th>
 							<th>Data Atualização</th>
 							<th>Status</th>
@@ -38,15 +38,18 @@
 					<tbody>
 						<tr data-ng-repeat="negotiation in negotiations">
 							<td>
-								<button class="btn btn-xs btn-success" ng-click="editNegotiation(negotiation)" ng-if="negotiation.status !== 'ACCEPT'">
-									<i class="fa fa-pencil"></i>
+								<button class="btn btn-xs btn-info" data-toggle="modal" data-target="#myModalNegotiation" ng-click="showNegotiation(negotiation)">
+									<i class="fa fa-eye"></i>
 								</button>
-								<!-- <button class="btn btn-xs btn-danger" ng-click="deleteNegotiation(negotiation)">
-									<i class="fa fa-trash-o"></i>
-								</button> -->
+								<button class="btn btn-xs btn-success" ng-click="acceptNegotiation(negotiation)" ng-if="negotiation.status === 'IN_PROGRESS'">
+									<i class="fa fa-check"></i>
+								</button>
+								<button class="btn btn-xs btn-danger" ng-click="denyNegotiation(negotiation)" ng-if="negotiation.status === 'IN_PROGRESS'">
+									<i class="fa fa-close"></i>
+								</button>
 							</td>
-							<td data-ng-bind="negotiationNegotiationTypeEnum[negotiation.tipoNegociacao]"></td>
-							<td data-ng-bind="negotiation.observacao"></td>
+							<td style="width: 110px" data-ng-bind="negotiationNegotiationTypeEnum[negotiation.tipoNegociacao]"></td>
+							<td style="max-width: 270px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" data-ng-bind="negotiation.observacao"></td>
 							<td data-ng-bind="negotiation.produto.nome"></td>
 							<td data-ng-bind="negotiation.valorPgto"></td>
 							<td data-ng-bind="negotiation.usuario.nome"></td>
@@ -59,4 +62,59 @@
 		</div>
 	</div>
 	<!-- //ads -->
+
+	<!-- modal-negotiation -->
+	<div class="modal video-modal fade" id="myModalNegotiation" tabindex="-2" role="dialog" aria-labelledby="myModalNegotiation">
+		<div class="modal-dialog" role="document" style="width: 700px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">
+						Negociação ({{currentNegotiation.produto.nome}})
+					</h4>
+				</div>
+				<section>
+					<div class="modal-body" style="padding: 1em 3em 2em;">
+						<div class="register">
+							<form id="negotiationForm" name="negotiationForm" novalidate role="form" class="form-horizontal">
+								<fieldset>
+									<div class="form-group">
+										<label class="col-sm-4 control-label">Opção de negociação</label>
+										<div class="col-sm-8">
+											<p class="form-control-static" style="margin-top: 0;">{{negotiationNegotiationTypeEnum[currentNegotiation.tipoNegociacao]}}</p>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-4 control-label">Produto de troca</label>
+										<div class="col-sm-8">
+											<p class="form-control-static" style="margin-top: 0;">{{currentNegotiation.produtoTroca.nome}}</p>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-4 control-label">Observação</label>
+										<div class="col-sm-8">
+											<p class="form-control-static" style="margin-top: 0;">{{currentNegotiation.observacao}}</p>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-sm-4 control-label">Valor (R$)</label>
+										<div class="col-sm-8">
+											<p class="form-control-static" style="margin-top: 0;">{{currentNegotiation.valorPgto}}</p>
+										</div>
+									</div>
+								</fieldset>
+							</form>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+					<script type="text/javascript">
+						$(document).ready(function () {
+							$(".decimal-2-places").numeric({ decimalPlaces: 2 }); //altDecimal: ".", decimal : ","
+						});
+					</script>
+				</section>
+			</div>
+		</div>
+	</div>
+	<!-- //modal-negotiation -->
 </div>

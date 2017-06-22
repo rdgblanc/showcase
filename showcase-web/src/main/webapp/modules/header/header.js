@@ -10,7 +10,6 @@ angular.module('showcase').controller("showcaseHeaderController", [
 
 		$scope.user = {};
 		$scope.showLoading = false;
-		//$scope.userLogged = true;
 
 		/* LOGIN MODAL */
 		$scope.auth = function() {
@@ -22,14 +21,15 @@ angular.module('showcase').controller("showcaseHeaderController", [
 				$log.info('Usuário logado!! [ShowcaseHeaderController]');
 				$log.info(JSON.stringify(response));
 
+				$scope.showLoading = false;
 				if (response && response.data) {
 					$scope.setCurrentUser(response.data);
+					$scope.$emit('showcaseLoginSuccessful');
 				}
-				$scope.userLogged = true;
-				$scope.showLoading = false;
+
 				$('#modal-login').modal('hide');
 			}, function(responseError) {
-				$log.error("Error auth: " + JSON.stringify(responseError));
+				$log.error('Error auth: ' + JSON.stringify(responseError) + ' [ShowcaseHeaderController]');
 				$scope.setErrorMessage(responseError, "Não foi possível efetuar o login, por favor tente novamente mais tarde.");
 			});
 		};
@@ -49,12 +49,8 @@ angular.module('showcase').controller("showcaseHeaderController", [
 					"title" : "Ok!",
 					"body" : "Cadastro efetuado com sucesso. Valide seu e-mail para ter acesso ao site."
 				};
-
-				/*setTimeout(function() {
-					$('#modal-login').modal('hide');
-				}, 5000);*/
 			}, function(responseError) {
-				$log.error("Error create user: " + JSON.stringify(responseError));
+				$log.error('Error create user: ' + JSON.stringify(responseError) + ' [ShowcaseHeaderController]');
 				$scope.setErrorMessage(responseError, "Não foi possível efetuar o cadastro, por favor tente novamente mais tarde.");
 			});
 		};
@@ -81,12 +77,8 @@ angular.module('showcase').controller("showcaseHeaderController", [
 				if (response && response.data) {
 					$scope.setCurrentUser(response.data);
 				}
-
-				/*setTimeout(function() {
-					$('#modal-personal').modal('hide');
-				}, 5000);*/
 			}, function(responseError) {
-				$log.error("Error update user: " + JSON.stringify(responseError));
+				$log.error('Error update user: ' + JSON.stringify(responseError) + ' [ShowcaseHeaderController]');
 				$scope.setErrorMessage(responseError, "Não foi possível alterar o cadastro, por favor tente novamente mais tarde.");
 			});
 		};
@@ -95,23 +87,15 @@ angular.module('showcase').controller("showcaseHeaderController", [
 			$log.info('Obtendo endereço do usuário.. [ShowcaseHeaderController]');
 			$log.info(JSON.stringify($scope.$parent.currentUser));
 
-			//$scope.showLoading = true;
 			addressService.getAddressByUser($scope.$parent.currentUser.id, function(response) {
 				$log.info('Endereço do usuário obtido com sucesso! [ShowcaseHeaderController]');
 				$log.info(JSON.stringify(response));
-
-				//$scope.showLoading = false;
-				/*$scope.message = {
-					"type" : "success",
-					"title" : "Ok!",
-					"body" : "Cadastro alterado com sucesso!"
-				};*/
 
 				if (response && response.data && response.data.length > 0) {
 					$scope.address = response.data[0];
 				}
 			}, function(responseError) {
-				$log.error("Error get address by user: " + JSON.stringify(responseError));
+				$log.error('Error get address by user: ' + JSON.stringify(responseError) + ' [ShowcaseHeaderController]');
 				$scope.setErrorMessage(responseError, "Não foi possível recuperar o endereço do usuário, por favor tente novamente mais tarde.");
 			});
 		};
@@ -126,9 +110,10 @@ angular.module('showcase').controller("showcaseHeaderController", [
 
 		$scope.createAddress = function() {
 			$log.info('Criando endereço do usuário.. [ShowcaseHeaderController]');
-			if ($scope.address && !$scope.address.usuario) {
+			/*if ($scope.address && !$scope.address.usuario) {
 				$scope.address.usuario = $scope.$parent.currentUser;
-			}
+			}*/
+			$scope.address.usuario = $scope.$parent.currentUser;
 			$log.info(JSON.stringify($scope.address));
 
 			$scope.showLoading = true;
@@ -147,7 +132,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 					$scope.address = response.data;
 				}
 			}, function(responseError) {
-				$log.error("Error create address: " + JSON.stringify(responseError));
+				$log.error('Error create address: ' + JSON.stringify(responseError) + ' [ShowcaseHeaderController]');
 				$scope.setErrorMessage(responseError, "Não foi possível criar o endereço do usuário, por favor tente novamente mais tarde.");
 			});
 		};
@@ -172,7 +157,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 					$scope.address = response.data;
 				}
 			}, function(responseError) {
-				$log.error("Error update address: " + JSON.stringify(responseError));
+				$log.error('Error update address: ' + JSON.stringify(responseError) + ' [ShowcaseHeaderController]');
 				$scope.setErrorMessage(responseError, "Não foi possível alterar o endereço do usuário, por favor tente novamente mais tarde.");
 			});
 		};
@@ -193,7 +178,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 					"body" : "Senha alterada com sucesso!"
 				};
 			}, function(responseError) {
-				$log.error("Error update user password: " + JSON.stringify(responseError));
+				$log.error('Error update user password: ' + JSON.stringify(responseError) + ' [ShowcaseHeaderController]');
 				$scope.setErrorMessage(responseError, "Não foi possível alterar a senha, por favor tente novamente mais tarde.");
 			});
 		};
@@ -211,15 +196,6 @@ angular.module('showcase').controller("showcaseHeaderController", [
 				"title" : "Ops!",
 				"body" : msg
 			};
-		};
-
-		$scope.openPersonal = function() {
-			if ($scope.userLogged) {
-				$('#modal-personal').modal('show');
-			} else {
-				$scope.reset();
-				$('#modal-login').modal('show');
-			}
 		};
 
 		/* RESETs */

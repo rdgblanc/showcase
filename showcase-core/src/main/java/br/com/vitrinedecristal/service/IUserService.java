@@ -60,13 +60,21 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	UserVO updateUser(UserVO userVO) throws BusinessException;
 
 	/**
-	 * Altera o status do usuário
+	 * Remove o usuário
 	 * 
 	 * @param id id do usuário a ser removido
-	 * @param status novo status do usuário
 	 * @throws BusinessException
 	 */
 	@Secured(ROLE_ADMIN)
+	void removeUser(Long id) throws BusinessException;
+
+	/**
+	 * Altera o status do usuário
+	 * 
+	 * @param id id do usuário
+	 * @param status novo status do usuário
+	 * @throws BusinessException
+	 */
 	void updateStatus(Long id, UserStatusEnum status) throws BusinessException;
 
 	/**
@@ -83,7 +91,7 @@ public interface IUserService extends IBaseService<Long, User, IUserDAO> {
 	 * @param email e-mail do usuário para recuperação de senha
 	 * @throws BusinessException
 	 */
-	void recoveryPassword(User email) throws BusinessException;
+	void recoveryPassword(String email) throws BusinessException;
 
 	/**
 	 * Atualiza password esquecido caso token seja válido.

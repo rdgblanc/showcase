@@ -7,11 +7,15 @@ angular.module('showcase').factory('negotiationService', [
 	'requestService',
 	function(request) {
 		var service = {
-			getNegotiationByUser : function(userId, successCallback, errorCallback) {
+			getNegotiationsByUserSeller : function(userId, successCallback, errorCallback) {
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
-				return request.get("/negotiation/user/" + userId).then(successCallback, errorCallback);
+				return request.get("/negotiation/user/seller/" + userId).then(successCallback, errorCallback);
 			},
-			getnegotiationByProduct : function(productId, successCallback, errorCallback) {
+			getNegotiationsByUserOrder : function(userId, successCallback, errorCallback) {
+				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
+				return request.get("/negotiation/user/order/" + userId).then(successCallback, errorCallback);
+			},
+			getNegotiationsByProduct : function(productId, successCallback, errorCallback) {
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
 				return request.get("/negotiation/product/" + productId).then(successCallback, errorCallback);
 			},

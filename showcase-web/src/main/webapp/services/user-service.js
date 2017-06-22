@@ -38,6 +38,14 @@ angular.module('showcase').factory('userService', [
 			updatePassword : function(id, updateUserPasswordDTO, successCallback, errorCallback) {
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
 				return request.put("/user/" + id + "/password", updateUserPasswordDTO).then(successCallback, errorCallback);
+			},
+			validateWelcomeToken : function(token, successCallback, errorCallback) {
+				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
+				return request.get("/user/token/" + token + "/welcome").then(successCallback, errorCallback);
+			},
+			recoveryPassword : function(email, successCallback, errorCallback) {
+				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
+				return request.get("/user/password/recovery", email).then(successCallback, errorCallback);
 			}
 		};
 

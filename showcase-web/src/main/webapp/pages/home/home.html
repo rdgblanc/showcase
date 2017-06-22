@@ -17,27 +17,27 @@
 					</a> -->
 				</div>
 				<!-- pop-up-box -->    
-						<!-- <link href="assets/css/popuo-box.css" rel="stylesheet" type="text/css" property="" media="all" />
-						<script src="assets/js/jquery.magnific-popup.js" type="text/javascript"></script> -->
-					<!--//pop-up-box -->
-					<!-- <div id="small-dialog" class="mfp-hide">
-						<iframe src="https://player.vimeo.com/video/23259282?title=0&byline=0&portrait=0"></iframe>
-					</div> -->
-					<!-- <script>
-						$(document).ready(function() {
-							$('.popup-with-zoom-anim').magnificPopup({
-								type: 'inline',
-								fixedContentPos: false,
-								fixedBgPos: true,
-								overflowY: 'auto',
-								closeBtnInside: true,
-								preloader: false,
-								midClick: true,
-								removalDelay: 300,
-								mainClass: 'my-mfp-zoom-in'
-							});
+					<!-- <link href="assets/css/popuo-box.css" rel="stylesheet" type="text/css" property="" media="all" />
+					<script src="assets/js/jquery.magnific-popup.js" type="text/javascript"></script> -->
+				<!--//pop-up-box -->
+				<!-- <div id="small-dialog" class="mfp-hide">
+					<iframe src="https://player.vimeo.com/video/23259282?title=0&byline=0&portrait=0"></iframe>
+				</div> -->
+				<!-- <script>
+					$(document).ready(function() {
+						$('.popup-with-zoom-anim').magnificPopup({
+							type: 'inline',
+							fixedContentPos: false,
+							fixedBgPos: true,
+							overflowY: 'auto',
+							closeBtnInside: true,
+							preloader: false,
+							midClick: true,
+							removalDelay: 300,
+							mainClass: 'my-mfp-zoom-in'
 						});
-					</script> -->
+					});
+				</script> -->
 			</div>
 			<div class="col-md-7 wthree_banner_bottom_right">
 				<div class="bs-example bs-example-tabs" role="tabpanel" data-example-id="togglable-tabs">
@@ -51,7 +51,15 @@
 							<div class="agile_ecommerce_tabs">
 								<div class="col-md-4 agile_ecommerce_tab_left" data-ng-repeat="product in products">
 									<div class="hs-wrapper">
-										<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in product.images"/>
+										<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in product.images" ng-if="product.images && product.images.length > 0" />
+										<div ng-if="product.images && product.images.length === 0">
+											<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+											<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+											<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+											<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+											<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+											<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+										</div>
 										<div class="w3_hs_bottom">
 											<ul>
 												<li>
@@ -89,10 +97,18 @@
 		<div class="container">
 			<h3>Novos Produtos</h3>
 			<div class="agileinfo_new_products_grids">
-				<div class="col-md-3 agileinfo_new_products_grid" data-ng-repeat="product in products">
+				<div class="col-md-3 agileinfo_new_products_grid" data-ng-repeat="product in newProducts">
 					<div class="agile_ecommerce_tab_left agileinfo_new_products_grid1">
 						<div class="hs-wrapper hs-wrapper1">
-							<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in product.images"/>
+							<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in product.images" ng-if="product.images && product.images.length > 0" />
+							<div ng-if="product.images && product.images.length === 0">
+								<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+								<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+								<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+								<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+								<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+								<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+							</div>
 							<div class="w3_hs_bottom w3_hs_bottom_sub">
 								<ul>
 									<li>
@@ -133,7 +149,15 @@
 					<div class="modal-body">
 						<div class="col-md-4 modal_body_left agile_ecommerce_tab_left">
 							<div class="hs-wrapper">
-								<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in productSelected.images"/>
+								<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in productSelected.images" ng-if="productSelected.images && productSelected.images.length > 0" />
+								<div ng-if="productSelected.images && productSelected.images.length === 0">
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+								</div>
 								<div class="w3_hs_bottom">
 								</div>
 							</div>
@@ -141,7 +165,7 @@
 						<div class="col-md-7 modal_body_right">
 							<h4>{{productSelected.product.nome}}</h4>
 							<p>{{productSelected.product.descricao}}</p>
-							<!-- <div class="rating">
+							<div class="rating">
 								<div class="rating-left">
 									<img src="assets/images/star-.png" alt=" " class="img-responsive" />
 								</div>
@@ -158,7 +182,7 @@
 									<img src="assets/images/star.png" alt=" " class="img-responsive" />
 								</div>
 								<div class="clearfix"> </div>
-							</div> -->
+							</div>
 							<div class="modal_body_right_cart simpleCart_shelfItem">
 								<p ng-if="productSelected.product.preco">
 									<i class="item_price">R${{productSelected.product.preco}}</i>
@@ -188,7 +212,7 @@
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 					<h4 class="modal-title" id="myModalLabel">
-						Negociação
+						Negociação ({{productSelected.product.nome}})
 					</h4>						
 				</div>
 				<section>
@@ -207,7 +231,7 @@
 													<a id="radioBuy" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="BUY">Compra</a>
 													<a id="radioExchangeOrBuy" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="EXCHANGE_OR_BUY">Troca ou Compra</a>
 												</div>
-												<input type="hidden" name="negotiationType" id="negotiationType" ng-model="$parent.currentProduct.tipoNegociacao" ng-value="{{this.value}}">
+												<input type="hidden" name="negotiationType" id="negotiationType" ng-model="currentNegotiation.tipoNegociacao" ng-value="{{this.value}}">
 											</div>
 										</div>
 									</div>
@@ -215,8 +239,8 @@
 										<label style="font-weight: normal; margin: 6px 0;">Produto de troca</label>
 										<div>
 											<div class="input-group" style="margin-bottom: 0px; width: 50%;">
-												<ol name="categorySelect" class="nya-bs-select" style="width: 100%" ng-model="$parent.currentNegotiation" required data-live-search="true" title="Selecione um produto...">
-													<li nya-bs-option="product in products">
+												<ol name="categorySelect" class="nya-bs-select" style="width: 100%" ng-model="currentNegotiation" required data-live-search="true" title="Selecione um produto...">
+													<li nya-bs-option="product in myProducts">
 														<a>{{product.product.nome}}</a>
 													</li>
 												</ol>
@@ -224,13 +248,13 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<textarea placeholder="Observação" name="observacao" class="form-control" style="border: 1px solid #DFDFDF; background: #f5f5f5; border-radius: 0px" required ng-model="$parent.currentNegotiation.observacao" ng-class="{'has-error': negotiationForm.$submitted && negotiationForm.observacao.$error.required}"></textarea>
+										<textarea placeholder="Observação" name="observacao" class="form-control" style="border: 1px solid #DFDFDF; background: #f5f5f5; border-radius: 0px" required ng-model="currentNegotiation.observacao" ng-class="{'has-error': negotiationForm.$submitted && negotiationForm.observacao.$error.required}"></textarea>
 										<span class="invalid" ng-if="negotiationForm.$submitted && negotiationForm.observacao.$invalid">Observação inválida.</span>
 									</div>
 									<div class="form-group" ng-if="showPrice">
-										<input placeholder="Valor (R$)" id="valorPgto" name="valorPgto" type="text" class="decimal-2-places" ng-model="$parent.currentNegotiation.valorPgto">
+										<input placeholder="Valor (R$)" id="valorPgto" name="valorPgto" type="text" class="decimal-2-places" ng-model="currentNegotiation.valorPgto">
 									</div>
-									<div id="alert-group" class="form-group" ng-if="message.type && updateForm.$submitted && updateForm.$valid && !showLoading">
+									<div id="alert-group" class="form-group" ng-if="message.type && negotiationForm.$submitted && negotiationForm.$valid && !showLoading">
 										<div class="alert alert-{{message.type}}" role="alert">
 											<strong ng-if="message.title">{{message.title}} </strong>{{message.body}}
 										</div>

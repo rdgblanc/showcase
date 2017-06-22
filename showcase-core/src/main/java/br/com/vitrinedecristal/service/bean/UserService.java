@@ -16,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import br.com.vitrinedecristal.application.ApplicationBeanFactory;
 import br.com.vitrinedecristal.dao.IUserDAO;
 import br.com.vitrinedecristal.dto.CreateUserDTO;
 import br.com.vitrinedecristal.dto.LoginDTO;
@@ -28,6 +27,8 @@ import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.exception.EntityNotFoundException;
 import br.com.vitrinedecristal.exception.InvalidPermissionException;
 import br.com.vitrinedecristal.exception.UserAlreadyExistsException;
+import br.com.vitrinedecristal.mail.IMailSender;
+import br.com.vitrinedecristal.mail.MailSender;
 import br.com.vitrinedecristal.model.Token;
 import br.com.vitrinedecristal.model.User;
 import br.com.vitrinedecristal.security.credential.UserCredentials;
@@ -36,6 +37,7 @@ import br.com.vitrinedecristal.service.ITokenService;
 import br.com.vitrinedecristal.service.IUserLoginService;
 import br.com.vitrinedecristal.service.IUserService;
 import br.com.vitrinedecristal.service.base.BaseService;
+import br.com.vitrinedecristal.util.EmailValidator;
 import br.com.vitrinedecristal.util.ParserUtil;
 import br.com.vitrinedecristal.vo.UserVO;
 
@@ -121,13 +123,19 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 
 		User user = ParserUtil.parse(createUserDTO, User.class);
 		user.setSenha(this.encryptPassword(createUserDTO.getSenha()));
-		user.setStatus(UserStatusEnum.INCOMPLETE);
+		user.setStatus(UserStatusEnum.INACTIVE);
 		user.setDtAtualizacao(new Date());
 		user.setRoles(Arrays.asList(RoleEnum.ROLE_USER));
 
 		logger.info("Criando usuário: " + user);
 		User storedUser = super.save(user);
+		Token token = this.tokenService.createWelcomeToken(storedUser);
 		logger.info("Usuário criado com sucesso!");
+
+		if (EmailValidator.validate(user.getEmail())) {
+			IMailSender mailSender = new MailSender();
+			mailSender.sendWelcomeMail(user.getNome(), user.getEmail(), token.getHash());
+		}
 
 		return ParserUtil.parse(storedUser, UserDTO.class);
 	}
@@ -189,12 +197,17 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	}
 
 	@Override
-	@Transactional
-	public void updateStatus(Long id, UserStatusEnum status) throws BusinessException {
+	public void removeUser(Long id) throws BusinessException {
 		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString())) {
 			throw new InvalidPermissionException();
 		}
 
+		this.updateStatus(id, UserStatusEnum.INACTIVE);
+	}
+
+	@Override
+	@Transactional
+	public void updateStatus(Long id, UserStatusEnum status) throws BusinessException {
 		if (id == null) {
 			throw new IllegalArgumentException("O id do usuário não pode ser nulo.");
 		}
@@ -239,27 +252,25 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 	// TODO função para atualizar a classificação do usuário (calcular a média e atualizad na base..)
 
 	@Override
-	public void recoveryPassword(User user) throws BusinessException {
-		User storedUser = null;
-
-		if (user == null || StringUtils.isBlank(user.getEmail())) {
+	public void recoveryPassword(String email) throws BusinessException {
+		if (StringUtils.isBlank(email)) {
 			throw new BusinessException("E-mail informado para a recuperação de senha é inválido.");
 		}
 
-		logger.info("Recuperando senha do usuário: " + user.getId());
+		logger.info("Recuperando senha do usuário: " + email);
 
+		User storedUser = null;
 		try {
-			storedUser = getDAO().findByEmail(user.getEmail(), null);
+			storedUser = getDAO().findByEmail(email, Arrays.asList(UserStatusEnum.ACTIVE, UserStatusEnum.INCOMPLETE));
 		} catch (Exception e) {
 			throw new BusinessException("E-mail informado para a recuperação de senha é inválido.");
 		}
 
-		ITokenService tokenBO = ApplicationBeanFactory.getBean(ITokenService.class);
-		Token token = tokenBO.createTokenForPasswordRecovery(storedUser);
-
-		// TODO add MailSender
-		// IMailSender mailSender = MailSenderFactory.createEmailSender();
-		// mailSender.sendRecoveryPasswordMail(token);
+		Token token = this.tokenService.createTokenForPasswordRecovery(storedUser);
+		if (EmailValidator.validate(email)) {
+			IMailSender mailSender = new MailSender();
+			mailSender.sendRecoveryPasswordMail(storedUser.getNome(), storedUser.getEmail(), token.getHash());
+		}
 
 		logger.info("E-mail de recuperação de senha foi enviado com sucesso!");
 	}
@@ -369,11 +380,6 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 		user.setSenha(newPasswordEncrypted);
 		user.setDtAtualizacao(new Date());
 		super.save(user);
-
-		// TODO add MailSender
-		// IMailSender mailSender = MailSenderFactory.createEmailSender();
-		// mailSender.sendChangePasswordMail(user.getEmail());
-		// logger.info("Enviando email de alteração de senha!");
 
 		logger.info("Senha alterada com sucesso!");
 	}

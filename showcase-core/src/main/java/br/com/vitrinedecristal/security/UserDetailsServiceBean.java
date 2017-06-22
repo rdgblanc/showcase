@@ -1,6 +1,7 @@
 package br.com.vitrinedecristal.security;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import br.com.vitrinedecristal.dao.IUserDAO;
 import br.com.vitrinedecristal.enums.RoleEnum;
+import br.com.vitrinedecristal.enums.UserStatusEnum;
 import br.com.vitrinedecristal.model.User;
 import br.com.vitrinedecristal.security.credential.UserCredentials;
 
@@ -31,7 +33,7 @@ public class UserDetailsServiceBean implements UserDetailsService {
 
 		User user = null;
 		try {
-			user = this.userDAO.findByEmail(username, null);
+			user = this.userDAO.findByEmail(username, Arrays.asList(UserStatusEnum.ACTIVE, UserStatusEnum.INCOMPLETE));
 		} catch (Exception e) {
 			throw new BadCredentialsException("Usuário não encontrado com o e-mail informado.");
 		}

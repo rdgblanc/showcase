@@ -139,22 +139,6 @@ public class ProductController extends SpringBeanAutowiringSupport {
 	}
 
 	@GET
-	@Path("/user/{userId}/another")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Lista os produtos de outros usuários", notes = "Lista os produtos cadastrados dos outros usuários.")
-	@ApiResponses(value = {
-			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
-			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
-	})
-	public List<ProductDTO> listByAnotherUser(@ApiParam @PathParam("userId") Long userId) throws ApiException, BusinessException {
-		if (userId == null) {
-			throw new EmptyRequestBodyException();
-		}
-
-		return this.productService.listProductByAnotherUser(userId);
-	}
-
-	@GET
 	@Path("/category/{categoryId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Lista os produtos da categoria", notes = "Lista os produtos cadastrados do categoria.")
@@ -169,7 +153,7 @@ public class ProductController extends SpringBeanAutowiringSupport {
 
 		return this.productService.listProductByCategory(categoryId);
 	}
-	
+
 	@GET
 	@Path("/category/{categoryId}/user/{userId}/another")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -182,8 +166,36 @@ public class ProductController extends SpringBeanAutowiringSupport {
 		if (categoryId == null) {
 			throw new EmptyRequestBodyException();
 		}
-		
+
 		return this.productService.listProductByCategoryAnotherUser(categoryId, userId);
+	}
+
+	@GET
+	@Path("/new")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Lista os novos produtos", notes = "Lista os novos produtos cadastrados.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
+			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
+	})
+	public List<ProductDTO> listNewProducts() throws ApiException, BusinessException {
+		return this.productService.listNewProducts();
+	}
+
+	@GET
+	@Path("/new/user/{userId}/another")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Lista os novos produtos de outros usuários", notes = "Lista os novos produtos cadastrados dos outros usuários.")
+	@ApiResponses(value = {
+			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
+			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
+	})
+	public List<ProductDTO> listByAnotherUser(@ApiParam @PathParam("userId") Long userId) throws ApiException, BusinessException {
+		if (userId == null) {
+			throw new EmptyRequestBodyException();
+		}
+
+		return this.productService.listNewProductsAnotherUser(userId);
 	}
 
 	@POST

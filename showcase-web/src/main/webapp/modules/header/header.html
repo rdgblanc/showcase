@@ -1,4 +1,4 @@
-<div data-ng-controller="showcaseHeaderController as headerCtrl">
+<div data-ng-controller="showcaseHeaderController">
 	<div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="modal-login" aria-hidden="true">
 		<div class="modal-dialog modal-lg" style="width: 500px;">
 			<div class="modal-content">
@@ -38,6 +38,7 @@
 													</div>
 													<div class="sign-up form-group">
 														<input type="submit" value="Acessar" />
+														<!-- <a>Esqueci Senha</a> -->
 														<!-- Loading -->
 														<div class="spinnerr" data-spinner data-ng-if="showLoading" />
 													</div>
@@ -294,7 +295,8 @@
 					<span class="glyphicon glyphicon-user" aria-hidden="true"></span>
 				</a>
 				<a href="#" data-toggle="modal" data-target="#modal-login" class="nick">
-					<h5>{{userLogged &amp;&amp; $parent.currentUser ? "Olá, " + $parent.currentUser.nome : "Entre"}}</h5>
+					<h5 ng-if="!$parent.currentUser && $parent.welcomeTokenValidated" style="width: 240px; text-align: left; padding-top: 10px;">Obrigado por validar o cadastro, favor efetuar o login</h5>
+					<h5 ng-if="!$parent.welcomeTokenValidated">{{$parent.currentUser ? "Olá, " + $parent.currentUser.nome : "Entre"}}</h5>
 				</a>
 			</div>
 			<div class="w3l_logo">
@@ -330,7 +332,7 @@
 				</div>
 				<div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
 					<ul class="nav navbar-nav">
-						<li class="active" ng-class="{'first-child-logged': userLogged}"><a href="#/" class="act" ng-click="switchView(viewsEnum.HOME)">Home</a></li>
+						<li class="active" ng-class="{'first-child-logged': $parent.currentUser}"><a href="#/" class="act" ng-click="switchView(viewsEnum.HOME)">Home</a></li>
 						<li><a href="#/products" ng-click="switchView(viewsEnum.PRODUCTS)">Produtos</a></li>
 						<!-- Mega Menu -->
 						<li class="dropdown">
@@ -350,7 +352,7 @@
 							</ul>
 						</li>
 						<!-- Mega Menu -->
-						<li class="dropdown" ng-if="userLogged">
+						<li class="dropdown" ng-if="$parent.currentUser">
 							<a href="#/" class="dropdown-toggle" data-toggle="dropdown">Minha Conta<b class="caret"></b></a>
 							<ul class="dropdown-menu multi-column columns-3">
 								<div class="row">
