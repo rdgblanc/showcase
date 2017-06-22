@@ -33,11 +33,13 @@ angular.module('showcase').controller("showcaseController", [
 			FAQ: 'pages/faq/faq.html',
 			GUIDELINE: 'pages/guideline/guideline.html',
 
+			FAVORITES: 'pages/favorites/favorites.html',
 			NEGOTIATIONS: 'pages/negotiations/negotiations.html',
 			ORDER_LIST: 'pages/order-list/order-list.html',
+			PRODUCTS: 'pages/products/products.html',
 
 			ADS: 'pages/ads/ads.html',
-			REGISTER_PRODUCT: 'pages/product/register-product.html'
+			REGISTER_PRODUCT: 'pages/products/register-product.html'
 		});
 
 		$scope.productNegotiationTypeEnum = Object.freeze({

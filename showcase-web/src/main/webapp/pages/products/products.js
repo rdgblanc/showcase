@@ -2,12 +2,12 @@
 'use strict';
 
 /*
-* Home controller
+* Products controller
 */
-angular.module('showcase').controller('showcaseHomeController', [
+angular.module('showcase').controller('showcaseProductsController', [
 	'$scope', '$log', 'categoryService','productService', 'negotiationService', 'favoriteService',
 	function($scope, $log, categoryService, productService, negotiationService, favoriteService) {
-		$log.info('Controller initialized [ShowcaseHomeController]');
+		$log.info('Controller initialized [showcaseProductsController]');
 
 		$scope.initialize = function() {
 			$scope.getCategories();
@@ -16,10 +16,10 @@ angular.module('showcase').controller('showcaseHomeController', [
 
 		/* GET INFOS QNDO USUÁRIO não LOGADO **********************************/
 		$scope.getCategories = function() {
-			$log.info('Obtendo categorias.. [ShowcaseHomeController]');
+			$log.info('Obtendo categorias.. [showcaseProductsController]');
 
 			categoryService.getCategories(function(response) {
-				$log.info('Categorias obtidas com sucesso! [ShowcaseHomeController]');
+				$log.info('Categorias obtidas com sucesso! [showcaseProductsController]');
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
@@ -29,44 +29,44 @@ angular.module('showcase').controller('showcaseHomeController', [
 					}
 				}
 			}, function(responseError) {
-				$log.error('Error get categories: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+				$log.error('Error get categories: ' + JSON.stringify(responseError) + ' [showcaseProductsController]');
 			});
 		};
 
 		$scope.getProductsByCategory = function(category) {
-			$log.info('Obtendo os produtos da categoria.. [ShowcaseHomeController]');
+			$log.info('Obtendo os produtos da categoria.. [showcaseProductsController]');
 			$log.info(JSON.stringify(category));
 
 			productService.getProductsByCategory(category.id, function(response) {
-				$log.info('Produtos obtidos com sucesso! [ShowcaseHomeController]');
+				$log.info('Produtos obtidos com sucesso! [showcaseProductsController]');
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
 					$scope.products = response.data;
 				}
 			}, function(responseError) {
-				$log.error('Error get products by category: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+				$log.error('Error get products by category: ' + JSON.stringify(responseError) + ' [showcaseProductsController]');
 			});
 		};
 
 		$scope.getNewProducts = function() {
-			$log.info('Obtendo os novos produtos.. [ShowcaseHomeController]');
+			$log.info('Obtendo os novos produtos.. [showcaseProductsController]');
 
 			productService.getNewProducts(function(response) {
-				$log.info('Novos produtos obtidos com sucesso! [ShowcaseHomeController]');
+				$log.info('Novos produtos obtidos com sucesso! [showcaseProductsController]');
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
 					$scope.newProducts = response.data;
 				}
 			}, function(responseError) {
-				$log.error('Error get new products: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+				$log.error('Error get new products: ' + JSON.stringify(responseError) + ' [showcaseProductsController]');
 			});
 		};
 		/* //GET INFOS QNDO USUÁRIO não LOGADO **********************************/
 
 		$scope.selectCategoryTab = function(category) {
-			$log.info('Aba/Categoria selecionada.. [ShowcaseHomeController]');
+			$log.info('Aba/Categoria selecionada.. [showcaseProductsController]');
 			$log.info(JSON.stringify(category));
 
 			$scope.currentCategoryTab = category;
@@ -79,7 +79,7 @@ angular.module('showcase').controller('showcaseHomeController', [
 
 		/* FUNÇÕES POPUP DETALHES E NEGOCIAÇÃO **********************************/
 		$scope.selectProduct = function(product) {
-			$log.info('Produto selecionado.. [ShowcaseHomeController]');
+			$log.info('Produto selecionado.. [showcaseProductsController]');
 			$log.info(JSON.stringify(product));
 
 			$scope.productSelected = product;
@@ -95,25 +95,22 @@ angular.module('showcase').controller('showcaseHomeController', [
 		$scope.favorite = function(product) {
 			if (product) {
 				if (product.favorite) {
-					$scope.productSelected = false;
 					$scope.removeFavorite(product.favorite);
 				} else {
-					$scope.productSelected = true;
 					$scope.createFavorite(product);
 				}
 			}
 		};
 
 		$scope.createFavorite = function(product) {
-			$log.info('Favoritando.. [ShowcaseHomeController]');
-			$scope.currentFavorite = {};
+			$log.info('Favoritando.. [showcaseProductsController]');
 			$scope.currentFavorite.usuario = $scope.$parent.currentUser;
-			$scope.currentFavorite.produto = product.product;
+			$scope.currentFavorite.produto = $scope.productSelected.product;
 			$log.info(JSON.stringify($scope.currentFavorite));
 
 			$scope.showLoading = true;
 			favoriteService.createFavorite($scope.currentFavorite, function(response) {
-				$log.info('Favorito criado com sucesso! [ShowcaseHomeController]');
+				$log.info('Favorito criado com sucesso! [showcaseProductsController]');
 				$log.info(JSON.stringify(response));
 
 				$scope.showLoading = false;
@@ -121,37 +118,37 @@ angular.module('showcase').controller('showcaseHomeController', [
 				//$scope.setFavoritesInProducts();
 				$scope.getFavoritesByUser();
 			}, function(responseError) {
-				$log.error('Error create favorite: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+				$log.error('Error create favorite: ' + JSON.stringify(responseError) + ' [showcaseProductsController]');
 				//$scope.setErrorMessage(responseError, "Não foi possível criar o favorito, por favor tente novamente mais tarde.");
 			});
 		};
 
 		$scope.removeFavorite = function(favorite) {
-			$log.info('Removendo favorito.. [ShowcaseHomeController]');
+			$log.info('Removendo favorito.. [showcaseProductsController]');
 			$log.info(JSON.stringify(favorite));
 
 			$scope.showLoading = true;
 			favoriteService.removeFavorite(favorite.id, function(response) {
-				$log.info('Favorito removido com sucesso! [ShowcaseHomeController]');
+				$log.info('Favorito removido com sucesso! [showcaseProductsController]');
 				$log.info(JSON.stringify(response));
 
 				$scope.showLoading = false;
 				$scope.getFavoritesByUser();
 			}, function(responseError) {
-				$log.error('Error remove favorite: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+				$log.error('Error remove favorite: ' + JSON.stringify(responseError) + ' [showcaseProductsController]');
 				//$scope.setErrorMessage(responseError, "Não foi possível criar o favorito, por favor tente novamente mais tarde.");
 			});
 		};
 
 		$scope.confirmNegotiation = function() {
-			$log.info('Confirmando negociação.. [ShowcaseHomeController]');
+			$log.info('Confirmando negociação.. [showcaseProductsController]');
 			$scope.currentNegotiation.usuario = $scope.$parent.currentUser;
 			$scope.currentNegotiation.produto = $scope.productSelected.product;
 			$log.info(JSON.stringify($scope.currentNegotiation));
 
 			$scope.showLoading = true;
 			negotiationService.createNegotiation($scope.currentNegotiation, function(response) {
-				$log.info('Negociação criada com sucesso! [ShowcaseHomeController]');
+				$log.info('Negociação criada com sucesso! [showcaseProductsController]');
 				$log.info(JSON.stringify(response));
 
 				$scope.showLoading = false;
@@ -163,7 +160,7 @@ angular.module('showcase').controller('showcaseHomeController', [
 				$scope.negotiationConfirmed = true;
 				$scope.getNegotiationsByUser();
 			}, function(responseError) {
-				$log.error('Error create negotiation: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+				$log.error('Error create negotiation: ' + JSON.stringify(responseError) + ' [showcaseProductsController]');
 				$scope.setErrorMessage(responseError, "Não foi possível confirmar a negociação, por favor tente novamente mais tarde.");
 			});
 		};
@@ -185,18 +182,18 @@ angular.module('showcase').controller('showcaseHomeController', [
 
 		/* GET INFOS QNDO USUÁRIO LOGADO **********************************/
 		$scope.$on('showcaseLoginSuccessful', function() {
-			$log.info('.. carregando a home com os dados para um usuário logado .. [ShowcaseHomeController]');
+			$log.info('.. carregando a home com os dados para um usuário logado .. [showcaseProductsController]');
 			$scope.getFavoritesByUser();
 			$scope.getNegotiationsByUser();
 			$scope.getProductsByUser();
 		});
 
 		$scope.getProductsByUser = function() {
-			$log.info('Obtendo os produtos do usuário.. [ShowcaseHomeController]');
+			$log.info('Obtendo os produtos do usuário.. [showcaseProductsController]');
 			$log.info(JSON.stringify($scope.$parent.currentUser));
 
 			productService.getProductsByUser($scope.$parent.currentUser.id, function(response) {
-				$log.info('Produtos do usuário obtidos com sucesso! [ShowcaseHomeController]');
+				$log.info('Produtos do usuário obtidos com sucesso! [showcaseProductsController]');
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
@@ -205,49 +202,49 @@ angular.module('showcase').controller('showcaseHomeController', [
 					$scope.getNewProductsAnotherUser();
 				}
 			}, function(responseError) {
-				$log.error('Error get products by user: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+				$log.error('Error get products by user: ' + JSON.stringify(responseError) + ' [showcaseProductsController]');
 			});
 		};
 
 		$scope.getFavoritesByUser = function() {
-			$log.info('Obtendo os favoritos do usuário logado.. [ShowcaseHomeController]');
+			$log.info('Obtendo os favoritos do usuário logado.. [showcaseProductsController]');
 			$log.info(JSON.stringify($scope.$parent.currentUser));
 
 			favoriteService.getFavoritesByUser($scope.$parent.currentUser.id, function(response) {
-				$log.info('Favoritos obtidos com sucesso! [ShowcaseHomeController]');
+				$log.info('Favoritos obtidos com sucesso! [showcaseProductsController]');
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
 					$scope.favorites = response.data;
 				}
 			}, function(responseError) {
-				$log.error('Error get favorites by user: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+				$log.error('Error get favorites by user: ' + JSON.stringify(responseError) + ' [showcaseProductsController]');
 			});
 		};
 
 		$scope.getNegotiationsByUser = function() {
-			$log.info('Obtendo as negociações do usuário logado.. [ShowcaseHomeController]');
+			$log.info('Obtendo as negociações do usuário logado.. [showcaseProductsController]');
 			$log.info(JSON.stringify($scope.$parent.currentUser));
 
 			negotiationService.getNegotiationsByUser($scope.$parent.currentUser.id, function(response) {
-				$log.info('Negociações obtidas com sucesso! [ShowcaseHomeController]');
+				$log.info('Negociações obtidas com sucesso! [showcaseProductsController]');
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
 					$scope.negotiations = response.data;
 				}
 			}, function(responseError) {
-				$log.error('Error get negotiations by user: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+				$log.error('Error get negotiations by user: ' + JSON.stringify(responseError) + ' [showcaseProductsController]');
 			});
 		};
 
 		$scope.getProductsAnotherUserByCategory = function(category) {
-			$log.info('Obtendo os produtos da categoria selecionada que não sejam do usuário conectado.. [ShowcaseHomeController]');
+			$log.info('Obtendo os produtos da categoria selecionada que não sejam do usuário conectado.. [showcaseProductsController]');
 			$log.info(JSON.stringify(category));
 			$log.info(JSON.stringify($scope.$parent.currentUser));
 
 			productService.getProductsAnotherUserByCategory(category.id, $scope.$parent.currentUser.id, function(response) {
-				$log.info('Produtos de outros usuários obtidos com sucesso! [ShowcaseHomeController]');
+				$log.info('Produtos de outros usuários obtidos com sucesso! [showcaseProductsController]');
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
@@ -256,16 +253,16 @@ angular.module('showcase').controller('showcaseHomeController', [
 					$scope.setFavoritesInProducts($scope.products);
 				}
 			}, function(responseError) {
-				$log.error('Error get products another user by category: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+				$log.error('Error get products another user by category: ' + JSON.stringify(responseError) + ' [showcaseProductsController]');
 			});
 		};
 
 		$scope.getNewProductsAnotherUser = function() {
-			$log.info('Obtendo os novos produtos que não seajm do usuário conectado.. [ShowcaseHomeController]');
+			$log.info('Obtendo os novos produtos que não seajm do usuário conectado.. [showcaseProductsController]');
 			$log.info(JSON.stringify($scope.$parent.currentUser));
 
 			productService.getNewProductsAnotherUser($scope.$parent.currentUser.id, function(response) {
-				$log.info('Novos produtos de outros usuários obtidos com sucesso! [ShowcaseHomeController]');
+				$log.info('Novos produtos de outros usuários obtidos com sucesso! [showcaseProductsController]');
 				$log.info(JSON.stringify(response));
 
 				if (response && response.data) {
@@ -274,12 +271,12 @@ angular.module('showcase').controller('showcaseHomeController', [
 					$scope.setFavoritesInProducts($scope.products);
 				}
 			}, function(responseError) {
-				$log.error('Error get new products another user: ' + JSON.stringify(responseError) + ' [ShowcaseHomeController]');
+				$log.error('Error get new products another user: ' + JSON.stringify(responseError) + ' [showcaseProductsController]');
 			});
 		};
 
 		$scope.setFavoritesInProducts = function(products) {
-			$log.info('Validando favoritos na lista de produtos.. [ShowcaseHomeController]');
+			$log.info('Validando favoritos na lista de produtos.. [showcaseProductsController]');
 
 			if (products && $scope.favorites) {
 				for (var i = 0; i < products.length; i++) {
@@ -294,11 +291,11 @@ angular.module('showcase').controller('showcaseHomeController', [
 			}
 
 			$scope.$digest();
-			$log.info('.. produtos indicando se é favorito ou não ' + JSON.stringify(products) + ' [ShowcaseHomeController]');
+			$log.info('.. produtos indicando se é favorito ou não ' + JSON.stringify(products) + ' [showcaseProductsController]');
 		};
 
 		$scope.setNegotiationsInProducts = function(products) {
-			$log.info('Validando negociações na lista de produtos.. [ShowcaseHomeController]');
+			$log.info('Validando negociações na lista de produtos.. [showcaseProductsController]');
 
 			if (products && $scope.negotiations) {
 				for (var i = 0; i < products.length; i++) {
@@ -313,12 +310,12 @@ angular.module('showcase').controller('showcaseHomeController', [
 			}
 
 			$scope.$digest();
-			$log.info('.. produtos indicando se há negociação em andamento ou não ' + JSON.stringify(products) + ' [ShowcaseHomeController]');
+			$log.info('.. produtos indicando se há negociação em andamento ou não ' + JSON.stringify(products) + ' [showcaseProductsController]');
 		};
 		/* //GET INFOS QNDO USUÁRIO LOGADO **********************************/
 
 		$('#myModalNegotiation').on('hide.bs.modal', function() {
-			$log.info('Current negotiation: ' + JSON.stringify($scope.currentNegotiation) + ' [ShowcaseHomeController]');
+			$log.info('Current negotiation: ' + JSON.stringify($scope.currentNegotiation) + ' [showcaseProductsController]');
 			$scope.currentNegotiation = null;
 			$scope.negotiationConfirmed = false;
 		});
@@ -349,14 +346,6 @@ angular.module('showcase').controller('showcaseHomeController', [
 
 		$scope.initialize();
 
-		/* GET INFOS QNDO USUÁRIO LOGADO **********************************/
-		$scope.$on('showcaseLoginSuccessful', function() {
-			$log.info('.. carregando a home com os dados para um usuário logado .. [ShowcaseHomeController]');
-			$scope.getFavoritesByUser();
-			$scope.getNegotiationsByUser();
-			$scope.getProductsByUser();
-		});
-
-		$log.info('Controller execution ended [ShowcaseHomeController]');
+		$log.info('Controller execution ended [showcaseProductsController]');
 	}
 ]);

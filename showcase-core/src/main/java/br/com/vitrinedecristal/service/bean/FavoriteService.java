@@ -8,12 +8,9 @@ import javax.transaction.Transactional;
 import org.apache.log4j.Logger;
 
 import br.com.vitrinedecristal.dao.IFavoriteDAO;
-import br.com.vitrinedecristal.enums.RoleEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.exception.EntityNotFoundException;
-import br.com.vitrinedecristal.exception.InvalidPermissionException;
 import br.com.vitrinedecristal.model.Favorite;
-import br.com.vitrinedecristal.security.util.AuthenticationUtils;
 import br.com.vitrinedecristal.service.IFavoriteService;
 import br.com.vitrinedecristal.service.base.BaseService;
 import br.com.vitrinedecristal.util.ParserUtil;
@@ -61,9 +58,9 @@ public class FavoriteService extends BaseService<Long, Favorite, IFavoriteDAO> i
 			throw new IllegalArgumentException("O produto do favorito não pode ser nulo ou conter id nulo.");
 		}
 
-		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !favoriteVO.getUsuario().getId().equals(AuthenticationUtils.getUserId())) {
-			throw new InvalidPermissionException();
-		}
+		// if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !favoriteVO.getUsuario().getId().equals(AuthenticationUtils.getUserId())) {
+		// throw new InvalidPermissionException();
+		// }
 
 		Favorite favorite = ParserUtil.parse(favoriteVO, Favorite.class);
 		favorite.setDtInsercao(new Date());

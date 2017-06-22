@@ -13,7 +13,10 @@ import br.com.vitrinedecristal.dao.INegotiationDAO;
 import br.com.vitrinedecristal.enums.NegotiationStatusEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.exception.EntityNotFoundException;
+import br.com.vitrinedecristal.mail.IMailSender;
+import br.com.vitrinedecristal.mail.MailSender;
 import br.com.vitrinedecristal.model.Negotiation;
+import br.com.vitrinedecristal.model.User;
 import br.com.vitrinedecristal.service.INegotiationService;
 import br.com.vitrinedecristal.service.base.BaseService;
 import br.com.vitrinedecristal.util.ParserUtil;
@@ -75,6 +78,11 @@ public class NegotiationService extends BaseService<Long, Negotiation, INegotiat
 
 		Negotiation storedNegotiation = super.save(negotiation);
 		logger.info("Negociação criada com sucesso!");
+
+		IMailSender mailSender = new MailSender();
+		User comprador = negotiation.getUsuario();
+		User vendedor = negotiation.getProduto().getUsuario();
+		mailSender.sendNegotiationOwnerMail(comprador.getNome(), vendedor.getNome(), vendedor.getEmail(), negotiation.getId());
 
 		return ParserUtil.parse(storedNegotiation, NegotiationVO.class);
 	}

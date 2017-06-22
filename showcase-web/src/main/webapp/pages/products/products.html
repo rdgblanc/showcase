@@ -1,0 +1,422 @@
+<div data-ng-controller="showcaseProductsController">
+	<!-- banner -->
+	<div class="banner8" id="home1">
+		<div class="container">
+			<h2>Vitrine de Cristal<span>-</span> Lista de <i>Produtos</i></h2>
+		</div>
+	</div>
+	<!-- //banner -->
+
+	<!-- breadcrumbs -->
+	<div class="breadcrumb_dress">
+		<div class="container">
+			<ul>
+				<li><a href="#/" ng-click="switchView(viewsEnum.HOME)"><span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home</a> <i>/</i></li>
+				<li>Produtos</li>
+			</ul>
+		</div>
+	</div>
+	<!-- //breadcrumbs -->
+
+	<!-- dresses -->
+	<div class="dresses">
+		<div class="container">
+			<div class="w3ls_dresses_grids">
+				<!-- MENU Esquerda-->
+				<div class="col-md-4 w3ls_dresses_grid_left">
+					<div class="w3ls_dresses_grid_left_grid">
+						<h3>Filtros</h3>
+						<div class="w3ls_dresses_grid_left_grid_sub">
+							<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+							  <div class="panel panel-default">
+								<div class="panel-heading" role="tab" id="headingOne">
+								  <h4 class="panel-title asd">
+									<a class="pa_italic" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+									  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><i class="glyphicon glyphicon-minus" aria-hidden="true"></i>Categorias
+									</a>
+								  </h4>
+								</div>
+								<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+								  <div class="panel-body panel_text">
+									<ul>
+										<li data-ng-repeat="category in categories"><a href="#" ng-click="selectCategoryTab(category)">{{category.nome}}</a></li>
+									</ul>
+								  </div>
+								</div>
+							  </div>
+							</div>
+							<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+							  <div class="panel panel-default">
+								<div class="panel-heading" role="tab" id="headingTwo">
+								  <h4 class="panel-title asd">
+									<a class="pa_italic collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+									  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><i class="glyphicon glyphicon-minus" aria-hidden="true"></i>Negociação
+									</a>
+								  </h4>
+								</div>
+								<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+								  <div class="panel-body panel_text">
+									<ul>
+										<li><a href="#">Troca</a></li>
+										<li><a href="#">Venda</a></li>
+										<li><a href="#">Troca ou Venda</a></li>
+									</ul>
+								  </div>
+								</div>
+							  </div>
+							</div>
+							<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+							  <div class="panel panel-default">
+								<div class="panel-heading" role="tab" id="headingThree">
+								  <h4 class="panel-title asd">
+									<a class="pa_italic collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+									  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span><i class="glyphicon glyphicon-minus" aria-hidden="true"></i>Conservação
+									</a>
+								  </h4>
+								</div>
+								<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+								  <div class="panel-body panel_text">
+									<ul>
+										<li><a href="#">Novo</a></li>
+										<li><a href="#">Seminovo</a></li>
+										<li><a href="#">Usado</a></li>
+									</ul>
+								  </div>
+								</div>
+							  </div>
+							</div>
+							<!-- <ul class="panel_bottom">
+								<li><a href="#">Novos Produtos</a></li>
+								<li><a href="#">Produtos Relacionados</a></li>
+							</ul> -->
+						</div>
+					</div>
+					<!-- <div class="w3ls_dresses_grid_left_grid">
+						<h3>Tipo de Negociação</h3>
+						<div class="w3ls_dresses_grid_left_grid_sub">
+							<div class="ecommerce_color ecommerce_size">
+								<ul>
+									<li><a href="#">Troca</a></li>
+									<li><a href="#">Venda</a></li>
+									<li><a href="#">Troca ou Venda</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="w3ls_dresses_grid_left_grid">
+						<h3>Estado de Conservação</h3>
+						<div class="w3ls_dresses_grid_left_grid_sub">
+							<div class="ecommerce_color ecommerce_size">
+								<ul>
+									<li><a href="#">Novo</a></li>
+									<li><a href="#">Seminovo</a></li>
+									<li><a href="#">Usado</a></li>
+								</ul>
+							</div>
+						</div>
+					</div> -->
+				</div>
+				<!-- /MENU Esquerda-->
+
+				<!-- GRID Direita-->
+				<div class="col-md-8 w3ls_dresses_grid_right">
+					<!-- <div class="col-md-6 w3ls_dresses_grid_right_left">
+						<div class="w3ls_dresses_grid_right_grid1">
+							<img src="images/72.jpg" alt=" " class="img-responsive" />
+							<div class="w3ls_dresses_grid_right_grid1_pos1">
+								<h3>Cosmetics <span>Up To</span> 10% Discount</h3>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 w3ls_dresses_grid_right_left">
+						<div class="w3ls_dresses_grid_right_grid1">
+							<img src="images/73.jpg" alt=" " class="img-responsive" />
+							<div class="w3ls_dresses_grid_right_grid1_pos">
+								<h3>Cosmetics <span>Makeup</span> Brush</h3>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix"> </div> -->
+
+					<!-- <div class="w3ls_dresses_grid_right_grid2">
+						<div class="w3ls_dresses_grid_right_grid2_left">
+							<h3>Resultados: 0-1</h3>
+						</div>
+						<div class="w3ls_dresses_grid_right_grid2_right">
+							<select name="select_item" class="select_item">
+								<option selected="selected">Ordenação padrão</option>
+								<option>Alfabética crescente</option>
+								<option>Alfabética descendente</option>
+								<option>Preço: menor ao maior</option>
+								<option>Preço: maior ao menor</option>
+							</select>
+						</div>
+						<div class="clearfix"> </div>
+					</div> -->
+					<div class="w3ls_dresses_grid_right_grid3">
+						<div class="col-md-4 agileinfo_new_products_grid agileinfo_new_products_grid_dresses">
+							<div class="agile_ecommerce_tab_left dresses_grid" data-ng-repeat="product in products">
+								<div class="hs-wrapper hs-wrapper2">
+									<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in product.images" ng-if="product.images && product.images.length > 0" />
+									<div ng-if="product.images && product.images.length === 0">
+										<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+										<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+										<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+										<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+										<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+										<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									</div>
+									<div class="w3_hs_bottom w3_hs_bottom_sub1">
+										<ul>
+											<li>
+												<a href="#" data-toggle="modal" data-target="#myModal" ng-click="selectProduct(product)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
+											</li>
+										</ul>
+									</div>
+								</div>
+								<h5><a href="#">{{product.product.nome}}</a></h5>
+								<div class="simpleCart_shelfItem">
+									<p ng-if="product.product.preco">
+										<i class="item_price">R${{product.product.preco}}</i>
+									</p>
+									<p ng-if="!product.product.preco">
+										<i class="item_price" style="font-style: italic; font-size: .8em; font-weight: 300;">Sem preço</i>
+									</p>
+									<p>
+										<a class="item_add" href="#" data-toggle="modal" data-target="#myModalNegotiation" ng-click="selectProduct(product)" ng-if="!product.hasNegotiation">Negociar</a>
+										<a class="disabledBtn" href="#" ng-if="product.hasNegotiation">Em negociação</a>
+									</p>
+								</div>
+								<!-- <div class="dresses_grid_pos">
+									<h6>Novo</h6>
+								</div> -->
+							</div>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+				</div>
+				<div class="clearfix"> </div>
+				<!-- /GRID Direita-->
+			</div>
+		</div>
+	</div>
+
+	<!-- Produtos Relacionados-->
+	<!-- <div class="w3l_related_products">
+		<div class="container">
+			<h3>Demais produtos</h3>
+			<ul id="flexiselDemo2">			
+				<li>
+					<div class="w3l_related_products_grid" data-ng-repeat="product in newProducts">
+						<div class="agile_ecommerce_tab_left dresses_grid">
+							<div class="hs-wrapper hs-wrapper3">
+								<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in product.images" ng-if="product.images && product.images.length > 0" />
+								<div ng-if="product.images && product.images.length === 0">
+									<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img width="255" height="340" src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+								</div>
+								<div class="w3_hs_bottom">
+									<div class="flex_ecommerce">
+										<a href="#" data-toggle="modal" data-target="#myModal" ng-click="openProductDetails(product)"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span></a>
+									</div>
+								</div>
+							</div>
+							<h5><a href="#">{{product.product.nome}}</a></h5>
+							<div class="simpleCart_shelfItem">
+								<p ng-if="product.product.preco">
+									<i class="item_price">R${{product.product.preco}}</i>
+								</p>
+								<p ng-if="!product.product.preco">
+									<i class="item_price" style="font-style: italic; font-size: .8em; font-weight: 300;">Sem preço</i>
+								</p>
+								<p>
+									<a class="item_add" href="#" data-toggle="modal" data-target="#myModalNegotiation" ng-click="selectProduct(product)" ng-if="!product.hasNegotiation">Negociar</a>
+									<a class="disabledBtn" href="#" ng-if="product.hasNegotiation">Em negociação</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<script type="text/javascript">
+				$(window).load(function() {
+					$("#flexiselDemo2").flexisel({
+						visibleItems:4,
+						animationSpeed: 1000,
+						autoPlay: true,
+						autoPlaySpeed: 3000,    		
+						pauseOnHover: true,
+						enableResponsiveBreakpoints: true,
+						responsiveBreakpoints: { 
+							portrait: { 
+								changePoint:480,
+								visibleItems: 1
+							}, 
+							landscape: { 
+								changePoint:640,
+								visibleItems:2
+							},
+							tablet: { 
+								changePoint:768,
+								visibleItems: 3
+							}
+						}
+					});
+					
+				});
+			</script>
+			<script type="text/javascript" src="assets/js/jquery.flexisel.js"></script>
+		</div>
+	</div> -->
+	<!-- /Produtos Relacionados-->
+
+	<!-- modal-products-details -->
+	<div class="modal video-modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModal">
+		<div class="modal-dialog" role="document" style="width: 700px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>						
+				</div>
+				<section>
+					<div class="modal-body">
+						<div class="col-md-4 modal_body_left agile_ecommerce_tab_left">
+							<div class="hs-wrapper">
+								<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in productSelected.images" ng-if="productSelected.images && productSelected.images.length > 0" />
+								<div ng-if="productSelected.images && productSelected.images.length === 0">
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
+								</div>
+								<div class="w3_hs_bottom">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-7 modal_body_right">
+							<h4>{{productSelected.product.nome}}</h4>
+							<p>{{productSelected.product.descricao}}</p>
+							<!-- <div class="rating">
+								<div class="rating-left">
+									<img src="assets/images/star-.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="assets/images/star-.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="assets/images/star-.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="assets/images/star.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="rating-left">
+									<img src="assets/images/star.png" alt=" " class="img-responsive" />
+								</div>
+								<div class="clearfix"> </div>
+							</div> -->
+							<div class="modal_body_right_cart simpleCart_shelfItem">
+								<p ng-if="productSelected.product.preco">
+									<i class="item_price">R${{productSelected.product.preco}}</i>
+								</p>
+								<p ng-if="!productSelected.product.preco">
+									<i class="item_price" style="font-style: italic; font-size: .8em; font-weight: 300;">Sem preço</i>
+								</p>
+								<p ng-if="showActionsDetails">
+									<a class="item_add" href="#" data-toggle="modal" data-target="#myModalNegotiation" ng-click="selectProduct(productSelected)" ng-if="!productSelected.hasNegotiation">Negociar</a>
+									<a class="disabledBtn" href="#" ng-if="productSelected.hasNegotiation">Em negociação</a>
+									<button class="btn btn-xs btn-success" ng-click="favorite(productSelected)">
+										<i class="fa fa-star" ng-if="productSelected.favorite"></i>
+										<i class="fa fa-star-o" ng-if="!productSelected.favorite"></i>
+									</button>
+									<!-- <a class="item_add" href="#" ng-click="favorite(productSelected)">Favorito{{favoriteLabel}}</a> -->
+								</p>
+							</div>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</div>
+	<!-- //modal-product-details -->
+
+	<!-- modal-negotiation -->
+	<div class="modal video-modal fade" id="myModalNegotiation" tabindex="-2" role="dialog" aria-labelledby="myModalNegotiation">
+		<div class="modal-dialog" role="document" style="width: 700px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">
+						Negociação ({{productSelected.product.nome}})
+					</h4>						
+				</div>
+				<section>
+					<div class="modal-body" style="padding: 1em 3em 2em;">
+						<div class="register">
+							<form id="negotiationForm" name="negotiationForm" novalidate role="form" ng-submit="negotiationForm.$valid && confirmNegotiation()">
+								<fieldset>
+									<div id="negotiation-type-group" class="form-group">
+										<label style="font-weight: normal; margin: 6px 0;">Opção de negociação</label>
+										<div>
+											<div class="input-group" style="margin-bottom: 0px">
+												<div id="radioBtnNegotiationTypeNeg" class="btn-group">
+													<a id="radioDonation" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="DONATION">Doação</a>
+													<a id="radioLoan" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="LOAN">Empréstimo</a>
+													<a id="radioExchange" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="EXCHANGE">Troca</a>
+													<a id="radioBuy" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="BUY">Compra</a>
+													<a id="radioExchangeOrBuy" class="btn btn-primary btn-sm notActive" data-toggle="negotiationType" data-title="EXCHANGE_OR_BUY">Troca ou Compra</a>
+												</div>
+												<input type="hidden" name="negotiationType" id="negotiationType" ng-model="currentNegotiation.tipoNegociacao" ng-value="{{this.value}}">
+											</div>
+										</div>
+									</div>
+									<div class="form-group" ng-if="showProducts">
+										<label style="font-weight: normal; margin: 6px 0;">Produto de troca</label>
+										<div>
+											<div class="input-group" style="margin-bottom: 0px; width: 50%;">
+												<ol name="categorySelect" class="nya-bs-select" style="width: 100%" ng-model="currentNegotiation" required data-live-search="true" title="Selecione um produto...">
+													<li nya-bs-option="product in myProducts">
+														<a>{{product.product.nome}}</a>
+													</li>
+												</ol>
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<textarea placeholder="Observação" name="observacao" class="form-control" style="border: 1px solid #DFDFDF; background: #f5f5f5; border-radius: 0px" required ng-model="currentNegotiation.observacao" ng-class="{'has-error': negotiationForm.$submitted && negotiationForm.observacao.$error.required}"></textarea>
+										<span class="invalid" ng-if="negotiationForm.$submitted && negotiationForm.observacao.$invalid">Observação inválida.</span>
+									</div>
+									<div class="form-group" ng-if="showPrice">
+										<input placeholder="Valor (R$)" id="valorPgto" name="valorPgto" type="text" class="decimal-2-places" ng-model="currentNegotiation.valorPgto">
+									</div>
+									<div id="alert-group" class="form-group" ng-if="message.type && negotiationForm.$submitted && negotiationForm.$valid && !showLoading">
+										<div class="alert alert-{{message.type}}" role="alert">
+											<strong ng-if="message.title">{{message.title}} </strong>{{message.body}}
+										</div>
+									</div>
+									<div class="sign-up form-group" ng-if="!negotiationConfirmed">
+										<input id="btnSaveNegotiation" type="submit" value="Confirmar" />
+										<!-- Loading -->
+										<div class="spinnerr" data-spinner data-ng-if="showLoading" />
+									</div>
+								</fieldset>
+							</form>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+					<script type="text/javascript">
+						$(document).ready(function () {
+							$(".decimal-2-places").numeric({ decimalPlaces: 2 }); //altDecimal: ".", decimal : ","
+						});
+					</script>
+				</section>
+			</div>
+		</div>
+	</div>
+	<!-- //modal-negotiation -->
+</div>
