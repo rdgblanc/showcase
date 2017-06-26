@@ -72,6 +72,6 @@ public interface IMessageService extends IBaseService<Long, Message, IMessageDAO
 	 * @throws BusinessException
 	 */
 	// @Secured(ROLE_USER)
-	List<MessageVO> listMessageByProduct(Long productId) throws BusinessException;
+	List<MessageVO> listMessageByNegotiation(Long productId) throws BusinessException;
 
 }

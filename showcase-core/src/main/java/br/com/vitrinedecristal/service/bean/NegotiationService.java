@@ -8,6 +8,7 @@ import javax.transaction.Transactional;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.vitrinedecristal.dao.INegotiationDAO;
 import br.com.vitrinedecristal.enums.NegotiationStatusEnum;
@@ -17,10 +18,13 @@ import br.com.vitrinedecristal.mail.IMailSender;
 import br.com.vitrinedecristal.mail.MailSender;
 import br.com.vitrinedecristal.model.Negotiation;
 import br.com.vitrinedecristal.model.User;
+import br.com.vitrinedecristal.service.IMessageService;
 import br.com.vitrinedecristal.service.INegotiationService;
 import br.com.vitrinedecristal.service.base.BaseService;
 import br.com.vitrinedecristal.util.ParserUtil;
+import br.com.vitrinedecristal.vo.MessageVO;
 import br.com.vitrinedecristal.vo.NegotiationVO;
+import br.com.vitrinedecristal.vo.UserVO;
 
 /**
  * Servico para realização de lógicas no negócio para a entidade {@link Negotiation}
@@ -34,6 +38,9 @@ public class NegotiationService extends BaseService<Long, Negotiation, INegotiat
 	public NegotiationService(INegotiationDAO negotiationDAO) {
 		super(negotiationDAO);
 	}
+
+	@Autowired
+	private IMessageService messageService;
 
 	@Override
 	public NegotiationVO getNegotiation(Long id) throws BusinessException {
@@ -83,6 +90,13 @@ public class NegotiationService extends BaseService<Long, Negotiation, INegotiat
 		User comprador = negotiation.getUsuario();
 		User vendedor = negotiation.getProduto().getUsuario();
 		mailSender.sendNegotiationOwnerMail(comprador.getNome(), vendedor.getNome(), vendedor.getEmail(), negotiation.getId());
+		// logger.info("Email enviado com sucesso!");
+
+		MessageVO messageVO = new MessageVO();
+		messageVO.setNegociacao(ParserUtil.parse(storedNegotiation, NegotiationVO.class));
+		messageVO.setUsuario(ParserUtil.parse(negotiation.getUsuario(), UserVO.class));
+		messageVO.setTexto(negotiation.getObservacao());
+		this.messageService.createMessage(messageVO);
 
 		return ParserUtil.parse(storedNegotiation, NegotiationVO.class);
 	}

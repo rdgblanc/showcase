@@ -41,19 +41,21 @@ public class MessageDAO extends BaseDAO<Long, Message> implements IMessageDAO {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Message> findByProduct(Long productId, List<MessageStatusEnum> status) {
-		if (productId == null) {
-			throw new IllegalArgumentException("O id do produto deve ser informado para a busca de mensagens por produto.");
+	public List<Message> findByNegotiation(Long negotiationId, List<MessageStatusEnum> status) {
+		if (negotiationId == null) {
+			throw new IllegalArgumentException("O id da negociação deve ser informado para a busca de mensagens por negociação.");
 		}
 
-		StringBuffer query = new StringBuffer("SELECT m FROM Message m WHERE m.produto.id = :productId");
+		StringBuffer query = new StringBuffer("SELECT m FROM Message m WHERE m.negociacao.id = :negotiationId");
 
 		if (status != null) {
 			query.append(" AND m.status IN (:status)");
 		}
 
+		query.append(" ORDER BY m.dtAtualizacao ASC");
+
 		Query q = getEntityManager().createQuery(query.toString());
-		q.setParameter("productId", productId);
+		q.setParameter("negotiationId", negotiationId);
 
 		if (status != null) {
 			q.setParameter("status", status);

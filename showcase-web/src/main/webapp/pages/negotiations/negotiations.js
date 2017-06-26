@@ -4,13 +4,13 @@
 * Negotiation controller
 */
 angular.module('showcase').controller('showcaseNegotiationsController', [
-	'$scope', '$log', 'negotiationService',
-	function($scope, $log, negotiationService) {
+	'$scope', '$log', 'negotiationService', 'messageService',
+	function($scope, $log, negotiationService, messageService) {
 		$log.info('Controller initialized [showcaseNegotiationsController]');
 
 		$scope.initialize = function() {
 			$scope.getNegotiationsByUserSeller();
-		}
+		};
 
 		$scope.getNegotiationsByUserSeller = function() {
 			$log.info('Obtendo as negociações do usuário vendedor.. [showcaseNegotiationsController]');
@@ -30,8 +30,59 @@ angular.module('showcase').controller('showcaseNegotiationsController', [
 			});
 		};
 
+		$scope.getMessagesByNegotiation = function() {
+			$log.info('Obtendo as mensagens do negociação.. [showcaseNegotiationsController]');
+			$log.info(JSON.stringify($scope.currentNegotiation));
+
+			//$scope.showLoading = true;
+			messageService.getMessagesByNegotiation($scope.currentNegotiation.id, function(response) {
+				$log.info('Mensagens do negociação obtidas com sucesso! [showcaseNegotiationsController]');
+				$log.info(JSON.stringify(response));
+
+				if (response && response.data) {
+					$scope.messages = response.data;
+				}
+			}, function(responseError) {
+				$log.error("Error get messages by negotiation: " + JSON.stringify(responseError));
+				//$scope.setErrorMessage(responseError, "Não foi possível recuperar as mensagens da negociação, por favor tente novamente mais tarde.");
+			});
+		};
+
 		$scope.showNegotiation = function(negotiation) {
 			$scope.currentNegotiation = negotiation;
+		};
+
+		$scope.showMessages = function(negotiation) {
+			$scope.currentNegotiation = negotiation;
+			$scope.getMessagesByNegotiation();
+		};
+
+		$("#btn-input").keypress(function(e) {
+			if(e.which == 13) {
+				$scope.createMessage();
+			}
+		});
+
+		$scope.createMessage = function() {
+			$log.info('Criando mensagem.. [showcaseNegotiationsController]');
+			var message = {};
+			message.texto = $('#btn-input').val();
+			message.negociacao = $scope.currentNegotiation;
+			message.usuario = $scope.$parent.currentUser;
+			$log.info(JSON.stringify(message));
+
+			$('#btn-input').val('');
+
+			//$scope.showLoading = true;
+			messageService.createMessage(message, function(response) {
+				$log.info('Mensagem criada com sucesso! [showcaseNegotiationsController]');
+				$log.info(JSON.stringify(response));
+
+				$scope.getMessagesByNegotiation();
+			}, function(responseError) {
+				$log.error("Error create message: " + JSON.stringify(responseError));
+				//$scope.setErrorMessage(responseError, "Não foi possível criar a mensagem, por favor tente novamente mais tarde.");
+			});
 		};
 
 		$scope.acceptNegotiation = function(negotiation) {

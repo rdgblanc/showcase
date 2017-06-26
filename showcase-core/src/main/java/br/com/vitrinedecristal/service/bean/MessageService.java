@@ -14,7 +14,6 @@ import br.com.vitrinedecristal.enums.MessageStatusEnum;
 import br.com.vitrinedecristal.enums.RoleEnum;
 import br.com.vitrinedecristal.exception.BusinessException;
 import br.com.vitrinedecristal.exception.EntityNotFoundException;
-import br.com.vitrinedecristal.exception.InvalidPermissionException;
 import br.com.vitrinedecristal.model.Message;
 import br.com.vitrinedecristal.security.util.AuthenticationUtils;
 import br.com.vitrinedecristal.service.IMessageService;
@@ -60,13 +59,13 @@ public class MessageService extends BaseService<Long, Message, IMessageDAO> impl
 			throw new IllegalArgumentException("O usuário da mensagem não pode ser nulo ou conter id nulo.");
 		}
 
-		if (messageVO.getProduto() == null || messageVO.getProduto().getId() == null) {
-			throw new IllegalArgumentException("O produto da mensagem não pode ser nulo ou conter id nulo.");
+		if (messageVO.getNegociacao() == null || messageVO.getNegociacao().getId() == null) {
+			throw new IllegalArgumentException("A negociação da mensagem não pode ser nulo ou conter id nulo.");
 		}
 
-		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !messageVO.getUsuario().getId().equals(AuthenticationUtils.getUserId())) {
-			throw new InvalidPermissionException();
-		}
+		// if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !messageVO.getUsuario().getId().equals(AuthenticationUtils.getUserId())) {
+		// throw new InvalidPermissionException();
+		// }
 
 		if (StringUtils.isBlank(messageVO.getTexto())) {
 			throw new BusinessException("O campo texto é obrigatório");
@@ -95,13 +94,13 @@ public class MessageService extends BaseService<Long, Message, IMessageDAO> impl
 			throw new IllegalArgumentException("O usuário da mensagem não pode ser nulo ou conter id nulo.");
 		}
 
-		if (messageVO.getProduto() == null || messageVO.getProduto().getId() == null) {
-			throw new IllegalArgumentException("O produto da mensagem não pode ser nulo ou conter id nulo.");
+		if (messageVO.getNegociacao() == null || messageVO.getNegociacao().getId() == null) {
+			throw new IllegalArgumentException("A negociação da mensagem não pode ser nulo ou conter id nulo.");
 		}
 
-		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !messageVO.getUsuario().getId().equals(AuthenticationUtils.getUserId())) {
-			throw new InvalidPermissionException();
-		}
+		// if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !messageVO.getUsuario().getId().equals(AuthenticationUtils.getUserId())) {
+		// throw new InvalidPermissionException();
+		// }
 
 		Message storedMessage = getDAO().findByPrimaryKey(messageVO.getId());
 		if (storedMessage == null) {
@@ -144,9 +143,9 @@ public class MessageService extends BaseService<Long, Message, IMessageDAO> impl
 			throw new EntityNotFoundException("Não foi encontrado nenhuma mensagem para o id informado.");
 		}
 
-		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !storedMessage.getUsuario().getId().equals(AuthenticationUtils.getUserId())) {
-			throw new InvalidPermissionException();
-		}
+		// if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !storedMessage.getUsuario().getId().equals(AuthenticationUtils.getUserId())) {
+		// throw new InvalidPermissionException();
+		// }
 
 		storedMessage.setStatus(status);
 		storedMessage.setDtAtualizacao(new Date());
@@ -165,9 +164,9 @@ public class MessageService extends BaseService<Long, Message, IMessageDAO> impl
 	}
 
 	@Override
-	public List<MessageVO> listMessageByProduct(Long productId) throws BusinessException {
-		logger.info("Listando as mensagens do produto: " + productId);
-		List<Message> listMessage = getDAO().findByProduct(productId, Arrays.asList(MessageStatusEnum.ACTIVE));
+	public List<MessageVO> listMessageByNegotiation(Long negotiationId) throws BusinessException {
+		logger.info("Listando as mensagens da negociação: " + negotiationId);
+		List<Message> listMessage = getDAO().findByNegotiation(negotiationId, Arrays.asList(MessageStatusEnum.ACTIVE));
 		logger.info("Mensagens listadas com sucesso!");
 
 		return ParserUtil.parse(listMessage, MessageVO.class);

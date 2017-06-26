@@ -13,6 +13,6 @@ public interface IMessageDAO extends IBaseDAO<Long, Message> {
 
 	List<Message> findByUser(Long userId, List<MessageStatusEnum> status);
 
-	List<Message> findByProduct(Long productId, List<MessageStatusEnum> status);
+	List<Message> findByNegotiation(Long negotiationId, List<MessageStatusEnum> status);
 
 }

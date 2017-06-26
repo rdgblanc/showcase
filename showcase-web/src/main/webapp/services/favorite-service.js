@@ -21,7 +21,7 @@ angular.module('showcase').factory('favoriteService', [
 			},
 			removeFavorite : function(id, successCallback, errorCallback) {
 				errorCallback = errorCallback || DEFAULT_ERROR_CALLBACK;
-				return request.delete("/favorite/" + id).then(successCallback, errorCallback);
+				return request.remove("/favorite/" + id).then(successCallback, errorCallback);
 			}
 		};
 

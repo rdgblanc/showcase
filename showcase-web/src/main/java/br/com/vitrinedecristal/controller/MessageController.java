@@ -118,19 +118,19 @@ public class MessageController extends SpringBeanAutowiringSupport {
 	}
 
 	@GET
-	@Path("/product/{productId}")
+	@Path("/negotiation/{negotiationId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Lista as mensagens do produto", notes = "Lista as mensagens cadastradas do produto.")
+	@ApiOperation(value = "Lista as mensagens da negociação", notes = "Lista as mensagens cadastradas da negociação.")
 	@ApiResponses(value = {
 			@ApiResponse(code = 400, message = BadRequestException.MESSAGE, response = ApiExceptionResponse.class),
 			@ApiResponse(code = 403, message = AuthorizationException.MESSAGE, response = ApiExceptionResponse.class)
 	})
-	public List<MessageVO> listByProduct(@ApiParam @PathParam("productId") Long productId) throws ApiException, BusinessException {
-		if (productId == null) {
+	public List<MessageVO> listByProduct(@ApiParam @PathParam("negotiationId") Long negotiationId) throws ApiException, BusinessException {
+		if (negotiationId == null) {
 			throw new EmptyRequestBodyException();
 		}
 
-		return this.messageService.listMessageByProduct(productId);
+		return this.messageService.listMessageByNegotiation(negotiationId);
 	}
 
 }

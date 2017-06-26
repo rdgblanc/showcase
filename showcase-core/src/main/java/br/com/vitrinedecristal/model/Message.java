@@ -19,7 +19,7 @@ import br.com.vitrinedecristal.dao.base.IID;
 import br.com.vitrinedecristal.enums.MessageStatusEnum;
 
 @Entity
-@Table(name = "TB_MESSAGE")
+@Table(name = "TB_MENSAGEM")
 public class Message implements IID<Long> {
 
 	@Id
@@ -38,9 +38,9 @@ public class Message implements IID<Long> {
 	@Enumerated(value = EnumType.STRING)
 	private MessageStatusEnum status;
 
-	@ManyToOne(targetEntity = Product.class)
-	@JoinColumn(name = "ID_PRODUTO", nullable = false)
-	private Product produto;
+	@ManyToOne(targetEntity = Negotiation.class)
+	@JoinColumn(name = "ID_NEGOCIACAO", nullable = false)
+	private Negotiation negociacao;
 
 	@ManyToOne(targetEntity = User.class)
 	@JoinColumn(name = "ID_USUARIO", nullable = false)
@@ -78,12 +78,12 @@ public class Message implements IID<Long> {
 		this.status = status;
 	}
 
-	public Product getProduto() {
-		return produto;
+	public Negotiation getNegociacao() {
+		return negociacao;
 	}
 
-	public void setProduto(Product produto) {
-		this.produto = produto;
+	public void setNegociacao(Negotiation negociacao) {
+		this.negociacao = negociacao;
 	}
 
 	public User getUsuario() {

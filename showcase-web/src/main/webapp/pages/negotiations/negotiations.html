@@ -29,7 +29,6 @@
 							<th>Tipo Negociação</th>
 							<th>Observação</th>
 							<th>Produto</th>
-							<th>Valor (R$)</th>
 							<th>Usuário</th>
 							<th>Data Atualização</th>
 							<th>Status</th>
@@ -41,6 +40,9 @@
 								<button class="btn btn-xs btn-info" data-toggle="modal" data-target="#myModalNegotiation" ng-click="showNegotiation(negotiation)">
 									<i class="fa fa-eye"></i>
 								</button>
+								<button class="btn btn-xs btn-warning" data-toggle="modal" data-target="#myModalMessages" ng-click="showMessages(negotiation)">
+									<i class="fa fa-wechat"></i>
+								</button>
 								<button class="btn btn-xs btn-success" ng-click="acceptNegotiation(negotiation)" ng-if="negotiation.status === 'IN_PROGRESS'">
 									<i class="fa fa-check"></i>
 								</button>
@@ -51,7 +53,6 @@
 							<td style="width: 110px" data-ng-bind="negotiationNegotiationTypeEnum[negotiation.tipoNegociacao]"></td>
 							<td style="max-width: 270px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" data-ng-bind="negotiation.observacao"></td>
 							<td data-ng-bind="negotiation.produto.nome"></td>
-							<td data-ng-bind="negotiation.valorPgto"></td>
 							<td data-ng-bind="negotiation.usuario.nome"></td>
 							<td data-ng-bind="negotiation.dtAtualizacao | date:'dd/MM/yyyy HH:mm'"></td>
 							<td data-ng-bind="negotiationStatusEnum[negotiation.status]"></td>
@@ -123,4 +124,153 @@
 		</div>
 	</div>
 	<!-- //modal-negotiation -->
+
+	<!-- modal-messages -->
+	<div class="modal video-modal fade" id="myModalMessages" tabindex="-2" role="dialog" aria-labelledby="myModalMessages">
+		<div class="modal-dialog" role="document" style="width: 700px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">
+						<span class="glyphicon glyphicon-comment"></span>
+						Mensagens ({{currentNegotiation.produto.nome}})
+					</h4>
+				</div>
+				<section>
+					<div class="modal-body" style="padding: 1em 3em 2em;">
+						<div>
+							<div class="row chat-window col-xs-5 col-md-3" id="chat_window_1" style="margin-left: -45px; height: 400px; /*position: fixed;*/ /* bottom: 0; */ width: 700px;">
+						        <div class="col-xs-12 col-md-12">
+						        	<div>
+						                <!-- <div class="panel-heading top-bar">
+						                    <div class="col-md-8 col-xs-8">
+						                        <h3 class="panel-title"><span class="glyphicon glyphicon-comment"></span> Chat - Miguel</h3>
+						                    </div>
+						                    <div class="col-md-4 col-xs-4" style="text-align: right;">
+						                        <a href="#"><span id="minim_chat_window" class="glyphicon glyphicon-minus icon_minim"></span></a>
+						                        <a href="#"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+						                    </div>
+						                </div> -->
+						                <div class="panel-body msg_container_base">
+						                	<div data-ng-repeat="message in messages">
+							                	<div class="row msg_container base_receive" ng-if="message.usuario.id === message.negociacao.usuario.id">
+							                        <div class="col-md-2 col-xs-2 avatar">
+							                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+							                        </div>
+							                        <div class="col-md-10 col-xs-10">
+							                            <div class="messages msg_receive">
+							                                <p>{{message.texto}}</p>
+							                                <time>{{message.dtAtualizacao}}</time>
+							                            </div>
+							                        </div>
+							                    </div>
+							                    <div class="row msg_container base_sent" ng-if="message.usuario.id !== message.negociacao.usuario.id">
+							                        <div class="col-md-10 col-xs-10">
+							                            <div class="messages msg_sent">
+							                                <p>{{message.texto}}</p>
+							                                <time>{{message.dtAtualizacao}}</time>
+							                            </div>
+							                        </div>
+							                        <div class="col-md-2 col-xs-2 avatar">
+							                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+							                        </div>
+							                    </div>
+						                    </div>
+						                    <!-- <div class="row msg_container base_sent">
+						                        <div class="col-md-10 col-xs-10">
+						                            <div class="messages msg_sent">
+						                                <p>that mongodb thing looks good, huh?
+						                                tiny master db, and huge document store</p>
+						                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+						                            </div>
+						                        </div>
+						                        <div class="col-md-2 col-xs-2 avatar">
+						                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+						                        </div>
+						                    </div>
+						                    <div class="row msg_container base_receive">
+						                        <div class="col-md-2 col-xs-2 avatar">
+						                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+						                        </div>
+						                        <div class="col-md-10 col-xs-10">
+						                            <div class="messages msg_receive">
+						                                <p>that mongodb thing looks good, huh?
+						                                tiny master db, and huge document store</p>
+						                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+						                            </div>
+						                        </div>
+						                    </div>
+						                    <div class="row msg_container base_receive">
+						                        <div class="col-md-2 col-xs-2 avatar">
+						                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+						                        </div>
+						                        <div class="col-xs-10 col-md-10">
+						                            <div class="messages msg_receive">
+						                                <p>that mongodb thing looks good, huh?
+						                                tiny master db, and huge document store</p>
+						                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+						                            </div>
+						                        </div>
+						                    </div>
+						                    <div class="row msg_container base_sent">
+						                        <div class="col-xs-10 col-md-10">
+						                            <div class="messages msg_sent">
+						                                <p>that mongodb thing looks good, huh?
+						                                tiny master db, and huge document store</p>
+						                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+						                            </div>
+						                        </div>
+						                        <div class="col-md-2 col-xs-2 avatar">
+						                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+						                        </div>
+						                    </div>
+						                    <div class="row msg_container base_receive">
+						                        <div class="col-md-2 col-xs-2 avatar">
+						                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+						                        </div>
+						                        <div class="col-xs-10 col-md-10">
+						                            <div class="messages msg_receive">
+						                                <p>that mongodb thing looks good, huh?
+						                                tiny master db, and huge document store</p>
+						                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+						                            </div>
+						                        </div>
+						                    </div>
+						                    <div class="row msg_container base_sent">
+						                        <div class="col-md-10 col-xs-10 ">
+						                            <div class="messages msg_sent">
+						                                <p>that mongodb thing looks good, huh?
+						                                tiny master db, and huge document store</p>
+						                                <time datetime="2009-11-13T20:00">Timothy • 51 min</time>
+						                            </div>
+						                        </div>
+						                        <div class="col-md-2 col-xs-2 avatar">
+						                            <img src="http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg" class=" img-responsive ">
+						                        </div>
+						                    </div> -->
+						                </div>
+						                <div class="panel-footer">
+						                    <div class="input-group">
+						                        <input id="btn-input" type="text" class="form-control input-sm chat_input" placeholder="Escreva sua mensagem aqui..." />
+						                        <span class="input-group-btn">
+						                        <button class="btn btn-primary btn-sm" id="btn-chat" ng-click="createMessage()">Enviar</button>
+						                        </span>
+						                    </div>
+						                </div>
+						    		</div>
+						        </div>
+						    </div>
+						</div>
+						<div class="clearfix"> </div>
+					</div>
+					<script type="text/javascript">
+						$(document).ready(function () {
+							$(".decimal-2-places").numeric({ decimalPlaces: 2 }); //altDecimal: ".", decimal : ","
+						});
+					</script>
+				</section>
+			</div>
+		</div>
+	</div>
+	<!-- //modal-messages -->
 </div>

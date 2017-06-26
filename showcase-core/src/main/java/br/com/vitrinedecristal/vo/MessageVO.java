@@ -24,7 +24,7 @@ public class MessageVO extends BaseVO<Message> {
 
 	private MessageStatusEnum status;
 
-	private ProductVO produto;
+	private NegotiationVO negociacao;
 
 	private UserVO usuario;
 
@@ -72,12 +72,12 @@ public class MessageVO extends BaseVO<Message> {
 		this.status = status;
 	}
 
-	public ProductVO getProduto() {
-		return produto;
+	public NegotiationVO getNegociacao() {
+		return negociacao;
 	}
 
-	public void setProduto(ProductVO produto) {
-		this.produto = produto;
+	public void setNegociacao(NegotiationVO negociacao) {
+		this.negociacao = negociacao;
 	}
 
 	public UserVO getUsuario() {

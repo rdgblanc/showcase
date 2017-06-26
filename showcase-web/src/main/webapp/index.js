@@ -146,6 +146,11 @@ angular.module('showcase').controller("showcaseController", [
 			$anchorScroll();
 		};
 
+		$scope.$on('showcaseLoginSuccessful', function() {
+			$log.info('.. >>>>>>>>>>>>>>>> ..');
+			$scope.$broadcast('loadHomeUserLogged');
+		});
+
 		$scope.initialize();
 
 		$log.info('Controller execution ended [ShowcaseController]');

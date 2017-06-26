@@ -184,7 +184,7 @@ angular.module('showcase').controller('showcaseHomeController', [
 		/* //FUNÇÕES POPUP DETALHES E NEGOCIAÇÃO **********************************/
 
 		/* GET INFOS QNDO USUÁRIO LOGADO **********************************/
-		$scope.$on('showcaseLoginSuccessful', function() {
+		$scope.$on('loadHomeUserLogged', function() {
 			$log.info('.. carregando a home com os dados para um usuário logado .. [ShowcaseHomeController]');
 			$scope.getFavoritesByUser();
 			$scope.getNegotiationsByUser();
@@ -229,7 +229,7 @@ angular.module('showcase').controller('showcaseHomeController', [
 			$log.info('Obtendo as negociações do usuário logado.. [ShowcaseHomeController]');
 			$log.info(JSON.stringify($scope.$parent.currentUser));
 
-			negotiationService.getNegotiationsByUser($scope.$parent.currentUser.id, function(response) {
+			negotiationService.getNegotiationsByUserOrder($scope.$parent.currentUser.id, function(response) {
 				$log.info('Negociações obtidas com sucesso! [ShowcaseHomeController]');
 				$log.info(JSON.stringify(response));
 
@@ -348,14 +348,6 @@ angular.module('showcase').controller('showcaseHomeController', [
 		});
 
 		$scope.initialize();
-
-		/* GET INFOS QNDO USUÁRIO LOGADO **********************************/
-		$scope.$on('showcaseLoginSuccessful', function() {
-			$log.info('.. carregando a home com os dados para um usuário logado .. [ShowcaseHomeController]');
-			$scope.getFavoritesByUser();
-			$scope.getNegotiationsByUser();
-			$scope.getProductsByUser();
-		});
 
 		$log.info('Controller execution ended [ShowcaseHomeController]');
 	}

@@ -24,7 +24,7 @@ angular.module('showcase').controller("showcaseHeaderController", [
 				$scope.showLoading = false;
 				if (response && response.data) {
 					$scope.setCurrentUser(response.data);
-					$scope.$broadcast('showcaseLoginSuccessful');
+					$scope.$emit('showcaseLoginSuccessful');
 				}
 
 				$('#modal-login').modal('hide');
