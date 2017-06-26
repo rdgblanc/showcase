@@ -36,7 +36,7 @@
 					<tbody>
 						<tr data-ng-repeat="favorite in favorites">
 							<td>
-								<button class="btn btn-xs btn-info" data-toggle="modal" data-target="#myModalProduct" ng-click="showProduct(favorite.produto)">
+								<button class="btn btn-xs btn-info" data-toggle="modal" data-target="#myModalProduct" ng-click="selectProduct(favorite.produto)">
 									<i class="fa fa-eye"></i>
 								</button>
 								<button class="btn btn-xs btn-danger" ng-click="removeFavorite(favorite)">
@@ -47,7 +47,7 @@
 							<td data-ng-bind="favorite.produto.nome"></td>
 							<td data-ng-bind="productConservationStateEnum[favorite.produto.estadoConservacao]"></td>
 							<td data-ng-bind="favorite.produto.preco"></td>
-							<td data-ng-bind="favorite.produto.dtInsercao | date:'dd/MM/yyyy HH:mm'"></td>
+							<td data-ng-bind="favorite.dtInsercao | date:'dd/MM/yyyy HH:mm'"></td>
 						</tr>
 					</tbody>
 				</table>
@@ -67,8 +67,9 @@
 					<div class="modal-body">
 						<div class="col-md-4 modal_body_left agile_ecommerce_tab_left">
 							<div class="hs-wrapper">
-								<img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in productSelected.images" ng-if="productSelected.images && productSelected.images.length > 0" />
-								<div ng-if="productSelected.images && productSelected.images.length === 0">
+								<!-- <img src="{{$parent.imagesUploadPath + image.caminho}}" alt=" " class="img-responsive" data-ng-repeat="image in productSelected.images" ng-if="productSelected.images && productSelected.images.length > 0" />
+								<div ng-if="productSelected.images && productSelected.images.length === 0"> -->
+								<div>
 									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
 									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
 									<img src="assets/images/sem-foto.jpg" alt=" " class="img-responsive" />
@@ -81,8 +82,8 @@
 							</div>
 						</div>
 						<div class="col-md-7 modal_body_right">
-							<h4>{{productSelected.product.nome}}</h4>
-							<p>{{productSelected.product.descricao}}</p>
+							<h4>{{productSelected.nome}}</h4>
+							<p>{{productSelected.descricao}}</p>
 							<!-- <div class="rating">
 								<div class="rating-left">
 									<img src="assets/images/star-.png" alt=" " class="img-responsive" />
@@ -102,10 +103,10 @@
 								<div class="clearfix"> </div>
 							</div> -->
 							<div class="modal_body_right_cart simpleCart_shelfItem">
-								<p ng-if="productSelected.product.preco">
-									<i class="item_price">R${{productSelected.product.preco}}</i>
+								<p ng-if="productSelected.preco">
+									<i class="item_price">R${{productSelected.preco}}</i>
 								</p>
-								<p ng-if="!productSelected.product.preco">
+								<p ng-if="!productSelected.preco">
 									<i class="item_price" style="font-style: italic; font-size: .8em; font-weight: 300;">Sem preço</i>
 								</p>
 								<p ng-if="showActionsDetails">

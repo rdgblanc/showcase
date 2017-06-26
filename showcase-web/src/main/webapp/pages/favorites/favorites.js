@@ -29,7 +29,8 @@ angular.module('showcase').controller('showcaseFavoritesController', [
 		};
 
 		$scope.showProduct = function(product) {
-			$scope.productSelected = product;
+			$log.info(JSON.stringify(product));
+			$scope.productFavorited = product;
 		};
 
 		$scope.removeFavorite = function(favorite) {

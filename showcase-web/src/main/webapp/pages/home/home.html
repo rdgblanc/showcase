@@ -194,8 +194,8 @@
 									<a class="item_add" href="#" data-toggle="modal" data-target="#myModalNegotiation" ng-click="selectProduct(productSelected)" ng-if="!productSelected.hasNegotiation">Negociar</a>
 									<a class="disabledBtn" href="#" ng-if="productSelected.hasNegotiation">Em negociação</a>
 									<button class="btn btn-xs" ng-click="favorite(productSelected)">
-										<i class="fa fa-star" ng-if="productSelected.favorite"></i>
-										<i class="fa fa-star-o" ng-if="!productSelected.favorite"></i>
+										<i class="fa fa-star" ng-if="productSelected.isFavorite"></i>
+										<i class="fa fa-star-o" ng-if="!productSelected.isFavorite"></i>
 									</button>
 									<!-- <a class="item_add" href="#" ng-click="favorite(productSelected)">Favorito{{favoriteLabel}}</a> -->
 								</p>

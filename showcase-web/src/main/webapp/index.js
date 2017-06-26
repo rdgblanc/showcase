@@ -35,7 +35,7 @@ angular.module('showcase').controller("showcaseController", [
 
 			FAVORITES: 'pages/favorites/favorites.html',
 			NEGOTIATIONS: 'pages/negotiations/negotiations.html',
-			ORDER_LIST: 'pages/order-list/order-list.html',
+			ORDER_LIST: 'pages/order/order-list.html',
 			PRODUCTS: 'pages/products/products.html',
 
 			ADS: 'pages/ads/ads.html',

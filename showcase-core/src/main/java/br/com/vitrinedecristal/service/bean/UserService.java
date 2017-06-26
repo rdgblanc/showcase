@@ -149,28 +149,32 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 			throw new IllegalArgumentException("A entidade usuário não pode ser nula.");
 		}
 
-		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !userVO.getId().equals(AuthenticationUtils.getUserId())) {
-			throw new InvalidPermissionException();
-		}
+		// if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString()) && !userVO.getId().equals(AuthenticationUtils.getUserId())) {
+		// throw new InvalidPermissionException();
+		// }
 
 		User storedUser = getDAO().findByPrimaryKey(userVO.getId());
 		if (storedUser == null) {
 			throw new EntityNotFoundException();
 		}
 
-		if (AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString())) {
-			if (StringUtils.isNotBlank(userVO.getEmail())) {
-				storedUser.setEmail(userVO.getEmail());
-			}
-
-			if (userVO.getRoles() != null && !userVO.getRoles().isEmpty() && RoleEnum.containsAll(userVO.getRoles())) {
-				storedUser.setRoles(userVO.getRoles());
-			}
-
-			if (userVO.getClassificacao() != null) {
-				storedUser.setClassificacao(userVO.getClassificacao());
-			}
+		if (StringUtils.isNotBlank(userVO.getEmail())) {
+			storedUser.setEmail(userVO.getEmail());
 		}
+
+		// if (AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString())) {
+		// if (StringUtils.isNotBlank(userVO.getEmail())) {
+		// storedUser.setEmail(userVO.getEmail());
+		// }
+		//
+		// if (userVO.getRoles() != null && !userVO.getRoles().isEmpty() && RoleEnum.containsAll(userVO.getRoles())) {
+		// storedUser.setRoles(userVO.getRoles());
+		// }
+		//
+		// if (userVO.getClassificacao() != null) {
+		// storedUser.setClassificacao(userVO.getClassificacao());
+		// }
+		// }
 
 		if (StringUtils.isNotBlank(userVO.getNome())) {
 			storedUser.setNome(userVO.getNome());
@@ -198,9 +202,9 @@ public class UserService extends BaseService<Long, User, IUserDAO> implements IU
 
 	@Override
 	public void removeUser(Long id) throws BusinessException {
-		if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString())) {
-			throw new InvalidPermissionException();
-		}
+		// if (!AuthenticationUtils.listUserRoles().contains(RoleEnum.ROLE_ADMIN.toString())) {
+		// throw new InvalidPermissionException();
+		// }
 
 		this.updateStatus(id, UserStatusEnum.INACTIVE);
 	}

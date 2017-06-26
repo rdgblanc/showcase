@@ -94,11 +94,11 @@ angular.module('showcase').controller('showcaseHomeController', [
 
 		$scope.favorite = function(product) {
 			if (product) {
-				if (product.favorite) {
-					$scope.productSelected = false;
+				if (product.isFavorite) {
+					$scope.productSelected.isFavorite = false;
 					$scope.removeFavorite(product.favorite);
 				} else {
-					$scope.productSelected = true;
+					$scope.productSelected.isFavorite = true;
 					$scope.createFavorite(product);
 				}
 			}
